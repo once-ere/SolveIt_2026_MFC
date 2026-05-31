@@ -1,0 +1,1033 @@
+This is Info file trlan.info, produced by Makeinfo version 1.68 from
+the input file trlan.texi.
+
+   Copyright (C) 1999 Kesheng Wu and Horst Simon
+
+   Users guide for TRLAN version:  Edition 1.0 1.0
+
+
+File: trlan.info,  Node: error code,  Prev: elements,  Up: TRL_INFO module
+
+TRLAN error code
+================
+
+   This section lists all error numbers defined in TRLAN and discusses
+possible remedies to the errors.  Currently (TRLAN version 1.0),
+defines the follow error numbers,
+
+`0'
+     No error.
+
+     It is possible that `trlan' has not computed all wanted eigenpairs,
+     check the value of `nec' to see exactly how many wanted eigenpairs
+     have converged.  In case you have not computed all wanted
+     eigenpairs, the possible solutions are:
+        * If checkpoint files were written, restart with the checkpoint
+          files.
+
+        * If no checkpoint files were written, make a linear
+          combination of the approximate eigenvectors and use the
+          resulting vector as the initial guess.  In addition, make
+          sure to set appropriate options with `trl_set_checkpoint' to
+          generate checkpoint files for future use.
+
+        * Increase the maximum basis size `maxlan', *Note basis size::
+          for more details.
+
+        * Increase the maximum number of iterations allowed `maxmv',
+          *Note maximum iterations:: for more details.
+
+        * Use a different restarting strategy, *Note restarting
+          scheme:: for more details.
+
+`-1'
+     The internal record of local problem size (`nloc') does not match
+     the value of `nrow' used when calling `trlan'.  Most likely the
+     user has used the `info' variable defined for a different problem.
+
+     SOLUTION: Make sure `trl_init_info' is called before `trlan' and
+     the arguments to both functions are correct for the intended
+     eigenvalue problem.
+
+`-2'
+     The leading dimension of the eigenvector array `evec' is smaller
+     than local problem size, `lde < nrow'.  There isn't enough space in
+     `evec' to store the eigenvectors correctly.
+
+     SOLUTION: Allocate the array `evec' with leading dimension larger
+     or equal to `nrow'.
+
+`-3'
+     The array size of `eval' is too small to store the eigenvalues,
+     `mev < info%ned'.  There isn't enough columns in `evec' either.
+
+     SOLUTION: Increase the size of array `eval' and increase the
+     number of columns in `evec'.
+
+`-4'
+     TRLAN failed to allocate space for storing the projection matrix,
+     etc..  The size of this work array (internally called `misc') is
+     `maxlan * (maxlan + 10)'.  TRLAN tries to allocate its own
+     workspace if the user has not provided enough workspace to store
+     the Lanczos basis vectors and the projection matrix, et al.
+
+     SOLUTION:
+        * If there is addition workspace not used, given TRLAN more
+          workspace.
+
+        * Decrease the size of `maxlan'.  This will decrease the among
+          of workspace required.
+
+        * If you have control over the swap file/partition size,
+          increase it will also solve this problem.
+
+`-5'
+     TRLAN failed to allocate space to store the Lanczos vectors.  The
+     workspace (internally called `base') size required here is
+     `(maxlan + 1 - mev) * nrow'.
+
+     SOLUTION: See solutions for error code `-4'.
+
+`-11'
+     TRLAN does not have enough workspace to perform Gram-Schmidt
+     procedure which is used to perform re-orthogonalization.  This
+     should not happen unless the caller directly calls lower level
+     routine `trlanczos' with insufficient workspace.
+
+     SOLUTION: Increase workspace provided.
+
+`-12'
+     TRLAN does not have enough workspace to compute eigenvalues of a
+     symmetric tridiagonal matrix.  This should not happen unless the
+     caller directly uses the lower level routine `trlanczos' with
+     insufficient workspace.
+
+     SOLUTION: Increase workspace provided.
+
+`-101'
+     The orthogonalization routine of `TRLAN' does not have enough
+     workspace.  This should not happen unless `trl_orth' is directly
+     called outside of TRLAN with insufficient workspace.
+
+     SOLUTION: Increase workspace provided.
+
+`-102'
+     The norm of the residual vector of Lanczos iterations is not a set
+     of valid finite floating-point numbers.  Unless the operator norm
+     is exceeding large, say large than `1E160', this error code should
+     not be generated.  If it is, normally it is an indication of other
+     errors.  For example, the workspace given by the user is not as
+     large as the user indicated to `trlan', the array `evec' is
+     actually smaller than `(lde, mev)', the first `nec' columns of
+     `evec' are not orthonormal vectors on input, or you have encounter
+     a bug in TRLAN or one of the libraries used by TRLAN.
+
+     SOLUTION:
+        * Make sure the workspace array given to `trlan' is as large as
+          claimed, i.e., the actual size of `wrk' is at least as large
+          as `lwrk'.  If `wrk' is present but not `lwrk', the actual
+          size of `wrk' should be no less than `mev'.
+
+        * Make sure there is enough space to store the eigenvalues and
+          eigenvectors even if you think `trlan' is not going to
+          compute all the eigenvectors because `trlan' uses the space
+          in `evec' to store the Lanczos vectors during its
+          computations.
+
+        * If the initial `nec' is not zero, make sure that the known
+          eigenvectors are stored in the first `nec' columns of `evec'
+          and the eigenvalues in the first `nec' elements of `eval'.
+
+     The above solution should be considered applicable to all the
+     following error conditions.  If you have checked everything
+     suggested here, then you may have found an error in TRLAN program.
+     Report the problem to the authors.
+
+`-111'
+     Insufficient workspace to one of a lower level routine used by
+     TRLAN to reduce the arrowhead of the projection matrix into
+     tridiagonal matrix.  This should not happen unless the user
+     directly calls the low level routine.
+
+     SOLUTION: Report the problem to the authors.
+
+`-112'
+     TRLAN has failed to generate an orthogonal transformation to
+     reduce the projection matrix into a tridiagonal matrix, i.e.,
+     `LAPACK' routine `dsytrd'/`ssytrd' has failed.  This is extremely
+     unlikely to happen.
+
+     SOLUTION: Check to make sure you have a correct version of the
+     `LAPACK'.  If your `LAPACK' is installed correctly, see
+     suggestions for error `-102'.
+
+`-113'
+     TRLAN has failed to apply the orthogonal transformation to reduce
+     the projection matrix into a tridiagonal matrix, i.e., `LAPACK'
+     routine `dorgtr'/`sorgtr' has failed.  This is extremely unlikely
+     to happen.
+
+     SOLUTION: See solutions to error `-102'.
+
+`-121'
+     Insufficient workspace to compute the eigenvalues of a tridiagonal
+     matrix.  This error should not occur if the size of workspace `wrk'
+     passed to `trlan' is no less than `lwrk'.
+
+     SOLUTION:  See solutions to error `-102'.
+
+`-122'
+     TRLAN has failed to computed the eigenvalues of a tridiagonal
+     matrix.  This is extremely unlikely to happen.
+
+     SOLUTION: See solutions to error `-102'.
+
+`-131'
+     Insufficient workspace to compute the eigenvectors of a tridiagonal
+     matrix.  This error should not occur if workspace of correct size
+     was provided to TRLAN.
+
+     SOLUTION: See solution to error `-102'.
+
+`-132'
+     TRLAN has failed to compute the eigenvectors of the projection
+     matrix, more specifically, `LAPACK' routine `dstein'/`sstein' has
+     failed.  Normally, if this happens, TRLAN will switch to a
+     different method of computing the eigenvectors.  It is very
+     unlikely the user will see this error flag.  If it does show up,
+     it might be an indication of error in the program.
+
+     SOLUTION: See solutions to error `-102'.
+
+`-141'
+     Insufficient workspace to compute the eigenvectors of a tridiagonal
+     matrix.  This error should not occur if workspace of correct size
+     was provided to TRLAN.
+
+     SOLUTION: See solutions to error `-102'.
+
+`-142'
+     TRLAN has failed because `LAPACK' routine `dsyev'/`ssyev' has
+     failed to compute the eigenvalues and eigenvectors of the
+     projection matrix.
+
+     SOLUTION: Check to make sure `LAPACK' is installed correctly.  See
+     solution to error `-102'.
+
+`-143'
+`-144'
+     TRLAN is unable to match the Ritz values selected to be saved with
+     the eigenvalue found by `dsyev'/`ssyev'.
+
+     SOLUTION: See solutions to error `-102'.
+
+`-201'
+     The Gram-Schmidt procedure is called with insufficient workspace.
+
+     SOLUTION: Increase the workspace size.  If you did not call
+     `trl_cgs' directly, make sure workspace size `lwrk' matches the
+     actual size of `wrk' when calling `trlan'.
+
+`-202'
+`-203'
+     The Gram-Schmidt process has failed to orthogonalize the given
+     vector to the current basis vectors.  This is unlikely to happen.
+     If it does, it indicates two possibly source of problem, the
+     current basis vectors are not orthogonal, or the random vectors
+     generated by TRLAN fall in the space spanned by the current
+     Lanczos vectors.
+
+     SOLUTION: One possible solution to this problem is to call
+     `FORTRAN 90' random number generator to set each processor with a
+     different seed value.  For example, the following code segment will
+     cause `random_number' to generate different random numbers on each
+     processor the next time it is used and it also produces an random
+     vector as initial guess for the Lanczos iterations.
+
+                  call random_number(evec(1:nrow,1))
+                  do i = 1, info%my_pe
+                     call random_number(evec(1:nrow,1))
+                  end do
+
+     If reseting the seed of the random number generator does not fix
+     the problem, then there might be a more serious problem.
+
+     See also solutions to error `-102'.
+
+`-204'
+     The vector norm after orthogonalization is not a valid
+     floating-point number.
+
+     SOLUTION: See solutions to error `-102'.
+
+`-211'
+     The leading dimension of the arrays are not large enough for
+     storing the vectors in a checkpoint file.  This error should have
+     been caught earlier as error `-2' unless the checkpoint files are
+     not for the same problem or not produced with the same number of
+     processors.
+
+     SOLUTION: Make sure the checkpoint files are generated on the same
+     type of machines and for the same problem using the same number of
+     processors.
+
+`-212'
+     Unable to open checkpoint files to read.
+
+     SOLUTION: Make sure the checkpoint files exist, the names are
+     correct, and the I/O unit number `cpio' is not used for something
+     else already.
+
+`-213'
+     The array size stored in checkpoint file is different from passed
+     in by user.  The checkpoint file is probably for a different
+     problem or was generated with different number of processors.
+
+     SOLUTION: Make sure the checkpoint files are generated for the
+     same problem and using the same number of processors.
+
+`-214'
+     There are more vectors stored in the checkpoint file than `maxlan'.
+
+     SOLUTION: Increase the size of `maxlan'.
+
+`-215'
+     Error was encountered while reading the content of the checkpoint
+     files.
+
+     SOLUTION: Make sure the checkpoint files are generated for the
+     same problem on the same type of machines.
+
+`-216'
+     Error was encountered while trying to close the checkpoint file
+     after completed reading.
+
+     SOLUTION: This error probably can be ignored.  Consult you system
+     administrator.
+
+`-221'
+     Unable to open checkpoint files for writing.
+
+     SOLUTION: Make sure the I/O unit number specified to be used for
+     writing checkpoint files are not used for other tasks and make
+     sure you have permission to write files in the location where the
+     program is running.
+
+`-222'
+     Error was encountered while writing the checkpoint files.
+
+     SOLUTION: Make sure there is enough space on the disk to store the
+     checkpoint files.  If there is `k' Lanczos vectors to be written
+     out, the number of bytes is `8*(2+2*k+nrow*(k+1))' for each
+     processor.  The maximum value for `k' is `maxlan'.
+
+`-223'
+     Error was encountered while trying to close the checkpoint files
+     after write them.
+
+     SOLUTION: This error probably can be ignored.  Consult you system
+     administrator.
+
+   This list represents all error code defined in TRLAN version
+1.0.  The function `trlan' should never return an error code not listed
+here.  If you encountered one and you are sure that all the arguments
+to TRLAN functions are correct, you have uncovered a flaw in TRLAN,
+contact the authors with a description of your problem.  A short
+example is always welcome.
+
+
+File: trlan.info,  Node: TRLAN interface,  Next: Parameters,  Prev: TRL_INFO module,  Up: Top
+
+Main function interfaces
+************************
+
+   The majority of the arithmetic computations to solve an eigenvalue
+problem are executed in the main function of TRLAN package and the
+user's own matrix-vector multiplication function.  This section gives a
+more detail description of the interfaces of these two functions.
+
+* Menu:
+
+* interface of trlan::
+* operator interface::
+
+
+File: trlan.info,  Node: interface of trlan,  Next: operator interface,  Up: TRLAN interface
+
+Interface of `trlan'
+====================
+
+   The main computation kernel of TRLAN package is named `trlan'.  We
+have see a short description of its arguments in *Note Example::.  To
+provide a different view of the interface, we show its `Fortran 90'
+`interface' block.
+
+     Subroutine trlan(op, info, nrow, mev, eval, evec, lde, wrk, lwrk)
+       Use trl_info
+       Implicit None
+       Type(TRL_INFO_T) :: info
+       Integer, Intent(in) :: lde, mev, nrow
+       Integer, Intent(in), Optional :: lwrk
+       Double Precision, Intent(inout) :: eval(mev), evec(lde,mev)
+       Double Precision, Target, Dimension(:), Optional :: wrk
+       Interface
+          Subroutine OP(nrow, ncol, xin, ldx, yout, ldy)
+            Integer, Intent(in) :: nrow, ncol, ldx, ldy
+            Double Precision, Dimension(ldx*ncol), Intent(in) :: xin
+            Double Precision, Dimension(ldy*ncol), Intent(out) :: yout
+          End Subroutine OP
+       End Interface
+     End Subroutine trlan
+
+Most of the arguments of this subroutine are explained before in *Note
+Example::.  However for completeness, we will list all of them here.
+
+`op'
+     The operator routine.  It applies the operator on `xin' and stores
+     the resulting vectors in `yout'.  In linear algebra terms, this is
+     a matrix-vector multiplication routine.  The vectors to be
+     multiplied are stored in `xin' and the resulting vectors are
+     stored in `yout'.
+
+`info'
+     A variable of `Fortran 90' derived type `TRL_INFO_T'.  It carries
+     the information to and from TRLAN.  *Note TRL_INFO module::, for
+     more details.
+
+`nrow'
+     The number of rows on this processor if the problem is distributed
+     using MPI, else the number of total rows in a Lanczos vector.
+
+`mev'
+     The number of elements in array `eval' and the number of columns in
+     array `evec'.  It denotes the maximum number of eigenpairs that can
+     be stored in `eval' and `evec'.
+
+NOTE: Since the array `evec' will be used internal to store
+     `mev' Lanczos vectors, even if you do not think TRLAN is able to
+     compute `mev' eigenvectors at the end, you still declare `evec' as
+     large as (`nrow, mev').
+
+`eval'
+
+`evec'
+     The arrays used to store the eigenvalue values (`eval') and the
+     eigenvectors (`evec').  On entry to `trlan', if `info%nec' is
+     greater than zero (0), the first `info%nec' elements of `eval'
+     shall contain the eigenvalues already known and the first
+     `info%nec' columns of `evec' shall contain the corresponding
+     eigenvectors.  These eigenpairs are assumed to have zero residual
+     norms and will not be modified by TRLAN.  On exit from `trlan',
+     the converged solutions are stored in the front of `eval' and
+     `evec', i.e.  the first `info%nec' eigenvalues in `eval' contains
+     the converged eigenvalues and the first `info%nec' columns of
+     `evec' are the corresponding eigenvectors.
+
+`lde'
+     The leading dimension of array `evec'.  It is expected to be no
+     less than `nrow', otherwise the eigenvectors can not be stored
+     properly and `trlan' will abort with error code `info%stat = -2'.
+
+`wrk'
+`lwrk'
+     These two are optional arguments.  If both are present, `wrk' will
+     be used as workspace inside and `lwrk' shall be the number of
+     elements in array `wrk'.  TRLAN will try to use this workspace if
+     it is large enough for either `misc' (size `maxlan * (maxlan +
+     10)') or `base' (size `(maxlan + 1 - mev) * nrow').  If `wrk' is
+     present but not `lwrk', the workspace size is assumed to be `mev'.
+     It does not make sense to have only `lwrk' without argument
+     `wrk'.  If it is the case, `lwrk' is ignored.
+
+     If argument `wrk' is present and there is enough space to store the
+     residual norms of the solutions, the first `info%nec' elements of
+     `wrk' will contain the residual norms corresponding to the
+     `info%nec' converged solutions.
+
+
+File: trlan.info,  Node: operator interface,  Prev: interface of trlan,  Up: TRLAN interface
+
+Operator interface
+==================
+
+   TRLAN program require the user to provide his/her own matrix-vector
+multiplication routine.  The matrix-vector multiplication routine needs
+to have the following interface.
+
+     Subroutine OP(nrow, ncol, xin, ldx, yout, ldy)
+       Integer, Intent(in) :: nrow, ncol, ldx, ldy
+       Double Precision, Dimension(ldx*ncol), Intent(in) :: xin
+       Double Precision, Dimension(ldy*ncol), Intent(out) :: yout
+     End Subroutine OP
+
+`nrow'
+     The number of rows on this processor if the problem is distributed
+     using MPI, otherwise the number of total rows in a Lanczos vector.
+
+`ncol'
+     The number of vectors (columns in `xin' and `yout') to be
+     multiplied.
+
+`xin'
+     The array to store the input vectors to be multiplied.  The
+     following two declarations are equivalent on most machines,
+          Double Precision, Dimension(1:ldx,1:ncol), Intent(in)::xin
+          Real*8 xin(1:ldx, 1:ncol)
+     The `i'th column of `xin' is `xin((i-1)*ldx+1 : (i-1)*ldx+nrow)'
+     if `xin' is declared as one-dimensional array.  If the user
+     routine actually declare it as a two-dimensional array, the `i'th
+     column should be `xin(1:nrow, i)'.  TRLAN calls OP using Fortran
+     77 style argument matching, only starting address of `xin' will be
+     passed.
+
+     For those who are familiar with `C/C++': `xin' is actually passed
+     as `double *' that points to the first element of array.  Elements
+     in a column are ordered consecutively and the `i'th column starts
+     at `(i-1)*ldx'.
+
+`ldx'
+     The leading dimension of the array `xin' when it is declared as
+     two-dimensional array.
+
+`yout'
+     The array to store results of the multiplication.  It can be
+     equivalently declared as
+          Double Precision,Dimension(1:ldy,1:ncol),Intent(out)::yout
+          Real*8 yout(1:ldy, 1:ncol)
+     The usage notes on `xin' also apply to `yout'.
+
+`ldy'
+     The leading dimension of the array `yout' when it is declared as
+     two-dimensional array.
+
+   This simple interface only has enough information to describe the
+input and output vectors.  Here are some possible ways of passing the
+matrix information to this subroutine.  In `Fortran 90', we recommend
+using a module to encapsulate information related to the matrix.  If
+`Fortran 77' is used, a `common block' may be used for the same
+purpose.  Normally, if another language like `C' or `C++' is used, the
+matrix can be packaged in a `struct' or a `class', and accessed through
+a global variable.
+
+   In case the user does not want to write his/her own matrix-vector
+multiplication routine.  There are a number of packages out there that
+can be used.  Useful software depots and information archives include
+`ACM TOMS'
+     `http://www.acm.org/toms/'
+
+`ACTS Toolkit'
+     `http://acts.nersc.gov/'
+
+`National HPCC Software Exchange'
+     `http://nhse.cs.utk.edu/'
+
+`NETLIB'
+     `http://www.netlib.org'
+
+`Scientific Application on Linux'
+     `http://SAL.KachinaTech.COM/'
+
+Potentially useful packages include
+`Aztec'
+     `http://www.cs.sandia.gov/CRF/aztec1.html'
+
+`BlockSolve'
+     `http://www.mcs.anl.gov/sumaa3d/BlockSolve/'
+
+`P_SPARSLIB'
+     `http://www.cs.umn.edu/Research/arpa/p_sparslib/psp-abs.html'
+
+`PETSc'
+     `http://www.mcs.anl.gov/petsc/'
+
+`SPARSKIT'
+     `http://www.cs.umn.edu/Research/arpa/SPARSKIT/sparskit.html'
+
+   NOTE: All of the packages mentioned above have matrix-vector
+multiplications routines.  However some of them are designed for solving
+linear systems or even larger granularity tasks, some effort may be
+required to directly using their matrix-vector multiplication routines.
+
+
+File: trlan.info,  Node: Parameters,  Next: Miscellaneous,  Prev: TRLAN interface,  Up: Top
+
+Recommended parameter choices
+*****************************
+
+* Menu:
+
+* basis size::
+* tolerance::
+* restarting scheme::
+* maximum iterations::
+
+   Before calling `trlan', the user needs to decide a few parameters.
+The most important parameters are arguments to function
+`trl_init_info'.  The parameters like `nrow', `lohi' and `ned' are
+determined by the problem to be solved, other parameters to control the
+execution of TRLAN might not be familiar to casual users.  This part of
+the manual will give some recommendations on how to determine those
+parameters.
+
+
+File: trlan.info,  Node: basis size,  Next: tolerance,  Up: Parameters
+
+Selecting the maximum basis size (`maxlan')
+===========================================
+
+   A few factors come into play when picking the maximum basis size
+`maxlan', for example, the available computer memory size, the number
+of eigenvalues wanted, and the separation of wanted eigenvalues from
+the others.  The first rule of thumb is that `maxlan' should at least
+as large as
+
+                         `ned + min(6, ned)'.
+
+   Generally, the larger it is, the better TRLAN will perform.  The
+limitation on using a very large basis is that there might not be enough
+computer memory to store the basis in memory.  Another concern regarding
+using a large basis is that the Gram-Schmidt orthogonalization process
+will be expensive.  In addition, if the basis size is larger than 1000,
+then the time spent in finding the eigenvectors of the projection matrix
+may be a substantial portion of the overall execution time.
+
+   If the wanted eigenvalues are easier to compute compared to others,
+then it does not matter how large the basis size is, the restarted
+Lanczos method will find the solutions fairly quickly.  If the wanted
+eigenvalues converge slower than the unwanted ones, such as the example
+in *Note Example::, then the above recommended minimum size is too small
+to be effective.  In this case, the user should look at how many
+eigenvalues were locked and compare it with the number of eigenvalues
+converged.  In difficult case, it is not unusually to see a large number
+of unwanted eigenpairs converge before the wanted one are finally
+computed.  In the previous example, the minimum recommended basis size
+is 11.  Since it is relatively small and we know the eigenvalue problem
+is relatively hard, we first tried `maxlan = 20'.  After 2,000
+matrix-vector multiplications, there are two wanted eigenvalues
+converged, and six eigenvalues were locked.  After this first test, we
+use the following guidelines to choose the next basis size.
+
+  1. Add two to `maxlan' for each locked eigenvalue.
+
+  2. Increase the basis size by a factor of `ned / nec'.
+
+
+The first rule suggests the new basis size of about 30 and the second
+suggest the next choice could be 50.  The basis size used in the
+example is 40.  We are able to find the five smallest eigenvalues with
+this choice.  Further tests show that using basis size of 30 can compute
+the same 5 eigenvalues in 1056 matrix-vector multiplications, and using
+a basis size of 50 TRLAN only need 777 matrix-vector multiplications.
+However, in both cases, more time was used.  This demonstrates the
+complexity of the choice.  In this particular case, either 30, 40 or 50
+is a reasonable choice.
+
+
+File: trlan.info,  Node: tolerance,  Next: restarting scheme,  Prev: basis size,  Up: Parameters
+
+Selecting the tolerance
+=======================
+
+   The convergence test used in this program is `r < tol * || A ||'.
+Normally, if the matrix is stored, the accuracy of the matrix-vector
+multiplication routine is on the order of `epsilon * || A ||'.  The
+unit round-off error (`epsilon') of a 64-bit IEEE floating-point number
+is approximately `2.2E-16'.  The default value of `tol' is about
+`1.49E-8'.  Typically, if 5 digits of accuracy is desired for the
+eigenvectors, `tol' should be set to `1E-5'.
+
+
+File: trlan.info,  Node: restarting scheme,  Next: maximum iterations,  Prev: tolerance,  Up: Parameters
+
+Selecting a restarting scheme
+=============================
+
+   This is another parameter that can change the execution time
+dramatically.  However, effective restarting schemes are still subject
+of active academic researches.  On the example given before, schemes 1
+and 2 uses about the same amount of matrix-vector multiplications which
+are more than the number of matrix-vector multiplications used with
+schemes 3 and 4.  However, because schemes 3 and 4 perform more restarts
+and they save more basis vectors during restarting, their restarting
+procedures are more expensive.  The actual execution time with schemes 3
+and 4 are longer than those with schemes 1 and 2.  Based on these
+observations, schemes 3 and 4 are better if the matrix-vector
+multiplication is very time-consuming, say, one matrix-vector
+multiplication takes more time than an average restart.  If the
+matrix-vector multiplication is relatively inexpensive, then schemes 1
+and 2 are preferred. Scheme 5 attempts to mimic the restarting strategy
+in ARPACK, in many cases, it has comparable performance as the scheme 1.
+
+
+File: trlan.info,  Node: maximum iterations,  Prev: restarting scheme,  Up: Parameters
+
+Selecting the maximum iterations
+================================
+
+   TRLAN is stopped usually after it has found all the wanted
+eigenvalues and the corresponding eigenvectors.  The other normal
+stopping condition is to stop after `maxmv' number of matrix-vector
+multiplications.  Typically, we would allow a fixed number of
+matrix-vector multiplications for each eigenvalue, for example, 100 per
+eigenvalue.  When we are trying to find the correct value to use for
+`maxlan' and `restart' we may limit the number of matrix-vector
+multiplications used to reduce the time consumed.  The default value in
+`trl_init_info' is very large especially for large problems.  An more
+acceptable limit might be 1000 matrix-vector multiplications per
+eigenvalue.  This should be sufficient for most problems.  If more than
+1000 matrix-vector multiplications are used to compute one eigenvalue,
+other means of computing eigenvalues should be tried.  For example, the
+shift-and-invert Lanczos method is often able to compute the desired
+eigenvector in a few steps.  The shift-and-invert scheme computes the
+extreme eigenvalues of `inv(A - lambda I)' first, then derive the
+actual eigenvalues of `A'.  To use this scheme, one need to either
+invert the matrix or at least being able to solve linear systems, `(A -
+lambda I) u = v'.  If neither is feasible, then the Davidson method
+might be an alternative to consider.
+
+   If TRLAN does not return with status 0, consult *Note debug
+parameters::, to setup a debugging session, and refer to *Note error
+code::, for error encountered and possible solutions.
+
+
+File: trlan.info,  Node: Miscellaneous,  Next: About Lanczos,  Prev: Parameters,  Up: Top
+
+Miscellaneous issues
+********************
+
+* Menu:
+
+* workspace::
+* other versions::
+* other languages::
+* debugging::
+* contacting authors::
+
+
+File: trlan.info,  Node: workspace,  Next: other versions,  Up: Miscellaneous
+
+Workspace requirement
+=====================
+
+   Some of the issues related to workspace requirements have been
+mentioned through out this manual.  This section provide a central
+location to collect all the information for ease of reference.
+
+   Inside of `trlan', there are three large chucks of workspace,
+`evec', `base' and `misc'.  The user always provides the array `evec',
+since it is necessary to carry input and output information for TRLAN.
+Its size is clearly defined in the calling sequence by `lde' and `mev'.
+The array `base' is used to store the basis vectors if the array
+`evec' can not store `maxlan+1' vectors.  Given the maximum basis size
+`maxlan', the size of `base' is `(maxlan + 1 - mev) * nrow)'.  The array
+`misc' is used to store the projection matrix, the eigenvalues and
+eigenvectors of the projection matrix, workspace required by all lower
+level routines of TRLAN, library routines from `LAPACK' and `BLAS'.
+Its size should be no less than `maxlan * (maxlan + 10)'.  If it is
+larger in size, some library routines might run faster.  Thus if there
+is large amount of computer memory, the user can let TRLAN use it by
+pass in a large array `wrk'.
+
+   If the user provides a workspace `wrk' to `trlan', then its size is
+checked to see either one of `misc' or `base' or both of them can fit
+inside the workspace.  If at lease one of them can fit into `wrk', it
+would be used.  If `wrk' is large enough for both `base' and `misc',
+the array `base' will use `(maxlan + 1 - mev) * nrow)' elements and the
+rest is given to `misc'.  If `trlan' can not use `wrk', it will allocate
+workspace of appropriate size internally.
+
+   If `wrk' is provided, its content is not used on input.  However
+before returning, `trlan' will copy the residual norms of the converged
+Ritz pairs in the first `nec' elements of `wrk'.
+
+
+File: trlan.info,  Node: other versions,  Next: other languages,  Prev: workspace,  Up: Miscellaneous
+
+Variations of TRLAN
+===================
+
+   We have isolated the communication needs of TRLAN in four
+subroutines, `trl_init_info', `trl_sync_flag', `trl_g_sum', and
+`trl_g_dot'.  The four subroutines are located in a file called
+`trl_comm_mpi.f90' for the MPI version and `trl_comm_none.f90' for
+sequential version.  If the the matrix-vector multiplication routine
+and the main program are written for sequential machine, the user can
+simply compile with `trl_comm_none.f90' to get the sequential version
+of the program.  This setup makes it easy to adopt TRLAN for different
+types of eigenvalue problems.
+
+   The function `trl_init_info' is used to initialize the `TRL_INFO_T'
+type variable to be used by `trlan'.  The function `trl_sync_flag' is
+used to synchronize the status flags used inside TRLAN.  In the current
+implementation, it computes the minimum value of `info%stat' on each
+processor and reset all `info%stat' to the minimum value.  Given that
+the error flags are all less than zero (0), if any processor has
+detected an error, all of them will be set to indicate an error.
+`Trl_g_sum' computes the global sum of an input array and it returns
+the global sum in the same array.  The subroutine `trl_g_dot' computes
+the dot-products among the Lanczos vectors.
+
+   If desired, one can change these four routines to suit different
+situations.  For example, if the physical domain of the eigenvalue
+problem has certain symmetry, usually the discretization does not
+contain the whole domain but only a portion of it.  Since not every
+element of a vector is stored, the dot-product routine needs to be
+modified.  In this case, only `trl_g_dot' and `trl_g_sum' need to be
+modified in order for TRLAN for function properly.
+
+
+File: trlan.info,  Node: other languages,  Next: debugging,  Prev: other versions,  Up: Miscellaneous
+
+Calling from other languages
+============================
+
+   TRLAN program is implemented in `Fortran 90'.  Since `Fortran 90' is
+backward compatible with previous versions of `Fortran'.  There should
+be no problem to use it in any other `Fortran' program.  However, at
+the moment, the authors are not aware of a scheme to reliably access
+`Fortran 90' subroutine with optional arguments, a subroutine with
+fixed arguments is created to get around this problem.  The fixed
+arguments subroutine has the following interface,
+
+           subroutine trlan77(op, ipar, nrow, mev, eval, evec, lde,
+          &                    wrk, lwrk)
+           integer ipar(32), nrow, mev, lde, lwrk
+           double precision eval(mev), evec(lde, mev), wrk(lwrk)
+           external op
+
+The `Fortran 90' derived type `TRL_INFO_T' variable is removed from
+this user interface since its primary access function `trl_init_info'
+contains optional arguments as well.  Here is a list showing how the
+integer array `ipar' is mapped to the elements of `TRL_INFO_T',
+
+   - `ipar(1)  = stat',
+
+   - `ipar(2)  = lohi',
+
+   - `ipar(3)  = ned',
+
+   - `ipar(4)  = nec',
+
+   - `ipar(5)  = maxlan',
+
+   - `ipar(6)  = restart',
+
+   - `ipar(7)  = maxmv',
+
+   - `ipar(8)  = mpicom',
+
+   - `ipar(9)  = verbose',
+
+   - `ipar(10) = log_io',
+
+   - `ipar(11) = iguess',
+
+   - `ipar(12) = cpflag',
+
+   - `ipar(13) = cpio',
+
+   - `ipar(14) = mvop',
+
+   - `ipar(24) = locked',
+
+   - `ipar(25) = matvec',
+
+   - `ipar(26) = nloop',
+
+   - `ipar(27) = north',
+
+   - `ipar(28) = nrand',
+
+   - `ipar(29) = total time in milliseconds',
+
+   - `ipar(30) = MATVEC time in milliseconds'.
+
+   - `ipar(31) = re-orthogonalization time in milliseconds'.
+
+   - `ipar(32) = restarting time in milliseconds'.
+
+Among the parameters, `ipar(2 : 14)' are input parameters, `ipar(1)',
+`ipar(4)' and `ipar(24 : 32)' are output parameters.
+
+   There are two floating-point number elements in `TRL_INFO_T', `tol'
+and `crat'.  Before calling `trlan77', the first element of `wrk'
+should be set to the residual tolerance `tol'.  Inside `trlan77',
+`wrk(1)' is transfered to `tol'.  On return from `trlan77', the first
+`ipar(4)' elements of `wrk' store the residual norms corresponding to
+the converged eigenvalues and eigenvectors.  Element `ipar(4)+1' of
+`wrk' will store the last known value of `crat'.  *Caution*: Fail to
+set `wrk(1)' to a valid floating-point number will cause TRLAN to
+produce floating-point exceptions!
+
+   The subroutine `trlan77' is relative simple to call from `C/C++'.
+The file `simplec.c' in the distribution of TRLAN version 1.0 has
+equivalent functionalities as `simple.f90' and `simple.f77'.
+
+
+File: trlan.info,  Node: debugging,  Next: contacting authors,  Prev: other languages,  Up: Miscellaneous
+
+Debugging
+=========
+
+   Here are a few suggestions on what to watch out for when using TRLAN.
+Some of suggestions are simply good programming practices.
+
+   - Use `implicit none' in `Fortran' programs.  This is very effective
+     in catching typos.  It is also a good practice to check the
+     programs with automated tools such as `lint' and `ftnchek'.
+
+   - Make sure the arrays passed to TRLAN have correct dimensions and
+     make sure the argument `lwrk' is actually the size of array `wrk'.
+
+   - Make sure all input variables to TRLAN are initialized correctly
+     and arguments to `trlan' matches arguments to `trl_init_info'.
+
+   - When encountering problems, turn on debugging options in TRLAN by
+     calling `trl_set_debug' prior to calling `trlan'.  Set the ninth
+     and tenth element of array `ipar' to appropriate values when
+     `trlan77' is used.  Consult *Note debug parameters:: to setup a
+     debugging session.  Refer to *Note error code:: for error
+     encountered and possible solutions.
+
+   - If all above have been done and there is still a problem, contact
+     the author at the address given in *Note contacting authors::.
+
+
+File: trlan.info,  Node: contacting authors,  Prev: debugging,  Up: Miscellaneous
+
+Contacting the authors
+======================
+
+   The authors of TRLAN and this document can be contacted at the
+following email addresses: `kwu@lbl.gov' (Kesheng Wu),
+`hdsimon@lbl.gov' (Horst Simon).  Kesheng Wu can also be reached at
+`kwu@ieee.org' and `kwu@computer.org'.  The authors also maintain their
+own research pages on the web at `http://www.nersc.gov/~kewu' and
+`http://www.nersc.gov/research/SIMON'.  The updated software package
+can also be found at both web addresses.
+
+
+File: trlan.info,  Node: About Lanczos,  Next: Index,  Prev: Miscellaneous,  Up: Top
+
+References
+**********
+
+   This is a list books and research papers on the Lanczos algorithm and
+restarting.  *Note operator interface::, for a list of software
+archives.
+
+  1. J. Baglama, D. Calvetti, and L. Reichel.  Iterative methods for
+     the computation of a few eigenvalues of a large symmetric matrix.
+     *BIT*, 36:400-421, 1996.
+
+  2. F. Chatelin.  *Eigenvalues of Matrices*.  Wiley, 1993.
+
+  3. J. Cullum and R. A. Willoughby.  *Lanczos Algorithms for Large
+     Symmetric Eigenvalue Computations: Theory*, volume 3 of *Progress
+     in Scientific Computing*.  Birkhauser, Boston, 1985.
+
+  4. J. Cullum and R. A. Willoughby.  *Lanczos Algorithms for Large
+     Symmetric Eigenvalue Computations: Programs*, volume 4 of *Progress
+     in Scientific Computing*.  Birkhauser, Boston, 1985.
+
+  5. T. Ericsson and A. Ruhe.  The spectral transformation Lanczos
+     method for numerical solution of large sparse generalized
+     symmetric eigenvalue problems.  *Math. Comp.*, 35:1251-1268, 1980.
+
+  6. R. G. Grimes, J. G. Lewis, and H. D. Simon.  A shifted block
+     Lanczos algorithm for solving sparse symmetric   generalized
+     eigenproblems.  *SIAM J. Matrix Anal. Appl.*, 15(1):228-272, 1994.
+
+  7. Beresford N. Parlett.  *The symmetric eigenvalue problem*.  SIAM,
+     Philadelphia, PA, 1998.
+
+  8. A. Ruhe.  Rational Krylov sequence methods for eigenvalue
+     computation.  *Lin. Alg. Appl.*, 58:391-405, 1984.
+
+  9. A. Ruhe.  Rational Krylov algorithm for nonsymmetric eigenvalue
+     problems   II: matrix pairs.  *Lin. Alg. Appl.*, 197/198:283-296,
+     1994.
+
+ 10. A. Ruhe.  The rational Krylov algorithm for nonsymmetric
+     eigenvalue problems   III: Complex shifts for real matrices.
+     *BIT*, 34:165-176, 1994.
+
+ 11. Yousef Saad.  *Numerical Methods for Large Eigenvalue Problems*.
+     Manchester University Press, 1993.
+
+ 12. D. S. Sorensen.  Implicit application of polynomial filters in a
+     K-step Arnoldi   method.  *SIAM J. Matrix Anal. Appl.*,
+     13(1):357-385, 1992.
+
+ 13. A. Stathopoulos, Y. Saad, and K. Wu.  Dynamic thick restarting of
+     the Davidson and the implicitly   restarted Arnoldi methods.
+     Technical Report UMSI 96/123, Minnesota Supercomputer Institute,
+     University of Minnesota, 1996.
+
+ 14. K. Wu and H. Simon.  Thick-restart Lanczos method for symmetric
+     eigenvalue problems.  Technical Report 41412, Lawrence Berkeley
+     National Laboratory, 1998.
+
+ 15. K. Wu and H. Simon.  Dynamic Retarting Schemes For Thick-Restart
+     Lanczos Method.  Technical Report xxxxx, Lawrence Berkeley
+     National Laboratory, 1999.
+
+
+
+File: trlan.info,  Node: Index,  Prev: About Lanczos,  Up: Top
+
+Index
+*****
+
+* Menu:
+
+* algorithm:                             Overview.
+* authors' email:                        contacting authors.
+* C/C++ <1>:                             other languages.
+* C/C++:                                 Overview.
+* checkpointing:                         checkpointing.
+* convergence factor:                    elements.
+* eigenvalue problem, set up:            initialization.
+* error code:                            error code.
+* example:                               Example.
+* failure due to workspace:              error code.
+* failure, Gram-Schmidt:                 error code.
+* Fortran 77 version:                    other languages.
+* Fortran 90, advantages:                Overview.
+* Gram-Schmidt, failure:                 error code.
+* info, initialization:                  initialization.
+* info, modifying <1>:                   checkpointing.
+* info, modifying:                       debug parameters.
+* info, printing:                        printing.
+* installation:                          Installation.
+* Lanczos basis:                         Overview.
+* locked <1>:                            elements.
+* locked:                                printing.
+* long output:                           Example.
+* matrix-vector multiplication:          operator interface.
+* MATVEC used <1>:                       elements.
+* MATVEC used:                           printing.
+* maximum basis size:                    basis size.
+* maximum matrix-vector multiplication:  maximum iterations.
+* op count:                              elements.
+* operator interface:                    operator interface.
+* operator, argument:                    interface of trlan.
+* print, long:                           Example.
+* print, short:                          printing.
+* references:                            About Lanczos.
+* residual tolerance:                    tolerance.
+* restarting schemes:                    restarting scheme.
+* set debug flags:                       debug parameters.
+* set up:                                initialization.
+* short output:                          printing.
+* small example:                         Example.
+* timing <1>:                            elements.
+* timing:                                printing.
+* TRL_INFO_T elements:                   elements.
+* TRLAN interface:                       interface of trlan.
+* troubleshooting:                       error code.
+* workspace:                             workspace.
+* workspace size problems:               error code.
+* workspace, argument:                   interface of trlan.
+
+

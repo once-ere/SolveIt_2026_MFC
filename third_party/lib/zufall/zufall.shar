@@ -1,0 +1,981 @@
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  READMEC zufall.c
+# Wrapped by wpp@yukon on Mon Oct 17 10:23:12 1994
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'READMEC' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'READMEC'\"
+else
+echo shar: Extracting \"'READMEC'\" \(2984 characters\)
+sed "s/^X//" >'READMEC' <<'END_OF_FILE'
+XREADMEC for zufall random number package (C version)
+X------- --- ------ ------ ------ -------
+XThis package contains a portable random number generator set
+Xfor: uniform (u in [0,1)), normal (<g> = 0, <g^2> = 1), and
+XPoisson distributions. The basic module, the uniform generator,
+Xuses a lagged Fibonacci series generator:
+X
+X              t    = u(n-273) + u(n-607)
+X              u(n) = t - float(int(t))
+X
+Xwhere each number generated, u(k), is floating point. Since
+Xthe numbers are floating point, the left end boundary of the
+Xrange contains zero. This package is portable except that
+Xthe test package contains some machine dependent timing data.
+XThese are cycle times (in seconds) for NEC SX-3, Fujitsu VP2200, 
+XCray Y-MP, and Sun-4. Select your favorite and comment out the 
+Xothers. There are also vectorization directives for Cray Y-MP
+Xmachines in the form of "pragma _CRI", which should be ignored
+Xalthough perhaps complained about by other compilers. Otherwise 
+Xthe package is portable and returns the same set of floating 
+Xpoint numbers up to word precision on any machine. 
+X
+XExternal documentation, "Lagged Fibonacci Random Number Generators
+Xfor the NEC SX-3," is to be published in the International
+XJournal of High Speed Computing (1994). Otherwise, ask the
+Xauthor: 
+X
+X         W. P. Petersen 
+X         IPS, RZ F-5
+X         ETHZ
+X         CH 8092, Zurich
+X         Switzerland
+X
+Xe-mail:  wpp@ips.ethz.ch.
+X
+XThe package contains the following routines:
+X
+X------------------------------------------------------
+XUNIFORM generator routines:
+X
+X      int zufalli_(seed)
+X      int seed;
+X/* initializes struct containing seeds. if seed=0,
+X   the default value is 1802. */
+X
+X      int zufall_(n,u)
+X      int n;
+X      double u[n];
+X/*  returns set of n uniforms u[0], ..., u[n-1]. */
+X
+X      int zufallsv_(zusave)
+X      double zusave[608];
+X/*  saves buffer and pointer in zusave, for later restarts */
+X
+X      int zufallrs_(zusave)
+X      double zusave[608];
+X/*  restores seed buffer and pointer from zusave */
+X------------------------------------------------------
+X
+XNORMAL generator routines:
+X
+X      int normalen_(n,g)
+X      int n;
+X      double g[n];
+X/*  returns set of n normals g[0], ..., g[n-1] such that
+X    mean <g> = 0, and variance <g**2> = 1. */
+X
+X      int normalsv_(normsv)
+X      double normsv[1634];
+X/*  saves zufall seed buffer and pointer in normsv
+X    buffer/pointer for normalen restart also in normsv */
+X
+X      int normalrs_(normsv)
+X      double normsv[1634];
+X/*  restores zufall seed buffer/pointer and 
+X    buffer/pointer for normalen restart from normsv */
+X------------------------------------------------------
+X
+XPOISSON generator routine:
+X
+X      int fische_(n,mu,q)
+X      integer n,q[n];
+X      double mu;
+X/*  returns set of n integers q, with poisson
+X    distribution, density p(q,mu) = exp(-mu) mu**q/q!
+X    
+X    USE zufallsv and zufallrs for stop/restart sequence */
+X
+X----------------- END READMEC ------------------------
+X------------------------------------------------------
+END_OF_FILE
+if test 2984 -ne `wc -c <'READMEC'`; then
+    echo shar: \"'READMEC'\" unpacked with wrong size!
+fi
+# end of 'READMEC'
+fi
+if test -f 'zufall.c' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'zufall.c'\"
+else
+echo shar: Extracting \"'zufall.c'\" \(17299 characters\)
+sed "s/^X//" >'zufall.c' <<'END_OF_FILE'
+X/* Common Block Declarations */
+X
+Xstruct klotz0_1_ {
+X    double buff[607];
+X    int ptr;
+X};
+X
+X#define klotz0_1 (*(struct klotz0_1_ *) &klotz0_)
+X#define min(a,b) (a<b)?a:b
+X
+Xstruct klotz1_1_ {
+X    double xbuff[1024];
+X    int first, xptr;
+X};
+X
+X#define klotz1_1 (*(struct klotz1_1_ *) &klotz1_)
+X
+X/* Initialized data */
+X
+Xstruct {
+X    int fill_1[1214];
+X    int e_2;
+X    } klotz0_ = { {0}, 0 };
+X
+Xstruct {
+X    double fill_1[1024];
+X    int e_2[2];
+X    double e_3;
+X    } klotz1_ = { {0}, 0, 0, 0. };
+X
+X
+X/* Table of constant values */
+X
+X#define NPTS 5000
+X
+Xmain()
+X{
+X    int seed;
+X    double a[NPTS];
+X    int p[NPTS];
+X    float t1, t2, tt[2];
+X    float etime_();
+X    extern int fischet_(), zufalli_(), normalt_(), zufallt_();
+X
+X
+X/* this program tests three random number generators: */
+X
+X/*      zufallt = a uniform distribution of r.v.'s test */
+X
+X/*      normalt  = a gaussian distribution of r. v.'s test */
+X
+X/*      fischet  = poisson distribution of random numbers test */
+X
+X
+X/*  initialize the seeds for the uniform random number generator */
+X
+X    seed = 0;
+X    t1 = etime_(tt);
+X    zufalli_(seed);
+X    t2 = etime_(tt);
+X    t1 = t2 - t1;
+X
+X    printf("\n               ========================\n");
+X    printf("               ===== BEGIN TESTS  =====\n");
+X    printf("               ========================\n");
+X    printf("\n --------------------------------------\n");
+X    printf("  ***** Initialization of zufall *****\n");
+X    printf(" --------------------------------------\n");
+X    printf("    Initialization takes %e seconds\n",t1); 
+X
+X/*  first do the uniform distribution test */
+X
+X    printf("\n --------------------------------------\n");
+X    printf("  ***** Uniform distribution test ****\n");
+X    printf(" --------------------------------------\n");
+X    zufallt_(NPTS, a);
+X
+X/*  next, the box-muller gaussian generator test */
+X
+X    printf("\n --------------------------------------\n");
+X    printf("  **** Gaussian distribution test ****\n");
+X    printf(" --------------------------------------\n");
+X    normalt_(NPTS, a);
+X
+X/*  finally, the poisson distribution test yields ints */
+X
+X    printf("\n --------------------------------------\n");
+X    printf("  ***** Poisson distribution test ****\n");
+X    printf(" --------------------------------------\n");
+X    fischet_(NPTS, p);
+X
+X    printf("\n               ========================\n");
+X    printf("               ===== END OF TESTS =====\n");
+X    printf("               ========================\n");
+X
+X} /* MAIN__ */
+X
+X
+Xint zufallt_(n, a)
+Xint n;
+Xdouble *a;
+X{
+X    /* Initialized data */
+X
+X/* cycle time for Sun-4 */
+X    float cycle = 4.0e-8; 
+X/* cycle time for NEC SX-3 */
+X/*  float cycle = 2.9e-9; */
+X/* cycle time for Cray Y-MP */
+X/*  float cycle = 6.0E-9; */
+X/* cycle time for VP2200 */
+X/*  float cycle = 3.2E-9; */
+X
+X    double diff;
+X    int nits;
+X    extern int zufallrs_(), zufallsv_();
+X    double b[607];
+X    int i, k;
+X    double svblk[608]; 
+X    float etime_();
+X    float t1, t2, t3, tt[2];
+X    int ia[20], ii;
+X    extern int zufall_();
+X
+X
+X/* number of iterations of test: nits */
+X
+X    nits = 128;
+X
+X    for (k = 0; k < 20; ++k) {
+X	ia[k] = 0;
+X    }
+X
+X    t1 = 100.;
+X    for (k = 0; k < nits; ++k) {
+X	t2 = etime_(tt);
+X	zufall_(n, a);
+X	t3 = etime_(tt);
+X	t2 = t3 - t2;
+X	t1 = min(t2,t1);
+X	for (i = 0; i < n; ++i) {
+X	    ii = (int) (a[i] * (double)20.);
+X	    ++ia[ii];
+X	}
+X
+X/*  last time, save klotz0 for save/resore test */
+X
+X	if (k == nits - 2) {
+X	    zufallsv_(svblk);
+X	}
+X    }
+X
+X/*  test save/restore sequence */
+X
+X    zufallrs_(svblk);
+X    zufall_(607, b);
+X    diff = 0.;
+X    for (i = 0; i < (min(n,607)); ++i) {
+X	diff += (b[i] - a[i])*(b[i] - a[i]);
+X    }
+X
+X    if (diff != 0.) {
+X	printf("ERROR in start/restart: diff = %e\n", diff);
+X    } else {
+X	printf("    zufall save/restore test OK \n");
+X    }
+X
+X    t1 = t1 / ((float)n);
+X    printf("\n    time/uniform = %e \n",t1);
+X    t1 = t1 / cycle;
+X    printf("    Cps./uniform = %e \n",t1);
+X    printf("\n    Histogram of uniform distribution:\n");
+X    printf("    --------- -- ------- ------------ \n");
+X    for (k = 0; k < 20; ++k) {
+X        if(k<9) printf("    bin[%d]  = %d\n",k+1,ia[k]);
+X        else    printf("    bin[%d] = %d\n",k+1,ia[k]);
+X    }
+X    return 0;
+X} /* zufallt_ */
+X
+X
+Xint normalt_(n, x)
+Xint n;
+Xdouble *x;
+X{
+X    double diff;
+X    int nits;
+X    extern int normalen_(), normalrs_(), normalsv_();
+X    int i, k;
+X    double y[128], boxsv[1634]; 
+X    float etime_();
+X    float t1, t2, t3; 
+X    float tt[2];
+X    double  x1, x2, x3, x4, x5, x6;
+X    int kk;
+X    double xx2, xx4;
+X    int bin[21];
+X
+X/* cycle time for Sun-4 */
+X    float cycle = 4.0e-8; 
+X/* cycle for SX-3: */
+X/*  float cycle = 2.9e-9; */
+X/* cycle for Y-MP: */
+X/*  float cycle = 6.0E-9;  */
+X/* cycle for VP2200 */
+X/*  float cycle = 3.2E-9; */
+X
+X/* number of iterations of test */
+X
+X    nits = 128;
+X
+X/* initialize moments */
+X
+X    x1 = 0.;
+X    x2 = 0.;
+X    x3 = 0.;
+X    x4 = 0.;
+X    x5 = 0.;
+X    x6 = 0.;
+X
+X    normalen_(n, x);
+X    for (i = 0; i < 21; ++i) {
+X	bin[i] = 0;
+X    }
+X
+X    t1 = 100.;
+X    for (k = 0; k < nits; ++k) {
+X
+X/*  save seeds and pointers for save/restore test */
+X
+X	if (k == nits-1) {
+X	    normalsv_(boxsv);
+X	}
+X
+X	t2 = etime_(tt);
+X	normalen_(n, x);
+X	t3 = etime_(tt);
+X	/* t2 = t3 - t2; */
+X	t1 = min(t1,t3-t2);
+X
+X	for (i = 0; i < n; ++i) {
+X	    kk = (int) ((x[i] + 5.25) * 2.);
+X	    ++bin[kk];
+X	}
+X	for (i = 0; i < n; ++i) {
+X	    x1 += x[i];
+X	    xx2 = x[i] * x[i];
+X	    x2 += xx2;
+X	    x3 += xx2 * x[i];
+X	    xx4 = xx2 * xx2;
+X	    x4 += xx4;
+X	    x5 += xx4 * x[i];
+X	    x6 += xx4 * xx2;
+X	}
+X
+X/*  restore previous seeds and pointers for save/restore test */
+X
+X	if (k == nits-1) {
+X	    normalrs_(boxsv);
+X	    normalen_(128, y);
+X	}
+X    }
+X
+X/*  save/restore check: */
+X
+X    diff = 0.;
+X    for (i = 0; i < (min(n,128)); ++i) {
+X	diff += (y[i] - x[i])*(y[i] - x[i]);
+X    }
+X    if (diff != 0.) {
+X	printf("ERROR in normalsv/normalrs: diff = %e\n",diff);
+X    } else {
+X	printf("    normalen save/restore test OK\n");
+X    }
+X
+X    x1 /= (double) (n * nits);
+X    x2 /= (double) (n * nits);
+X    x3 /= (double) (n * nits);
+X    x4 /= (double) (n * nits);
+X    x5 /= (double) (n * nits);
+X    x6 /= (double) (n * nits);
+X
+X    t1 = t1 / ((float) n);
+X    printf("\n    Time/normal = %e seconds \n",t1);
+X    t1 = t1 / cycle;
+X    printf("    Cps./normal = %e \n\n",t1);
+X    printf("    Moments: \n");
+X    printf("      Compare to (0.0)               (1.0) \n");
+X    printf("              %e       %e \n",x1,x2);
+X    printf("      Compare to (0.0)               (3.0) \n");
+X    printf("              %e       %e \n",x3,x4);
+X    printf("      Compare to (0.0)              (15.0) \n");
+X    printf("              %e       %e \n",x5,x6);
+X    printf("\n    Histogram of gaussian distribution:\n");
+X    printf("    --------- -- --------- ------------ \n");
+X    for (k = 0; k < 21; ++k) {
+X        if(k<9) printf("    bin[%d]  = %d \n",k+1,bin[k]);
+X	else     printf("    bin[%d] = %d \n",k+1,bin[k]);
+X    }
+X
+X
+X    return 0;
+X} /* normalt_ */
+X
+X
+Xint fischet_(n, p)
+Xint n, *p;
+X{
+X    int nits, i, k;
+X    double p1,p2,p3,p4,x1,x2,x3,x4,fp;
+X    float t1,t2,t3;
+X    float tt[2];
+X    int kk;
+X    extern int fische_();
+X    double mu;
+X    int bin[20];
+X
+X/* cycle time for Sun-4 */
+X    float cycle = 4.0e-8;
+X/* cycle for NEC SX-3: */
+X/*  float cycle = 2.9e-9; */
+X/* cycle for Y-MP: */
+X/*  float cycle = 6.0E-9; */
+X/* cycle for VP2200 */
+X/*  float cycle = 3.2E-9; */
+X
+X    mu = 2.;
+X    nits = 128;
+X
+X    for (k = 0; k < 20; ++k) {
+X	bin[k] = 0;
+X    }
+X
+X/* moment comparison values */
+X
+X    p1 = mu;
+X    p2 = mu + mu * mu;
+X    p3 = mu + mu * (double)3. * mu + mu * mu * mu;
+X    p4 = mu + 7.*mu*mu + 6.*mu*mu*mu + mu*mu*mu*mu;
+X
+X    x1 = 0.;
+X    x2 = 0.;
+X    x3 = 0.;
+X    x4 = 0.;
+X
+X    t1 = 10.;
+X    for (k = 0; k < nits; ++k) {
+X
+X	t2 = etime_(tt);
+X	fische_(n, mu, p);
+X	t3 = etime_(tt);
+X	t2 = t3 - t2;
+X	t1 = min(t1,t2);
+X
+X	for (i = 0; i < n; ++i) {
+X	    kk = p[i];
+X	    ++bin[kk];
+X	}
+X
+X	for (i = 0; i < n; ++i) {
+X	    fp = (double) p[i];
+X	    x1 += fp;
+X	    x2 += fp * fp;
+X	    x3 += fp * fp * fp;
+X	    x4 += fp * fp * fp * fp;
+X	}
+X
+X    }
+X
+X    x1 /= (double) (n * nits);
+X    x2 /= (double) (n * nits);
+X    x3 /= (double) (n * nits);
+X    x4 /= (double) (n * nits);
+X
+X    t1 = t1 / (float) n;
+X    printf("\n    Time/poisson = %e seconds \n",t1);
+X    t1 = t1 / cycle;
+X    printf("    Cps./poisson = %e \n\n",t1);
+X    printf("    Moments: \n"); 
+X    printf("       Compare: (%e)           (%e)\n",p1,p2);
+X    printf("                 %e             %e \n",x1,x2);
+X    printf("       Compare: (%e)           (%e)\n",p3,p4);
+X    printf("                 %e             %e \n",x3,x4);
+X    printf("\n    Histogram of Poisson distribution: mu = %e\n",mu);
+X    printf("    --------- -- ------- ------------ \n");
+X    for (k = 0; k < 20; ++k) {
+X        if(k<9) printf("    bin[%d]  = %d \n",k+1,bin[k]);
+X        else     printf("    bin[%d] = %d \n",k+1,bin[k]);
+X    }
+X
+X    return 0;
+X} /* fischet_ */
+X
+X/* ---------------- end of test programs ------------- */
+X
+Xint zufall_(n, a)
+Xint n;
+Xdouble *a;
+X{
+X    int buffsz = 607;
+X
+X    int left, aptr, bptr, aptr0, i, k, q;
+X    double t;
+X    int nn, vl, qq, k273, k607, kptr;
+X
+X
+X/* portable lagged Fibonacci series uniform random number */
+X/* generator with "lags" -273 und -607: */
+X/* W.P. Petersen, IPS, ETH Zuerich, 19 Mar. 92 */
+X
+X
+X    aptr = 0;
+X    nn = n;
+X
+XL1:
+X
+X    if (nn <= 0) {
+X	return 0;
+X    }
+X
+X/* factor nn = q*607 + r */
+X
+X    q = (nn - 1) / 607;
+X    left = buffsz - klotz0_1.ptr;
+X
+X    if (q <= 1) {
+X
+X/* only one or fewer full segments */
+X
+X	if (nn < left) {
+X            kptr = klotz0_1.ptr;
+X	    for (i = 0; i < nn; ++i) {
+X		a[i + aptr] = klotz0_1.buff[kptr + i];
+X	    }
+X	    klotz0_1.ptr += nn;
+X	    return 0;
+X	} else {
+X            kptr = klotz0_1.ptr;
+X#pragma _CRI ivdep
+X	    for (i = 0; i < left; ++i) {
+X		a[i + aptr] = klotz0_1.buff[kptr + i];
+X	    }
+X	    klotz0_1.ptr = 0;
+X	    aptr += left;
+X	    nn -= left;
+X/*  buff -> buff case */
+X	    vl = 273;
+X	    k273 = 334;
+X	    k607 = 0;
+X	    for (k = 0; k < 3; ++k) {
+X#pragma _CRI ivdep
+X		for (i = 0; i < vl; ++i) {
+X		   t = klotz0_1.buff[k273+i]+klotz0_1.buff[k607+i];
+X		   klotz0_1.buff[k607+i] = t - (double) ((int) t);
+X		}
+X		k607 += vl;
+X		k273 += vl;
+X		vl = 167;
+X		if (k == 0) {
+X		    k273 = 0;
+X		}
+X	    }
+X	    goto L1;
+X	}
+X    } else {
+X
+X/* more than 1 full segment */
+X
+X        kptr = klotz0_1.ptr;
+X#pragma _CRI ivdep
+X	for (i = 0; i < left; ++i) {
+X	    a[i + aptr] = klotz0_1.buff[kptr + i];
+X	}
+X	nn -= left;
+X	klotz0_1.ptr = 0;
+X	aptr += left;
+X
+X/* buff -> a(aptr0) */
+X
+X	vl = 273;
+X	k273 = 334;
+X	k607 = 0;
+X	for (k = 0; k < 3; ++k) {
+X	    if (k == 0) {
+X#pragma _CRI ivdep
+X		for (i = 0; i < vl; ++i) {
+X		    t = klotz0_1.buff[k273+i]+klotz0_1.buff[k607+i];
+X		    a[aptr + i] = t - (double) ((int) t);
+X		}
+X		k273 = aptr;
+X		k607 += vl;
+X		aptr += vl;
+X		vl = 167;
+X	    } else {
+X#pragma _CRI ivdep
+X		for (i = 0; i < vl; ++i) {
+X		    t = a[k273 + i] + klotz0_1.buff[k607 + i];
+X		    a[aptr + i] = t - (double) ((int) t);
+X		}
+X		k607 += vl;
+X		k273 += vl;
+X		aptr += vl;
+X	    }
+X	}
+X	nn += -607;
+X
+X/* a(aptr-607) -> a(aptr) for last of the q-1 segments */
+X
+X	aptr0 = aptr - 607;
+X	vl = 607;
+X
+X	for (qq = 0; qq < q-2; ++qq) {
+X	    k273 = aptr0 + 334;
+X#pragma _CRI ivdep
+X	    for (i = 0; i < vl; ++i) {
+X		t = a[k273 + i] + a[aptr0 + i];
+X		a[aptr + i] = t - (double) ((int) t);
+X	    }
+X	    nn += -607;
+X	    aptr += vl;
+X	    aptr0 += vl;
+X	}
+X
+X/* a(aptr0) -> buff, last segment before residual */
+X
+X	vl = 273;
+X	k273 = aptr0 + 334;
+X	k607 = aptr0;
+X	bptr = 0;
+X	for (k = 0; k < 3; ++k) {
+X	    if (k == 0) {
+X#pragma _CRI ivdep
+X		for (i = 0; i < vl; ++i) {
+X		    t = a[k273 + i] + a[k607 + i];
+X		    klotz0_1.buff[bptr + i] = t - (double) ((int) t);
+X		}
+X		k273 = 0;
+X		k607 += vl;
+X		bptr += vl;
+X		vl = 167;
+X	    } else {
+X#pragma _CRI ivdep
+X		for (i = 0; i < vl; ++i) {
+X		    t = klotz0_1.buff[k273 + i] + a[k607 + i];
+X		    klotz0_1.buff[bptr + i] = t - (double) ((int) t);
+X		}
+X		k607 += vl;
+X		k273 += vl;
+X		bptr += vl;
+X	    }
+X	}
+X	goto L1;
+X    }
+X} /* zufall_ */
+X
+X
+Xint zufalli_(seed)
+Xint seed;
+X{
+X    /* Initialized data */
+X
+X    int kl = 9373;
+X    int ij = 1802;
+X
+X    /* Local variables */
+X    int i, j, k, l, m;
+X    double s, t;
+X    int ii, jj;
+X
+X
+X/*  generates initial seed buffer by linear congruential */
+X/*  method. Taken from Marsaglia, FSU report FSU-SCRI-87-50 */
+X/*  variable seed should be 0 < seed <31328 */
+X
+X
+X    if (seed != 0) {
+X	ij = seed;
+X    }
+X
+X    i = ij / 177 % 177 + 2;
+X    j = ij % 177 + 2;
+X    k = kl / 169 % 178 + 1;
+X    l = kl % 169;
+X    for (ii = 0; ii < 607; ++ii) {
+X	s = 0.;
+X	t = .5;
+X	for (jj = 1; jj <= 24; ++jj) {
+X	    m = i * j % 179 * k % 179;
+X	    i = j;
+X	    j = k;
+X	    k = m;
+X	    l = (l * 53 + 1) % 169;
+X	    if (l * m % 64 >= 32) {
+X		s += t;
+X	    }
+X	    t *= (double).5;
+X	}
+X	klotz0_1.buff[ii] = s;
+X    }
+X    return 0;
+X} /* zufalli_ */
+X
+X
+Xint zufallsv_(svblk)
+Xdouble *svblk;
+X{
+X    int i;
+X
+X
+X/*  saves common blocks klotz0, containing seeds and */
+X/*  pointer to position in seed block. IMPORTANT: svblk must be */
+X/*  dimensioned at least 608 in driver. The entire contents */
+X/*  of klotz0 (pointer in buff, and buff) must be saved. */
+X
+X
+X    /* Function Body */
+X    svblk[0] = (double) klotz0_1.ptr;
+X#pragma _CRI ivdep
+X    for (i = 0; i < 607; ++i) {
+X	svblk[i + 1] = klotz0_1.buff[i];
+X    }
+X
+X    return 0;
+X} /* zufallsv_ */
+X
+Xint zufallrs_(svblk)
+Xdouble *svblk;
+X{
+X    int i;
+X
+X
+X/*  restores common block klotz0, containing seeds and pointer */
+X/*  to position in seed block. IMPORTANT: svblk must be */
+X/*  dimensioned at least 608 in driver. The entire contents */
+X/*  of klotz0 must be restored. */
+X
+X
+X    klotz0_1.ptr = (int) svblk[0];
+X#pragma _CRI ivdep
+X    for (i = 0; i < 607; ++i) {
+X	klotz0_1.buff[i] = svblk[i + 1];
+X    }
+X
+X    return 0;
+X} /* zufallrs_ */
+X
+Xint normalen_(n, x)
+Xint n;
+Xdouble *x;
+X{
+X    int buffsz = 1024;
+X
+X    /* Local variables */
+X    int left, i, nn, ptr, kptr;
+X    extern int normal00_();
+X/* Box-Muller method for Gaussian random numbers */
+X
+X    nn = n;
+X    if (nn <= 0) {
+X	return 0;
+X    }
+X    if (klotz1_1.first == 0) {
+X	normal00_();
+X	klotz1_1.first = 1;
+X    }
+X    ptr = 0;
+X
+XL1:
+X    left = buffsz - klotz1_1.xptr;
+X    if (nn < left) {
+X        kptr = klotz1_1.xptr;
+X#pragma _CRI ivdep
+X	for (i = 0; i < nn; ++i) {
+X	    x[i + ptr] = klotz1_1.xbuff[kptr + i];
+X	}
+X	klotz1_1.xptr += nn;
+X	return 0;
+X    } else {
+X        kptr = klotz1_1.xptr;
+X#pragma _CRI ivdep
+X	for (i = 0; i < left; ++i) {
+X	    x[i + ptr] = klotz1_1.xbuff[kptr + i];
+X	}
+X	klotz1_1.xptr = 0;
+X	ptr += left;
+X	nn -= left;
+X	normal00_();
+X	goto L1;
+X    }
+X} /* normalen_ */
+X
+Xint normal00_()
+X{
+X    /* Builtin functions */
+X    double cos(), sin(), log(), sqrt();
+X
+X    /* Local variables */
+X    int i;
+X    double twopi, r1, r2, t1, t2;
+X    extern int zufall_();
+X
+X    twopi = 6.2831853071795862;
+X    zufall_(1024, klotz1_1.xbuff);
+X#pragma _CRI ivdep
+X    for (i = 0; i < 1023; i += 2) {
+X	r1 = twopi * klotz1_1.xbuff[i];
+X	t1 = cos(r1);
+X	t2 = sin(r1);
+X	r2 = sqrt(-2.*(log(1. - klotz1_1.xbuff[i+1])));
+X	klotz1_1.xbuff[i]   = t1 * r2;
+X	klotz1_1.xbuff[i+1] = t2 * r2;
+X    }
+X
+X    return 0;
+X} /* normal00_ */
+X
+Xint normalsv_(svbox)
+Xdouble *svbox;
+X{
+X    extern int zufallsv_();
+X    int i, k;
+X
+X
+X/*  IMPORTANT: svbox must be dimensioned at */
+X/*  least 1634 in driver. The entire contents of blocks */
+X/*  klotz0 (via zufallsv) and klotz1 must be saved. */
+X
+X    if (klotz1_1.first == 0) {
+X	printf("ERROR in normalsv, save of uninitialized block\n");
+X    }
+X
+X/*  save zufall block klotz0 */
+X
+X    zufallsv_(svbox);
+X
+X    svbox[608] = (double) klotz1_1.first;
+X    svbox[609] = (double) klotz1_1.xptr;
+X    k = 610;
+X#pragma _CRI ivdep
+X    for (i = 0; i < 1024; ++i) {
+X	svbox[i + k] = klotz1_1.xbuff[i];
+X    }
+X
+X    return 0;
+X} /* normalsv_ */
+X
+Xint normalrs_(svbox)
+Xdouble *svbox;
+X{
+X    /* Local variables */
+X    extern int zufallrs_();
+X    int i, k;
+X
+X/*  IMPORTANT: svbox must be dimensioned at */
+X/*  least 1634 in driver. The entire contents */
+X/*  of klotz0 and klotz1 must be restored. */
+X
+X/* restore zufall blocks klotz0 and klotz1 */
+X
+X    zufallrs_(svbox);
+X    klotz1_1.first = (int) svbox[608];
+X    if (klotz1_1.first == 0) {
+X      printf("ERROR in normalrs, restoration of uninitialized block\n");
+X    }
+X    klotz1_1.xptr = (int) svbox[609];
+X    k = 610;
+X#pragma _CRI ivdep
+X    for (i = 0; i < 1024; ++i) {
+X	klotz1_1.xbuff[i] = svbox[i + k];
+X    }
+X
+X    return 0;
+X} /* normalrs_ */
+X
+Xint fische_(n, mu, p)
+Xint n;
+Xdouble mu;
+Xint *p;
+X{
+X
+X    /* Builtin functions */
+X    double exp();
+X
+X    /* Local variables */
+X    int left, indx[1024], i, k;
+X    double q[1024], u[1024];
+X    int nsegs, p0;
+X    double q0;
+X    int ii, jj;
+X    extern /* Subroutine */ int zufall_();
+X    int nl0;
+X    double pmu;
+X
+X/* Poisson generator for distribution function of p's: */
+X
+X/*    q(mu,p) = exp(-mu) mu**p/p! */
+X
+X/* initialize arrays, pointers */
+X
+X
+X    /* Function Body */
+X    if (n <= 0) {
+X	return 0;
+X    }
+X
+X    pmu = exp(-mu);
+X    p0 = 0;
+X
+X    nsegs = (n - 1) / 1024;
+X    left = n - (nsegs << 10);
+X    ++nsegs;
+X    nl0 = left;
+X
+X    for (k = 0; k < nsegs; ++k) {
+X
+X	for (i = 0; i < left; ++i) {
+X	    indx[i] = i;
+X	    p[p0 + i] = 0;
+X	    q[i] = 1.;
+X	}
+X
+X/* Begin iterative loop on segment of p's */
+X
+XL1:
+X
+X/* Get the needed uniforms */
+X
+X	zufall_(left, u);
+X
+X	jj = 0;
+X
+X	for (i = 0; i < left; ++i) {
+X	    ii = indx[i];
+X	    q0 = q[ii] * u[i];
+X	    q[ii] = q0;
+X	    if (q0 > pmu) {
+X		indx[jj++] = ii;
+X		++p[p0 + ii];
+X	    }
+X	}
+X
+X/* any left in this segment? */
+X
+X	left = jj;
+X	if (left > 0) {
+X	    goto L1;
+X	}
+X
+X	p0  += nl0;
+X	nl0  = 1024;
+X	left = 1024;
+X
+X    }
+X
+X    return 0;
+X} /* fische_ */
+END_OF_FILE
+if test 17299 -ne `wc -c <'zufall.c'`; then
+    echo shar: \"'zufall.c'\" unpacked with wrong size!
+fi
+# end of 'zufall.c'
+fi
+echo shar: End of shell archive.
+exit 0
+

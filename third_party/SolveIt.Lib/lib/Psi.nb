@@ -1,0 +1,1241 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 3.0,
+MathReader 3.0, or any compatible application. The data for the notebook 
+starts with the line of stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     30337,        950]*)
+(*NotebookOutlinePosition[     31437,        985]*)
+(*  CellTagsIndexPosition[     31393,        981]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[TextData["A Tutorial Introduction to the Quantum`Psi` Package"], "Title",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["by Alvin Goh"], "Subtitle",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"This package contains various functions for interacting with the PsiEv \
+(Psi-Evolver) external program which, given an initial solution and a \
+time-independent potential function, numerically integrates the \
+one-dimensional Schrodinger equation to produce the solution for future \
+times."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The boundary conditions used by PsiEv are that the wavefunction must be zero \
+at x <= 0 and x >= w where w = 1 by default. (Units are chosen such that hbar \
+= 1 and mass = 0.5.) In practice, this means that PsiEv simulates the \
+evolution of the solution to the one-dimensional infinite square-well \
+potential of width w. All experiments simulated with PsiEv must be such that \
+they will fit within the confines of the well."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Loading the package"], "Section",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Let's load Quantum`Psi`!"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(<< "\<qpsi07.m\>"\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData["We'll check out what's available with"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(\(?Quantum`Psi`*\)\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"You should see a list of symbols from AnimatePsi to XBoundaries which have \
+been defined by this package. If not, stay cool! Try the commands again and \
+if they still don't work then 'Houston, we have a problem' (Jim Lovell, Cmdr \
+Apollo 13) - call Mission Control (a demonstrator)."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"We can see the current state of the quantum mechanical system simulated by \
+PsiEv by (remember to try ?ShowCurrentState[])"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(ShowCurrentState[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"This shows the current simulation time at the top of the frame and the left, \
+bottom and right sides of the infinite square well. Because no potential or \
+wavefunction has been set as yet, these are still both zero and are not seen. \
+The units of length and time are such that Planck's constant/(2Pi), hbar = 1 \
+and mass, m = 1/2. No facility exists for changing these built-in values."], 
+  "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Don't forget to delete graphics which are no longer needed to conserve \
+memory. You may wish to delete the above graphic before moving on."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Hands-on demonstrations"], "Section",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"\"It's not enough just to stand and stare...\"\n\t\t\t\t\tPink Floyd\n\t\t\t\
+\t\t\"On the turning away\""], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True,
+  FontSize->10],
+
+Cell[TextData[
+"The best way to come to grips with the features of Quantum`Psi` is to try it \
+out. To this end, we'll do a series of simulated experiments. These will only \
+cover the most frequently used functions."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Free-particle wavepacket"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData["The Setup"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Let's set up a Gaussian wavepacket centred at a location a little over 1/2 \
+of the way across the well, x=0.6. We must choose the standard deviation of x \
+so that the wavefunction falls off to a low value which is effectively zero \
+at the walls where x=0 and x=1. A value of 0.05 will suffice since it puts \
+the closest wall (at x=1) 8 standard deviations away from the centre of the \
+Gaussian curve. We'll also have to choose a mean momentum for the wavepacket; \
+let's pick 100."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Note: Do not set up wavepackets with momenta much greater than 100 - because \
+of limitations of the simulation, these may not be accurately modelled and \
+appear to behave in a bizarre manner."], "SmallText",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The easiest way to set up a Gaussian wavepacket in PsiEv is to call \
+SetGaussian. Hence, (use ?SetGaussian to find out more) we invoke"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(SetGaussian[0.6, 0.05, 100]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"SetGaussian returns the list of the values of the wavefunction which are \
+kept by PsiEv. This list is rather long so in future, we'll use a semi-colon \
+; at the end of the function call to suppress this result. Try this out by \
+going back to the last command and adding a semicolon to the end and entering \
+it again."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The potential will be set to zero to simulate a free particle. (Actually, of \
+course, it's already zero because we haven't set it yet but let's just reset \
+it for practice.)"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(\(SetSquarePotential[{0}]; \)\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Note the semicolon at the end; SetSquarePotential returns an unwieldy list \
+of the potential function's values as kept by PsiEv."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"While we're at it, let's set the simulation time to zero. (Yes I know it's \
+already zero but let's just do it for practice.)"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(SetTime[0]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData["Let's see what the setup is now."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(ShowCurrentState[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"You should see a graph of the absolute-square values of the wavefunction in \
+the form of the well-known bell-shaped curve centred at x=0.25 (check the \
+coordinates of the maximum point of the curve by selecting the graphic, \
+enlarging it by dragging the handles and then holding down the Command key as \
+you position the cursor over the point.)."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Running the simulation"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Now let's animate the wavefunction! To do this, use the AnimatePsi function. \
+We'll produce a series of frames for times t=0 to t=0.001 by increments of \
+0.0002. (Be careful not to set the time increment too large as it will then \
+take a long time for PsiEv to produce a result.)"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(AnimatePsi[0.001, 0.0002]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"You should see that the Gaussian curve has moved to the right by an amount \
+100/(1/2)*0.001=0.2 where 100 is the momentum, 1/2 is the mass and 0.001 is \
+the time-interval."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Actually, things are starting to get interesting since the wavepacket is \
+about to collide with the right wall of the well. Let's continue the \
+simulation and see what happens."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(AnimatePsi[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData["Well! Let's see some more!"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(AnimatePsi[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"That was reflection of a Gaussian wavepacket off an infinite potential step! \
+You can continue this simulation further if you like and confirm that the \
+reflected wavepacket now travels with velocity v = -0.2, but don't forget to \
+delete unneeded graphics when you're through."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Exercise"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData[
+"Set up a Gaussian wavepacket with mean momentum 50 and confirm that it's \
+group velocity agrees with expectations."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Answer"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(SetTime[0]; \)\), 
+    \(\(SetGaussian[0.25, 0.05, 50]; \)\), 
+    \(\(SetSquarePotential[{0}]; \)\), 
+    \(AnimatePsi[0.001, 0.0001]\)}], "Input",
+  AspectRatioFixed->True]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Scattering from a potential step"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData["The Setup"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"We'll set up an experiment in which a Gaussian wavepacket will be scattered \
+off a potential step. Let's choose the wavepacket to represent a particle at \
+x = 0.25 with std. dev. of x of 0.05 and mean momentum 100. We'll have a step \
+potential of height equal to 90% of the mean energy of the particle, i.e. 0.9 \
+of 100^2/(2*0.5) = 0.9*10000 = 9000 where 100 is the particle's momentum and \
+0.5 is the mass. Finally, we will reset the simulation clock to zero for the \
+initial state."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(SetGaussian[0.25, 0.05, 100]; \)\), 
+    \(\(SetSquarePotential[{0, 0.5, 9000}]; \)\), 
+    \(\(SetTime[0]; \)\), 
+    \(ShowCurrentState[Energy \[Rule] 100\^2, DisplayEnergy \[Rule] True]\)}],
+   "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The Energy option allows specification of an arbitrary energy level which \
+will be plotted to the same scale as the potential so as to allow easy \
+comparison. The DisplayEnergy option controls the display of this energy \
+plot. By default, the energy is plotted as a dashed cyan line. We will use \
+this feature to display the mean energy of the wavepacket so it can be easily \
+compared with the potential."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The graphic shows the potential function in green. It's height has been \
+automatically scaled so that it spans the vertical range of the displayed \
+graphic - it should not be inferred that the heights of the peak of the \
+wavepacket and the potential function are in any way comparable. After all, \
+they don't even have the same units!"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Incidentally, the default settings of the major options recognized by many \
+of the functions of Quantum`Psi` can be seen using"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(Options[QuantumPsi]\)], "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["The Experimental Run"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Before we actually run the simulation, we should decide on what data to \
+record."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"An important option for AnimatePsi is XBoundaries. This allows you to \
+specify ranges of x of particular interest. AnimatePsi will then calculate \
+the probability that the particle is in each of these ranges at each \
+time-increment and save the results for later analysis. We are interested in \
+the probabilities that the particle is to the left and to the right of the \
+potential step so we'll use this option in our animation, specifying x-ranges \
+of 0 to 0.5 to 1."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["After all that preparation, now it's all systems go!"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(AnimatePsi[0.005, 0.0002, Energy \[Rule] 10000, 
+      DisplayEnergy \[Rule] True, XBoundaries \[Rule] {0, 0.5, 1}]\)], "Input",\
+
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Data Analysis"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"We can examine the probabilities saved by our use of XBoundaries with"], 
+  "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(ShowProbabilities[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The first graph labelled P[0<x<0.5] shows the probability that the particle \
+is to be found between x=0 and x=0.5 while the second graph does the same for \
+x=0.5 and x=1. The last graph shows both superimposed. The reflection and \
+transmission coefficients can be read off these graphs as the value of \
+P[0<x<0.5] and P[0.5<x<1] when the scattering event has completed but before \
+the reflected waves reach the step. (Do it!) This can be checked against a \
+theoretically derived value."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(N[RStep[Gaussian, 100, 10, 9000]]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"RStep is a function which returns the reflection coefficient for scattering \
+from a potential step. It's second argument is the standard deviation in \
+momentum. For a Gaussian at t=0, it is given by (hbar/2)/sigmax so in this \
+case, its (1/2)/0.05 = 10. (You may see warning messages about underflows \
+when using RStep but don't worry, be happy - they do not significantly alter \
+the result for the cases you are likely to encounter.)"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Exercise"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData[
+"Repeat the above and run a simulation to 'experimentally' determine the \
+transmission coefficient for a similar particle scattering off a potential \
+step of height 10500 and check against predictions."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Answer"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(SetGaussian[0.25, 0.05, 100]; \)\), 
+    \(\(SetSquarePotential[{0, 0.5, 10500}]; \)\), 
+    \(\(SetTime[0]; \)\), 
+    \(\(AnimatePsi[0.005, 0.0001, Energy \[Rule] 10000, 
+      DisplayEnergy \[Rule] True, XBoundaries \[Rule] {0, 0.5, 1}]; \)\), 
+    \(\(ShowProbabilities[]; \)\), 
+    \(N[RStep[Gaussian, 100, 10, 10500]]\)}], "Input",
+  AspectRatioFixed->True]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Tunnelling"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Briefing"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"This experiment is almost identical to the step-scattering one except for \
+the form of the potential which is a barrier potential. One can easily be set \
+up."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Pre-flight check"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"We'll throw the Gaussian wavepacket we've used previously against a barrier \
+potential of height 15000 and width 0.01 centred in the well. Hence, the \
+potential will be set to zero for x from 0 to 0.5-0.01/2=0.495, to 15000 for \
+x from 0.495 to 0.5+0.01/2=0.505, and 0 again for x from 0.505 to 1."], "Text",\
+
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(SetSquarePotential[{0, 0.495, 15000, 0.505, 0}]; \)\), 
+    \(\(SetGaussian[0.25, 0.05, 100]; \)\), 
+    \(\(SetTime[0]; \)\), 
+    \(ShowCurrentState[Energy \[Rule] 100\^2, DisplayEnergy \[Rule] True]\)}],
+   "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The potential barrier may look more spiky than squarish - this is because it \
+is too narrow to be displayed properly. Setting an option called JM to a \
+value higher than its default can alleviate this problem but because this \
+will increase memory demands and reduce speed, this is rarely worth doing. \
+For practice, add JM->500 to ShowCurrentState above and see the difference."],
+   "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Flight"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The data we'll be interested in collecting relate to the reflection and \
+transmission coefficients for the particle scattering off the barrier. Hence, \
+we'll be interested in the probability that the particle is to the left and \
+to the right of the barrier, i.e. P[0 < x < 0.495] and P[0.505 < x < 1]. To \
+keep this data, we must set the XBoundaries option appropriately."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Let's run the experiment!"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(AnimatePsi[0.003, 0.0001, Energy \[Rule] 100\^2, 
+      DisplayEnergy \[Rule] True, XBoundaries \[Rule] {0, .495, .505, 1}]\)], 
+  "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Now, wasn't that spectacular? Select the graphics and animate them to watch \
+it again."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Debriefing"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Now for the exciting(?) part - let's examine that probability data we so \
+painstakingly collected!"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(ShowProbabilities[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The graphs show what their labels say they show and the first and third \
+graphs are the ones of interest to us. Read off the value for P[0 < x < \
+0.495] when the tunneling event is over and compare it to predictions:"], 
+  "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(N[RBarrier[Gaussian, 100, 10, 15000, 0.01]]\)], "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Exercise"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData[
+"Throw our Gaussian wavepacket against a barrier of height 9000 and width \
+0.02 and check observed R against prediction."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Answer"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(SetTime[0]; \)\), 
+    \(\(SetGaussian[0.25, 0.05, 100]; \)\), 
+    \(\(SetSquarePotential[{0, 0.5 - 0.02\/2, 9000, 0.5 + 0.02\/2, 0}]; \)\), 
+  
+    \(\(AnimatePsi[0.003, 0.0002, Energy \[Rule] 100\^2, 
+      DisplayEnergy \[Rule] True, 
+      XBoundaries \[Rule] {0, 0.5 - 0.02\/2, 0.5 + 0.02\/2, 1}]; \)\), 
+    \(\(ShowProbabilities[]; \)\), 
+    \(N[RBarrier[Gaussian, 100, 10, 9000, 0.02]]\)}], "Input",
+  AspectRatioFixed->True]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Harmonic Oscillator"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Start"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Here's one of my favorites! We're going to simulate a system representing a \
+particle subject to a restoring force of F = -k (x-x0) where x0 is the \
+equilibrium position. The potential function is V = k (x-x0)^2 / 2 and we'll \
+use a special function to set this so that the equilibrium position is \
+centred in the well and we'll arbitrarily choose k = 250000 . Initially, \
+we'll have the particle represented by our familiar Gaussian wavepacket \
+centred in the well."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(SetTime[0]; \)\), 
+    \(\(SetGaussian[0.5, 0.05, 100]; \)\), 
+    \(\(SetHarmOscPotential[0.5, 250000]; \)\), 
+    \(ShowCurrentState[Energy \[Rule] 100\^2, DisplayEnergy \[Rule] True]\)}],
+   "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Middle"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Because of the behaviour of the wavepacket, it's advisable to increase the \
+vertical range for this experiment. Trial and error shows that PlotMax->15 \
+gives good results."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Data collection in this experiment will focus on whether the particle is in \
+the left or right halves of the well so XBoundaries will be set \
+appropriately."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(AnimatePsi[0.01, 0.0005, Energy \[Rule] 100\^2, 
+      DisplayEnergy \[Rule] True, PlotMax \[Rule] 15, 
+      XBoundaries \[Rule] {0, 0.5, 1}]\)], "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Finish"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Let's examine the collected data."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(ShowProbabilities[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The graphs show a little over one cycle of an oscillation and the period of \
+the oscillation can be read off and compared to theory:"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(N[PeriodSHO[0.5, 250000]]\)], "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Exercise"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData[
+"Repeat the experiment with k=200000. Then change the momentum used in your \
+answer to 50 and compare the periods."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["Answer"], "Subsubsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Since 2 values of momentum will be used, we'll first define a variable \
+called momentum and use it in the code."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[{
+    \(\(momentum = 100; \)\), 
+    \(\(SetTime[0]; \)\), 
+    \(\(SetGaussian[0.5, 0.05, momentum]; \)\), 
+    \(\(SetHarmOscPotential[0.5, 500000]; \)\), 
+    \(\(AnimatePsi[0.007, 0.001, Energy \[Rule] momentum\^2, 
+      DisplayEnergy \[Rule] True, XBoundaries \[Rule] {0, 0.5, 1}]; \)\), 
+    \(\(ShowProbabilities[]; \)\), 
+    \(N[PeriodSHO[0.5, 500000]]\)}], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"After running the above, just edit the first line to read momentum=50; and \
+enter it again! This way you don't have to change every occurrence."], "Text",\
+
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[TextData[
+"This completes the coverage of the basics of Quantum`Psi` except for one, \
+very, VERY IMPORTANT point. When you are through with using PsiEv (e.g. you \
+wanna quit Mathematica) you MUST call the Quantum`Psi` function"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(Done[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"This will free the memory used by PsiEv but does not unload it. (For techies \
+only: it ensures graceful termination by first freeing memory blocks \
+previously allocated by calloc.) If you change your mind and want to use \
+PsiEv again, just call"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(Init[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData["and PsiEv will once again be at your beck-and-call."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Advanced topics"], "Section",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Reinitializing PsiEv"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"It may become desirable to reset PsiEv to its initial state. This is easily \
+done with"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(Init[]\)], "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Entering an arbitrary wavefunction"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"PsiEv is flexible and may be initialized with an arbitrary wavefunction. Due \
+to technical difficulties, this must be done separately for the real and \
+imaginary parts. Suppose the wavefunction Sin[Pi x] is required. The real \
+part can be set by"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(\(SetPsiReal[Table[N[Sin[\[Pi]\ x]], {x, 0, 1, 0.001}]]; \)\)], "Input",\
+
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"(Note the use of the N function - SetPsiReal only accepts lists of reals.) \
+This will set up PsiEv's internal representation of the wavefunction by \
+interpolating as necessary between the values in the list which has been \
+passed to it. Best results are obtained when the length of the passed list is \
+comparable to the size of PsiEv's internal array (determined by the first \
+element of the list returned by GetParms[])."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData["The imaginary part can be set uniformly to zero with"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(\(SetPsiImag[{0}]; \)\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData["The wavefunction can now be normalized by"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(\(NormalizePsi[]; \)\)], "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Entering an arbitary potential function"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"In a similar manner to the above section, an arbitrary potential function \
+can be set. For example, let's set up a potential of the form V[x]=0 for \
+0<=x<=0.5 and V[x]=x-0.5 for 0.5<x<=1. We can exploit PsiEv's interpolating \
+behaviour so that we need only specify a three-element list."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(\(SetPotential[{0, 0, 0.5}]; \)\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"A more complicated potential function must be represented by a longer list, \
+e.g."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(\(SetPotential[Table[N[Exp[x]], {x, 0, 1, 0.001}]]; \)\)], "Input",
+  AspectRatioFixed->True]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData["Changing PsiEv's parameters"], "Subsection",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"PsiEv uses parameters which control the width of the potential well, the \
+relation between the time-increment and x-increment and the number of points \
+it uses internally to represent the wavefunction and potential function. \
+These parameters can be changed, e.g. suppose we want a well of width 2 and \
+2001 points to be used to represent the wavefunction and potential."], "Text",\
+
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(SetParms[2001, 1, 2, 0]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The second parameter of SetParms is 2 epsilon^2/delta where epsilon and \
+delta are the x- and t-increment respectively. It is usually best just to \
+leave it as 1."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"Warning: Do not change these parameters willy-nilly! They have strong \
+effects on the accuracy of the solutions generated."], "SmallText",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"The current settings of these parameters can be seen with"], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True],
+
+Cell[BoxData[
+    \(GetParms[]\)], "Input",
+  AspectRatioFixed->True],
+
+Cell[TextData[
+"These parameters are easily reset to their default values by reinitializing \
+PsiEv (see above)."], "Text",
+  Evaluatable->False,
+  AspectRatioFixed->True]
+}, Closed]]
+}, Closed]]
+},
+FrontEndVersion->"Macintosh 3.0",
+ScreenRectangle->{{0, 800}, {0, 580}},
+WindowToolbars->{},
+CellGrouping->Manual,
+WindowSize->{732, 553},
+WindowMargins->{{4, Automatic}, {Automatic, 1}},
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, -1}},
+ShowCellLabel->True,
+ShowCellTags->False,
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+CharacterEncoding->"MacintoshAutomaticEncoding",
+MacintoshSystemPageSetup->"\<\
+00<0001804P000000]P2:?oQon82n@960dL5:0?l0080001804P000000]P2:001
+0000I00000400`<300000BL?00400@00000000000000060801T1T00000000000
+00000000000000000000000000000000\>"
+]
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1709, 49, 126, 2, 136, "Title",
+  Evaluatable->False],
+Cell[1838, 53, 90, 2, 62, "Subtitle",
+  Evaluatable->False],
+Cell[1931, 57, 366, 7, 46, "Text",
+  Evaluatable->False],
+Cell[2300, 66, 503, 8, 62, "Text",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[2828, 78, 96, 2, 50, "Section",
+  Evaluatable->False],
+Cell[2927, 82, 98, 2, 30, "Text",
+  Evaluatable->False],
+Cell[3028, 86, 76, 2, 27, "Input"],
+Cell[3107, 90, 111, 2, 30, "Text",
+  Evaluatable->False],
+Cell[3221, 94, 77, 2, 27, "Input"],
+Cell[3301, 98, 360, 6, 62, "Text",
+  Evaluatable->False],
+Cell[3664, 106, 198, 4, 30, "Text",
+  Evaluatable->False],
+Cell[3865, 112, 77, 2, 27, "Input"],
+Cell[3945, 116, 467, 8, 62, "Text",
+  Evaluatable->False],
+Cell[4415, 126, 214, 4, 30, "Text",
+  Evaluatable->False]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[4666, 135, 100, 2, 30, "Section",
+  Evaluatable->False],
+Cell[4769, 139, 196, 5, 70, "Text"],
+Cell[4968, 146, 275, 5, 70, "Text"],
+
+Cell[CellGroupData[{
+Cell[5268, 155, 104, 2, 70, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[5397, 161, 92, 2, 70, "Subsubsection"],
+Cell[5492, 165, 560, 9, 70, "Text"],
+Cell[6055, 176, 273, 5, 70, "SmallText"],
+Cell[6331, 183, 210, 4, 70, "Text"],
+Cell[6544, 189, 86, 2, 70, "Input"],
+Cell[6633, 193, 395, 7, 70, "Text"],
+Cell[7031, 202, 250, 5, 70, "Text"],
+Cell[7284, 209, 88, 2, 70, "Input"],
+Cell[7375, 213, 204, 4, 70, "Text"],
+Cell[7582, 219, 200, 4, 70, "Text"],
+Cell[7785, 225, 69, 2, 70, "Input"],
+Cell[7857, 229, 106, 2, 70, "Text"],
+Cell[7966, 233, 77, 2, 70, "Input"],
+Cell[8046, 237, 424, 7, 70, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[8507, 249, 105, 2, 70, "Subsubsection"],
+Cell[8615, 253, 357, 6, 70, "Text"],
+Cell[8975, 261, 84, 2, 70, "Input"],
+Cell[9062, 265, 248, 5, 70, "Text"],
+Cell[9313, 272, 253, 5, 70, "Text"],
+Cell[9569, 279, 71, 2, 70, "Input"],
+Cell[9643, 283, 100, 2, 70, "Text"],
+Cell[9746, 287, 71, 2, 70, "Input"],
+Cell[9820, 291, 354, 6, 70, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[10211, 302, 91, 2, 70, "Subsubsection"],
+
+Cell[CellGroupData[{
+Cell[10327, 308, 190, 4, 70, "Text"],
+Cell[10520, 314, 89, 2, 70, "Subsubsection"],
+Cell[10612, 318, 197, 5, 70, "Input"]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[10870, 330, 112, 2, 70, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[11007, 336, 92, 2, 70, "Subsubsection"],
+Cell[11102, 340, 564, 9, 70, "Text"],
+Cell[11669, 351, 254, 6, 70, "Input"],
+Cell[11926, 359, 484, 8, 70, "Text"],
+Cell[12413, 369, 413, 7, 70, "Text"],
+Cell[12829, 378, 202, 4, 70, "Text"],
+Cell[13034, 384, 78, 2, 70, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[13149, 391, 103, 2, 70, "Subsubsection"],
+Cell[13255, 395, 156, 4, 70, "Text"],
+Cell[13414, 401, 548, 9, 70, "Text"],
+Cell[13965, 412, 126, 2, 70, "Text"],
+Cell[14094, 416, 176, 4, 70, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[14307, 425, 96, 2, 70, "Subsubsection"],
+Cell[14406, 429, 147, 4, 70, "Text"],
+Cell[14556, 435, 78, 2, 70, "Input"],
+Cell[14637, 439, 566, 9, 70, "Text"],
+Cell[15206, 450, 92, 2, 70, "Input"],
+Cell[15301, 454, 514, 8, 70, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[15852, 467, 91, 2, 70, "Subsubsection"],
+
+Cell[CellGroupData[{
+Cell[15968, 473, 277, 5, 70, "Text"],
+Cell[16248, 480, 89, 2, 70, "Subsubsection"],
+Cell[16340, 484, 387, 8, 70, "Input"]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[16788, 499, 90, 2, 70, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[16903, 505, 91, 2, 70, "Subsubsection"],
+Cell[16997, 509, 234, 5, 70, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[17268, 519, 99, 2, 70, "Subsubsection"],
+Cell[17370, 523, 377, 7, 70, "Text"],
+Cell[17750, 532, 267, 6, 70, "Input"],
+Cell[18020, 540, 460, 8, 70, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[18517, 553, 89, 2, 70, "Subsubsection"],
+Cell[18609, 557, 450, 7, 70, "Text"],
+Cell[19062, 566, 99, 2, 70, "Text"],
+Cell[19164, 570, 185, 4, 70, "Input"],
+Cell[19352, 576, 162, 4, 70, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[19551, 585, 93, 2, 70, "Subsubsection"],
+Cell[19647, 589, 174, 4, 70, "Text"],
+Cell[19824, 595, 78, 2, 70, "Input"],
+Cell[19905, 599, 296, 6, 70, "Text"],
+Cell[20204, 607, 102, 2, 70, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[20343, 614, 91, 2, 70, "Subsubsection"],
+
+Cell[CellGroupData[{
+Cell[20459, 620, 195, 4, 70, "Text"],
+Cell[20657, 626, 89, 2, 70, "Subsubsection"],
+Cell[20749, 630, 458, 10, 70, "Input"]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[21268, 647, 99, 2, 70, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[21392, 653, 88, 2, 70, "Subsubsection"],
+Cell[21483, 657, 547, 9, 70, "Text"],
+Cell[22033, 668, 251, 6, 70, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[22321, 679, 89, 2, 70, "Subsubsection"],
+Cell[22413, 683, 248, 5, 70, "Text"],
+Cell[22664, 690, 233, 5, 70, "Text"],
+Cell[22900, 697, 201, 4, 70, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[23138, 706, 89, 2, 70, "Subsubsection"],
+Cell[23230, 710, 107, 2, 70, "Text"],
+Cell[23340, 714, 78, 2, 70, "Input"],
+Cell[23421, 718, 208, 4, 70, "Text"],
+Cell[23632, 724, 84, 2, 70, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[23753, 731, 91, 2, 70, "Subsubsection"],
+
+Cell[CellGroupData[{
+Cell[23869, 737, 189, 4, 70, "Text"],
+Cell[24061, 743, 89, 2, 70, "Subsubsection"],
+Cell[24153, 747, 187, 4, 70, "Text"],
+Cell[24343, 753, 415, 9, 70, "Input"],
+Cell[24761, 764, 221, 5, 70, "Text"]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[25021, 774, 292, 5, 70, "Text"],
+Cell[25316, 781, 65, 2, 70, "Input"],
+Cell[25384, 785, 322, 6, 70, "Text"],
+Cell[25709, 793, 65, 2, 70, "Input"],
+Cell[25777, 797, 125, 2, 70, "Text"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[25939, 804, 92, 2, 30, "Section",
+  Evaluatable->False],
+
+Cell[CellGroupData[{
+Cell[26056, 810, 100, 2, 70, "Subsection"],
+Cell[26159, 814, 162, 4, 70, "Text"],
+Cell[26324, 820, 65, 2, 70, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[26426, 827, 114, 2, 70, "Subsection"],
+Cell[26543, 831, 323, 6, 70, "Text"],
+Cell[26869, 839, 120, 3, 70, "Input"],
+Cell[26992, 844, 501, 8, 70, "Text"],
+Cell[27496, 854, 126, 2, 70, "Text"],
+Cell[27625, 858, 80, 2, 70, "Input"],
+Cell[27708, 862, 115, 2, 70, "Text"],
+Cell[27826, 866, 79, 2, 70, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[27942, 873, 119, 2, 70, "Subsection"],
+Cell[28064, 877, 364, 6, 70, "Text"],
+Cell[28431, 885, 90, 2, 70, "Input"],
+Cell[28524, 889, 157, 4, 70, "Text"],
+Cell[28684, 895, 113, 2, 70, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[28834, 902, 107, 2, 70, "Subsection"],
+Cell[28944, 906, 451, 8, 70, "Text"],
+Cell[29398, 916, 82, 2, 70, "Input"],
+Cell[29483, 920, 239, 5, 70, "Text"],
+Cell[29725, 927, 203, 4, 70, "SmallText"],
+Cell[29931, 933, 132, 3, 70, "Text"],
+Cell[30066, 938, 69, 2, 70, "Input"],
+Cell[30138, 942, 171, 4, 70, "Text"]
+}, Closed]]
+}, Closed]]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
+

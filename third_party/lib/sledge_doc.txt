@@ -1,0 +1,834 @@
+*\***********************************************************************
+*                                                                       *
+*                       Routines for SLEDGE                             *
+*       (Sturm-Liouville Estimates Determined by Global Errors)         *
+*                                                                       *
+*************************************************************************
+*                                                                       *
+*     Release 2.3     12/20/94                                          *
+*                                                                       *
+*     Steven Pruess,  Colorado School of Mines                          *
+*                     spruess@mines.colorado.edu                        *
+*     Charles Fulton, Florida Institute of Technology                   *
+*                     fulton@zach.fit.edu                               *
+*                                                                       *
+*     Version 2.2 C code implemention by                                *
+*                     Yuantao Xie and Wuning Zhuang                     *
+*                     Colorado School of Mines                          *
+*************************************************************************
+*      These routines estimate eigenvalues, eigenfunctions and/or       *
+*      spectral density functions for Sturm-Liouville problems.         *
+*      The differential equation has the form:                          *
+*                                                                       *
+*           -(p(x)u')' + q(x)u  =  EV*r(x)u       for x in [A,B]        *
+*                                                                       *
+*      with boundary conditions (at regular points)                     *
+*                                                                       *
+*           A1*u - A2*(pu')  =  EV*(A1'*u - A2'*(pu'))    at A          *
+*           B1*u + B2*(pu')  =  0                         at B .        *
+*                                                                       *
+*      The functions p(x) and r(x) are assumed to be positive in        *
+*      the open interval (A,B).                                         *
+*************************************************************************
+*                                                                       *
+*      Possible outputs are:                                            *
+*         a set of eigenvalues;                                         *
+*         a set of eigenvalues and tables of values for their eigen-    *
+*            functions;                                                 *
+*         a table of the spectral density function (for cases with      *
+*            continuous spectrum).                                      *
+*         a classification of the problem (regular or singular; if      *
+*            singular then limit point or limit circle, oscillatory     *
+*            or nonoscillatory).                                        *
+*                                                                       *
+*      The code can find eigenvalues and eigenfunctions for problems    *
+*      in spectral category 1 (both endpoints NONOSC), spectral         *
+*      category 2 (one endpoint NONOSC and the other O-NO), and         *
+*      those discrete eigenvalues below the essential spectrum in       *
+*      spectral category 10 (both endpoints O-NO).  Here OSC at an      *
+*      endpoint means the Sturm-Liouville equation is oscillatory for   *
+*      all real values of EV at that endpoint, NONOSC at an endpoint    *
+*      means the equation is nonoscillatory for all real values of EV   *
+*      at that endpoint, and O-NO means there is a `cutoff' value EV'   *
+*      such that the equation is nonoscillatory for real values of      *
+*      EV < EV' and oscillatory for real values of EV > EV'.  For       *
+*      problems in other spectral categories an error return will       *
+*      be generated.  The manner in which SLEDGE classifies singular    *
+*      endpoints of Sturm-Liouville problems as LP/LC (Limit Point/     *
+*      Limit Circle), OSC/NONOSC/O-NO, and uses this information to     *
+*      determine the spectral category is explained in detail in        *
+*      reference [2].                                                   *
+*                                                                       *
+*      There is one function called sledge of direct interest to the    *
+*      user; additionally, a secondary function interv is available     *
+*      which determines the indices of eigenvalues located in a         *
+*      specified subinterval of the real line.                          *
+*                                                                       *
+*      The whole package includes three header files, named sledge.h,   *
+*      sl_gv.h,sl_gvx.h and one c file sledge.c.  All functions used    *
+*      in sledge.c are declared in sledge.h; some important constants   *
+*      are also defined in sledge.h.  The names of other functions in   *
+*      this package are                                                 *
+*         aitken, asymp_ev, asymp_r, bracket, classify,                 *
+*         classify_end, density_function, description,                  *
+*         extrapolation, get_ef, get_r, get_rho, mesh,                  *
+*         power, pqrint, regular, shoot, start, step, and zzero.        *
+*      Also, there are a few utility functions, such as                 *
+*         max_d, min_d, max_i, min_i, sign, *vector_d,                  *
+*         vector_i, and **matrix_d.                                     *
+*      The global variables used in sledge.c and the driver file are    *
+*      declared in a header file named sl_gv.h.  The header file named  *
+*      sl_gvx.h declares these global variables as external variables.  *
+*                                                                       *
+*      This is the double precision version of the code; all floating   *
+*      point variables should be declared double in the calling         *
+*      program.  In these functions all such local variables and        *
+*      constants have been explicitly declared; also, some C generic    *
+*      intrinsic functions have been used, so conversion to single      *
+*      precision should be straightforward, if desired.                 *
+*                                                                       *
+*      ACKNOWLEDGMENT:  This work was partially supported by the        *
+*      National Science Foundation under grants DMS-8813113 and DMS-    *
+*      8905202 to Florida Institute of Technology and DMS-8800839 and   *
+*      DMS-8905232 to the Colorado School of Mines.                     *
+*************************************************************************
+       References
+
+       The following papers are available from the authors on request:
+
+       [1]. Pruess & Fulton, Mathematical software for Sturm-Liouville
+            problems, ACM Trans. Math. Software, 19 (1993), 360-376.
+
+       [2]. Fulton, Pruess & Xie, The automatic classification of Sturm-
+            Liouville problems, to appear ACM Trans. Math. Software, 1998.
+ 
+       [3]. Pruess, Fulton & Xie, An asymptotic numerical method for a
+            class of singular Sturm-Liouville problems, SIAM J. Numer. 
+            Anal., 32 (1995), 1658-1676.
+ 
+       [4]  Fulton and Pruess, Eigenvalue and eigenfunction asymptotics
+            for regular Sturm-Liouville problems, Jour. Math. Anal. and
+            Appls., 188 (1994), 297-340. 
+
+       [5]  Fulton and Pruess, Numerical Approximation of singular
+            spectral functions arising from the Fourier-Jacobi problem
+            on a half line with continuous spectra, Sixth International
+            Workshop in Analysis and its Applications, June, 1992.
+
+       [6]. Pruess, Fulton & Xie, Performance of the Sturm-Liouville 
+            software package SLEDGE, Colo. School of Mines, Dept. of
+            Math. and Comp. Sci., MCS-91-19, 1991. Revision 12/94.
+-----------------------------------------------------------------------
+          The code constructs (or takes from input) an initial mesh,
+       called the level 0 mesh.  Subsequent meshes (for level 1,2,...)
+       are unions of the previous level's mesh with its midpoints.  A 
+       sequence of estimates for desired eigenvalues and eigenfunctions 
+       is constructed, one set for each level.  These estimates (the 
+       eigenvalue is called EvHat) are exact solutions (up to the 
+       requested tolerance) of a Sturm-Liouville problem which is an 
+       approximation to the original one; this approximation results 
+       from replacing the given coefficient functions with step function
+       approximations relative to the current level's mesh.  The eigen-
+       functions of the resulting ODE's are piecewise trigonometric
+       (circular or hyperbolic) functions.
+          If estimates for the spectral density function are reqested,
+       these are computed as limits of a sequence of spectral density
+       functions of approximating regular problems.  For these regular
+       problems the spectral density function is a step function, and
+       is computed directly from the definition making use of computed
+       eigenvalues and the norm reciprocals of the corresponding eigen-
+       functions.  If verbose output is rquested by the user, there
+       will be displayed iterations (corresponding to the sequence of
+       approximating regular intervals which the code automatically 
+       selects) and within each iteration there will be levels 
+       (corresponding to increasingly finer meshes as described above).
+       A step spectral density function will be printed at each level
+       of each iteration.  The spectral density function displayed at
+       the end of each iteration is the result of an h-squared extra-
+       polation over the regular step functions generated at each level 
+       of this iteration.  The condition for stopping at a given iter-
+       ation is a straightforward comparison of the spectral function 
+       data for the current iteration with the previous iteration. There
+       is no extrapolation over the sequence of regular approximating
+       intervals as no extrapolation theory for the approximation of
+       the singular spectral function by regular step spectral functions
+       is known.  (To achieve closer approximation of the regular step
+       spectral functions to the singular spectral function, it is
+       actually the piecewise linear function obtained by joining the
+       midpoints of successive steps by a straight line which is used as
+       the `regular' spectral function for the purpose of generating the
+       actual data used for the h-squared extrapolation.)
+          The classification is determined by applying standard theory
+       to an approximating problem, each of whose coefficient functions,
+       in a small neighborhood of each endpoint, consists of the leading
+       term in a power-like asymptotic development.  For this reason
+       there are many problems, particularly those with oscillatory
+       coefficient functions, for which the code's output for the
+       classification information is labelled `uncertain'.  For further
+       information on the theory used by the code to generate endpoint
+       classifications and spectral category information see [2] above.
+*************************************************************************
+Usage (simple explanation) -
+   The principal procedure sledge looks like
+
+void sledge(logical *job, double *cons, logical *endfin,
+            int *invec, double *tol, double *ev, int *numx,
+            double *t, double *rho, int *iflag)
+
+      If k eigenvalues (no eigenvectors) are sought then set
+      (a) the logical 5-vector job to (TRUE, FALSE, FALSE, FALSE, TRUE);
+      (b) the real 8-vector cons to the values of A1,A1',A2,A2',B1,B2,
+          A,B for the boundary condition information.  It does not
+          matter what values are used for infinite endpoints, nor for
+          the boundary constants at a singular endpoint; the code 
+          automatically selects the Friedrichs' boundary condition at 
+          NONOSC singular endpoints, overriding user input for the 
+          boundary condition constants; for infinite endpoints the code
+          also automatically selects these constants.
+      (c) the logical 2-vector endfin to (TRUE, TRUE) if both endpoints
+          are finite, (TRUE, FALSE) if A is finite but B infinite, etc.;
+      (d) the integer vector invec should have
+              invec[0] = 0
+              invec[1] = 0
+              invec[2] = k, the number of eigenvalues sought
+              invec[3+i] = index of ith eigenvalue sought, i = 0, 
+                           1, ..., k-1;
+      (e) the real 6-vector tol should have
+              tol[0] = absolute error tolerance desired,
+              tol[1] = relative error tolerance desired,
+          the remaining 4 entries of tol are ignored;
+      (f) the output estimate for the ith eigenvalue is returned
+          in ev[i], i = 0,...,k-1;
+      (g) the output integer k-vector IFLAG should have all entries
+          zero; nonzero values indicate warnings or error returns and 
+          are explained in the detailed usage section below;
+      (h) the integer scalar numx and the real vectors t and rho can be 
+          ignored. 
+
+      For other possibilities, see the detailed description which 
+      follows.
+------------------------------------------------------------------------
+Usage (detailed explanation) -
+
+  Input parameters;
+     job[*]    = logical 5-vector,
+                 job[0] = TRUE iff 
+                               a set of eigenvalues are to be computed
+                               but not their eigenfunctions.
+                 job[1] = TRUE iff 
+                               a set of eigenvalue and eigenfunction
+                               pairs are to be calculated.
+                 job[2] = TRUE iff 
+                               the spectral function is to be computed
+                               over some subinterval of the essential
+                               spectrum.
+                 job[3] = TRUE iff 
+                               the normal call to the routines for 
+                               classification (regular/singular, etc.)
+                               is OVERRIDDEN.  If job[3] is True then
+                               type[*][*] discussed below must be INPUT
+                               correctly!  Most users will not want to 
+                               override the classification routines, but 
+                               it would, of course, be appropriate for 
+                               users experimenting with problems for 
+                               which the coefficient functions do not 
+                               have power-like behavior near the singular 
+                               endpoints.  Note: the code may perform 
+                               poorly if the classification information 
+                               is incorrect; since the cost is usually
+                               negligible, it is strongly recommended 
+                               that job[3] be False.  The classification
+                               is deemed sufficiently important for 
+                               spectral density function calculation that
+                               job[3] is ignored when job[2] is True.
+                 job[4] = TRUE iff 
+                               mesh distribution is to be chosen by
+                               sledge.  If job[4] is True and numx is 
+                               zero, then the number of mesh points is
+                               also chosen by sledge; if numx > 0 then
+                               numx mesh points will be used.  If job[4]
+                               is False, then the number (numx) and 
+                               distribution (x[*]) must be input by the
+                               user.  IMPORTANT: most vectors and matrices 
+                               used in this code are dynamically allocated
+                               (except vectors and matrices used in function 
+                               extrap).  If the user inputs a mesh, be sure 
+                               to allocate the memory first by calling 
+                               functions vector_d, vector_i, and matrix_d.
+                               If job[2] is True and job[4] False then the 
+                               user must set BOTH the number numx and 
+                               distribution.  In this case, NO global error 
+                               estimates are made.
+     cons[*]   = double precision vector of length 8, values are the 
+                 boundary condition constants A1, A1', A2, A2', B1, B2,
+                 A, B. In the case of a nonoscillatory singular endpoint,
+                 the classification routine uses the Friedrichs' boundary
+                 condition constants; the code cannot automatically 
+                 choose a non-Friedrichs' boundary condition; however,
+                 interval truncation in the user's calling program can
+                 be used, together with many calls to sledge, to 
+                 compute singular eigenvalues associated with a non-
+                 Friedrichs' boundary condition at a NONOSC endpoint
+                 (see remark 12 below).
+     endfin[*] = logical 2-vector, values are
+                 endfin[0] = TRUE iff endpoint A is finite.
+                 endfin[1] = TRUE iff endpoint B is finite.
+     invec[*]  = integer vector of length 2.
+                 invec[0] = total number of eigenvalues to be output 
+                            in ev[*].
+                 invec[1] = gives the number (positive) of output 
+                            values desired for the array rho[*]
+                            (not referenced if job[2] is False).
+                 invec[j] for j = 2, 3, ..., 1+invec[1] contains the 
+                            indices for the eigenvalues sought. If 
+                            job[0] and job[1] are False, this part of 
+                            invec[*] is not referenced.
+     tol[*]    = double precision vector of from 2 to 6 tolerances. 
+                 If job[0] or job[1] is True then
+                    tol[0] is the absolute error tolerance for e-values,
+                    tol[1] is the relative error tolerance for e-values,
+                    tol[2] is the abs. error tolerance for e-functions,
+                    tol[3] is the rel. error tolerance for e-functions,
+                    tol[4] is the abs. error tolerance for eigenfunction
+                           derivatives,
+                    tol[5] is the rel. error tolerance for eigenfunction
+                           derivatives.
+                 Eigenfunction tolerances need not be set if job[1]
+                    is False.
+                 If job[2] is True then
+                    tol[0] is the absolute error tolerance,
+                    tol[1] is the relative error tolerance.
+                 All absolute error tolerances must be positive; all
+                    relative must be at least 100 times the unit roundoff.
+     numx      =    integer whose value is the number of output points 
+                    where each eigenfunction is to be evaluated (the
+                    number of entries in x[*] when job[1] is True,
+                 or
+                    the number of points in the initial mesh used when
+                    job[4] is False and numx > 0.
+                 If job[4] is False, the points in x[*] should be chosen
+                 to have a reasonable distribution.  Since the endpoints
+                 A and B must be part of any mesh, numx cannot be 1 in 
+                 this case.  If job[4] is False and job[2] is True, 
+                 then numx must be positive.
+     t[*]      = double precision vector of invec[1] values where the 
+                 spectral function rho[*] is desired (the existence and 
+                 location of continuous spectrum can be found by first 
+                 calling sledge with job[j] False, j = 0,...,3).
+                 Vector t[*] is not referenced if job[2] is False.  Its
+                 entries must be in increasing order.
+
+   Output parameters:
+     ev[*]     = double precision vector containing the computed 
+                 approximations to the eigenvalues whose indices are
+                 specified in indxev[*]; if job[0] and job[1] are False,
+                 then the output has no meaning.
+     numx      = the number of output points for eigenfunctions in the
+                 case when input numx = 0, job[1] and job[4] are True.
+     rho[*]    = double precision vector of values for the spectral
+                 density function Rho(t), rho[i] = Rho(t[i]).  rho[*] 
+                 must be dimensioned at least invec[1]; this vector is
+                 not referenced if job[2] is False.
+     iflag[*]  = integer vector carrying information about the output.
+       For the k-th requested eigenvalue when job[0] or job[1] is True
+       (or iflag[invec[0]] when job[2] is True):
+       iflag[k]   =  0,  normal return, output should be reliable.
+                  <  0,  fatal error, calculations ceased: if
+                  = -1,  too many levels needed for the eigenvalue
+                         calculation; problem seems too difficult for 
+                         this algorithm at this tolerance. Are the 
+                         coefficient functions nonsmooth?
+                  = -2,  too many levels needed for the eigenfunction
+                         calculation; problem seems too difficult for 
+                         this algorithm at this tolerance.  Are the eigen-
+                         functions ill-conditioned?
+                  = -3,  too many levels needed for the spectral density
+                         calculation; problem seems too difficult for 
+                         this algorithm at this tolerance.
+                  = -4,  the user has requested the spectral density
+                         function for a problem which has no continuous
+                         spectrum.
+                  = -5,  the user has requested the spectral density 
+                         function for a problem with both endpoints
+                         generating essential spectrum, i.e., both
+                         endpoints being either OSC or O-NO.  The 
+                         spectral density function calculation has not 
+                         been implemented for such cases.  For spectral 
+                         category 10 (both endpoints O-NO) the spectral
+                         multiplicity is generally two, proper normal-
+                         izations for the solutions against which the 
+                         spectral functions will be normalized will 
+                         depend on how the user wants to express the 
+                         eigenfunction expansion.  Users having problems 
+                         in spectral category 10 are encouraged to 
+                         supply them to the authors, and if possible, 
+                         recommend normalizations of the two solutions 
+                         to be used in writing the associated eigen-
+                         function expansion.
+                  = -6,  the user has requested the spectral density 
+                         function for a problem in spectral category 2
+                         for which a proper normalization of solution 
+                         at the NONOSC endpoint is not known; for 
+                         example, problems with an irregular singular
+                         point or infinite endpoint at one end and 
+                         continuous spectrum generated at the other.
+                         Users with problems of this type are encouraged 
+                         to supply them to the authors, and if possible, 
+                         recommend a normalization of solution at the 
+                         NONOSC endpoint which they would like to see 
+                         implemented. As a rule it is best to pick a 
+                         normalization which ensures that the solution 
+                         is uniquely fixed and entire in the eigenvalue 
+                         parameter EV for all x in the Sturm-Liouville 
+                         interval; for further mathematical information 
+                         on NONOSC endpoints we refer to paper [2] above.
+                  = -7,  problems encountered in obtaining a bracket.
+                  = -8,  too small a step used in the integration;
+                         tol[*] values may be too small for this
+                         problem.
+                  = -9,  too small a step used in a spectral density
+                         function calculation for which the continuous
+                         spectrum is generated by a finite endpoint.  Try
+                         transforming to Liouville (or some other) form.
+                  = -10, an argument to the circular trig functions is
+                         too large.  Try rerunning with a finer initial
+                         mesh, or, on singular problems, use interval
+                         truncation (see remark (12)).
+                  = -15, p(x) and r(x) not positive in (A,B).
+                  = -20, eigenvalues/functions were requested for a
+                         problem with an OSC singular endpoint.
+                         Interval truncation (see remark (12)) must be
+                         used on such problems.
+                  = -3?, illegal input, viz.
+                    -30,  numx = 1 when job[4] is True,
+                          or numx = 0 when job[2] is True and job[4]
+                          is False,
+                    -31,  B1 = B2 = 0 (at a regular endpoint),
+                    -32,  A1'*A2-A1*A2' .le. 0 when A1' or A2' nonzero,
+                    -33,  A1 = A2 = A1'= A2'= 0 (at a regular endpoint),
+                    -34,  A >= B (when both are finite),
+                    -35,  tol[even] <= 0 ,
+                    -36,  tol[odd]  <  100*unit roundoff,
+                    -37,  indxev[k] < 0  for some k when 0 =< k < invec[0],
+                    -38,  invec[1] <= 0 when job[2] is True ,
+                    -39,  x[*] entries out of order or not in [A,B], or
+                          x[1], x[numx-2] have the wrong sign in infinite 
+                          interval cases, or t[*] entries are out of order.
+                  >  0,   indicates some kind of warning, in this case
+                          value may contain any of the following digits:
+                   =  1,  failure in function brcket probably due to a
+                          cluster of eigenvalues which the code cannot
+                          separate.  Calculations have continued as best
+                          as possible, but any eigenfunction results are
+                          suspect.  Try rerunning with tighter input
+                          tolerances to separate the cluster. 
+                   =  2,  there is uncertainty in the classification for
+                          this problem.  Because of the limitations of the
+                          floating point arithmetic on the computer used,
+                          and the nature of the finite sampling, the
+                          function is not confident about the printed 
+                          classification information at the requested
+                          tolerance.
+                   =  3,  there may be some eigenvalues imbedded in the
+                          continuous spectrum; using g_print greater than
+                          zero will result in additional output giving 
+                          the location of the approximating eigenvalues 
+                          for the step function problem.  These could be
+                          extrapolated to estimate the actual eigenvalue
+                          for the continuous problem.
+                   =  5,  a change of variables was made to avoid poten-
+                          tial slow convergence; however, the global
+                          error estimates may not be as reliable.  Some
+                          experimentation using different tolerances is
+                          recommended.
+                   =  6,  there were problems with eigenfunction conver-
+                          gence in a spectral density calculation; the
+                          output rho[t] may not be accurate.
+  Global variables used in driver program:
+     g_print   = controls the amount of internal printing:
+                 values are from 0 (no printing) to 5 (much printing).
+                 For g_print > 0 much of the output will be to a file
+                 in pointer *output which should be named in the user's
+                 calling program via an fopen statement.
+                 Output for the various cases is,
+                 0   no printing.
+            When job[0] or job[1] is True
+                 1   Level 0 mesh (the first 51 or fewer points), 
+                     eigenvalue estimate at each level,
+                 4   the above,
+                     at each level matching point for eigenfunction 
+                     shooting, x[*], ef[*], pde[*] (ef, pde are local)
+                     values,
+                 5   all the above,
+                     at each level
+                     brackets for the eigenvalue search,
+                     intermediate shooting info for the eigenfunction
+                     and eigenfunction norm.
+           When job[2] is True
+                 1   the actual (a,b) used at each iteration,
+                     the total number of eigenvalues computed,
+                 2   the above,
+                     switchover points to the asymptotic formulas,
+                     some intermediate Rho(t) approximations,
+                 3   all the above,
+                     initial meshes for each iteration,
+                     index of the largest EV which may be computed,
+                     various Ev and RsubN values,
+                 4   all of the above,
+                     RhoHat values at each level,
+                 5   all of the above,
+                     all Ev and RsubN values below switchover point.
+            When job[3] is False
+                 2   output a description of the spectrum,
+                 3   the above plus the constants for the
+                     Friedrichs' boundary condition(s),
+                 5   all the above plus intermediate details of
+                     classification calculation.
+            Some of the output may go to the default output device
+            (screen or printer), but all information requested is
+            also directed to the file attached to output.
+     g_ncoeff =  number of coefficient function evaluations.
+     xef[*]   =  double precision vector of points where
+                    eigenfunction estimates are desired (job[1] True)
+                 or
+                    where user's initial mesh is entered (job[4] False
+                    and numx > 0).
+                 The values must satisfy
+                      A = xef[0] < xef[1] < ... < xef[numx-1] = B .
+                 When job[1] is True the initial mesh corresponds to the
+                 set of points where eigenfunction output is desired.
+                 If job[1] is False and numx = 0, then this vector is 
+                 not referenced.  When A and/or B are infinite (as 
+                 indicated through endfin[*]), the entries x[0] and/or 
+                 x[numx-1] are ignored;  however, it is required that 
+                 x[1] be negative when endfin[0] is False, and x[numx-2] 
+                 positive when endfin[1] is False (otherwise, iflag = -39 
+                 will result).
+    type[*][*] = 2 by 4 logical array; row 1 carries information about
+                 endpoint A while row 2 refers to B.
+                 type[*][0] = True  iff the endpoint is regular,
+                 type[*][1] = True  iff it is limit circle,
+                 type[*][2] = True  iff it is nonoscillatory for all EV,
+                 type[*][3] = True  iff it is oscillatory for all EV,
+                 Important note: all of these must be correctly INPUT
+                 if job[3] is True!
+     ef[*][*]  = double precision matrix of eigenfunction values:
+                 ef[i][j] is the estimate of u(x[j]) corresponding to
+                 the eigenvalue in ev[i].  If job[1] is False then this
+                 vector is not referenced.
+    pdef[*][*] = double precision vector of eigenfunction derivative 
+                 values: pdef[i][j] is the estimate of (pu')(x[j]) 
+                 corresponding to the eigenvalue in ev[i].  If job[1] 
+                 is False then this vector is not referenced.
+     *output   = output file pointer.
+
+*************************************************************************
+int interv(logical first,double alpha,double beta,double *cons,
+           logical *endfin,long int *nfirst,long int *ntotal)
+
+   Input parameters:
+     first      = logical; value is True if various internal variables
+                  have not yet been set.  If a prior call has been made
+                  to interv with first True, then a little time can
+                  be saved by letting first be False.
+                  IMPORTANT NOTE: setting first = True will clobber any
+                  initial mesh the user has input (when numx > 0 or
+                  job[4] is False);  also, interv will classify the
+                  problem irregardless of what job[3] is set to
+                  for sledge.
+     alpha      = double precision value of left end point of search 
+                  interval.
+     beta       = double precision value of right end point of search 
+                  interval.
+     cons[*]    = double precision vector of 8 input constants: A1, A1',
+                  A2, A2',  B1, B2, A, B.
+     endfin[*]  = logical 2-vector, same meaning as in sledge.
+     x[*]       = global variable. 
+                  double precision vector holding initial mesh.
+
+   Output parameters:
+     nfirst = index of first eigenvalue > alpha.
+     ntotal = total number of eigenvalues in the interval.
+     flag   = integer status indicator.
+                flag =   0 , normal return, output should be reliable,
+                     =  11 , there are no eigenvalues in [alpha, beta],
+                     =  12 , low confidence in nfirst or ntotal or both,
+                     =  13 , beta and/or alpha exceed the cutoff for 
+                             the continuous spectrum.  If only beta
+                             is too big then nfirst may be OK, but
+                             ntotal is meaningless.
+                     = -11 , alpha >=  beta,
+                     = -25 , oscillatory endpoint, output meaningless,
+                     = -3? , illegal cons[*] values (see above comments
+                             on sledge for an explanation). 
+*************************************************************************
+         In addition, a function must be provided for the coefficient 
+      functions p(x), q(x), and r(x); the form of this function is
+
+void coeff(double x,double *px,double *qx,double *rx)
+{
+...
+*px = ...
+*qx = ...
+*rx = ...
+}
+      The function name must be coeff, though of course the names of
+      arguments only need follow the usual C rules. x is the
+      independent variable; *px,*qx,*rx are the output values of the
+      respective coefficient functions p(x), q(x), and r(x) at x.
+
+/************************************************************************
+*                                                                       *
+*    This is a simple sample driver for sledge.                         *
+*                                                                       *
+************************************************************************/
+
+/*   header file: define some constants and functions                  */
+
+#include "sledge.h"
+
+/*   header file: define global variables                              */
+
+#include "sl_gv.h"
+
+void main()
+{
+/*   Declare all variables.                                            */
+
+     int     i, *iflag, invec[3], j, numx;
+     logical job[5], endfin[2];
+     double  *ev, *t, *rho, cons[8], tol[6];
+
+/*   Initialize cons[*] and endfin[*]. This example has a Neumann
+     condition at A = 1, and a singular point at B = +infinity.        */
+
+     cons[0] = 0.0;
+     cons[1] = 0.0;
+     cons[2] = 1.0;
+     cons[3] = 0.0;
+     cons[4] = 0.0;
+     cons[5] = 0.0;
+     cons[6] = 1.0;
+     cons[7] = 100.0;
+     endfin[0] = TRUE;
+     endfin[1] = FALSE;
+
+/*   Set the job[*] vector:
+        estimate both eigenvalues and eigenvectors,
+        estimate the spectral density function, classify,
+        force the initial mesh to be the output points.               */
+
+     job[0] = FALSE;
+     job[1] = TRUE;
+     job[2] = TRUE;
+     job[3] = FALSE;
+     job[4] = FALSE;
+
+/*   Set the tolerance.                                               */
+
+     tol[0] = 1.e-5;
+     tol[1] = 1.e-4;
+     tol[2] = 1.e-5;
+     tol[3] = 1.e-4;
+     tol[4] = 1.e-5;
+     tol[5] = 1.e-4;
+
+/*   Little printing,                                                 */
+
+     g_print = 1;
+
+/*   Initialize the vector invec[*]:
+        3 output points for the density function Rho(t),
+        estimates for the first (index 0) eigenvalue/function.        */
+
+     invec[0] = 1;
+     invec[1] = 3;
+     invec[2] = 0;
+
+/*   The eigenfunctions will be estimated at 5 points.                */
+
+     numx   = 5;
+     iflag  = vector_i(invec[0]+1);
+     xef    = vector_d(numx);
+     ev     = vector_d(invec[0]);
+     ef     = matrix_d(invec[0],numx);
+     pdef   = matrix_d(invec[0],numx);
+     xef[0] = 1.0;
+     xef[1] = 1.5;
+     xef[2] = 2.0;
+     xef[3] = 4.0;
+     xef[4] = 100.0;
+
+/*   Initialize the 3 output points for the density function.         */
+
+     t    = vector_d(invec[1]);
+     rho  = vector_d(invec[1]);
+     t[0] = 0.0;
+     t[1] = 0.5;
+     t[2] = 2.0;
+
+/*   Open file for output.                                            */
+
+     output_file = fopen("test.out","w");
+
+     sledge(job, cons, endfin, invec, tol, ev, &numx, t, rho, iflag);
+
+/*   Print results:                                                   */
+
+     for (i = 0; i < invec[0]; i++)
+     {
+        printf(" Nev = %6d;   Ev = %25.15e;     Flag = %8d\n",
+               invec[i+2], ev[i], iflag[i]);
+        fprintf(output_file, 
+			    " Nev = %6d;   Ev = %25.15e;     Flag = %8d\n",
+                invec[i+2], ev[i], iflag[i]);
+        if (iflag[i] > -10)
+        {
+           fprintf(output_file,
+  "            x                       u(x)                    (pu`)(x)\n");
+           for (j = 0; j < numx; j++)
+              fprintf(output_file, "%22.15e %25.15e %25.15e\n",
+                      xef[j], ef[i][j], pdef[i][j]);
+        }
+     }
+     printf("        t                     Rho(t)\n");
+     fprintf(output_file, "        t                     Rho(t)\n");
+     for (i = 0; i < invec[1]; i++) 
+     {
+        printf("%11.3f %32.15e\n", t[i], rho[i]);
+        fprintf(output_file, "%11.3f %32.15e\n", t[i], rho[i]);
+     }
+     printf(" Flag = %8d\n", iflag[invec[0]]);
+     fprintf(output_file," Flag = %8d\n", iflag[invec[0]]);
+     printf(" Number of COEFF calls = %ld\n", g_ncoeff);
+     fprintf(output_file, " Number of COEFF calls = %ld\n", g_ncoeff);
+     fclose(output_file);
+}
+
+void coeff(double x, double *px, double *qx, double *rx)
+{
+/*   Define the coefficient functions; here a Yukawa potential.       */
+
+     double t;
+
+/*   Be careful with potential over/underflows; here we assume the
+     IEEE double precision exponent range.                            */
+
+     if (x < 650.0)
+        t = exp(-x);
+     else
+        t = 0.0;
+     *px = 1.0;
+     *qx = -t / x;   
+     *rx = 1.0;
+}
+
+/************************************************************************
+*    End of sample driver for sledge.                                   *
+************************************************************************/
+
+      General remarks:
+      (1) Two machine dependent constants must be set in assignment
+          statements at the beginning of function start:
+          urn   -  an estimate of the unit roundoff; infinite output
+                   values are assigned the value 1/URN.
+          uflow -  a number somewhat smaller than -ln(underflow level).  
+                   Values of certain variables z for which
+                             ln(abs(z)) < -under
+                   will be set to zero.
+      (2) A value of iflag = -1, -2, or -3 may be the result of a 
+          lack of smoothness in the coefficient functions.  In such
+          cases a user input mesh may perform better (see (4) below).
+      (3) The heuristics for generating the initial mesh distribution
+          work reasonably well over a wide range of examples, but
+          occasionally they are far from optimal.  The code's choice
+          can be over-ridden by setting job[4] False and supplying a
+          mesh in x[*].
+      (4) If any of the coefficient functions p,q, or r (or their first
+          few derivatives) have finite jump discontinuities at points
+          in the interior of (A,B), then it is advantageous to have
+          these points in sledge's mesh.  Currently, this can only be
+          accomplished by setting job[4] False and supplying an 
+          appropriate mesh in x[*].
+      (5) In general, eigenvalue convergence is observed to be more
+          rapid than eigenfunction convergence; hence, it is
+          recommended that job[1] be False unless eigenfunction
+          information really is necessary.
+      (6) When eigenfunction output is sought, unless some knowledge
+          of the eigenfunction is known in advance, it is recommended 
+          that job[4] be True so that the code will attempt to choose
+          a reasonable distribution for the initial mesh points.
+      (7) Computing the spectral density function for problems having
+          continuous spectrum can be very expensive; it is recommended
+          that initially, relatively crude tolerances (0.001 or so) be
+          used to get some idea of the effort required.
+      (8) It is recommended that every problem be classified (job[3]
+          False) by the code before any calculation of spectral
+          quantities occurs.  Only if the user is certain as to what
+          the classification is (and describes it correctly through
+          invec and type) should the classification option be bypassed.
+      (9) If the code does the classification of singular problems, it
+          will automatically choose the Friedrichs' boundary condition 
+          at NONOSC endpoints.  If another boundary condition is desired,
+          the user must use interval truncation (see remark (12)).
+     (10) While all parts of the code should function on machines
+          with a fairly narrow exponent range (such as IEEE single
+          precision), it is better to have a relatively wide exponent
+          range (IEEE double precision).  The classification algorithm,
+          in particular, is far more reliable if done on a machine with
+          a fairly wide exponent range.
+     (11) Care must be taken in writing the function coeff for the
+          evaluation of p(x), q(x), and r(x) to avoid arithmetic
+          exceptions such as overflow and underflow (or trig function
+          arguments too large).  This can be especially delicate on
+          machines with a small exponent range.
+     (12) In some cases `interval truncation' is recommended.  By this
+          is meant the user should call sledge several times using a 
+          sequence of regular endpoints (with appropriate boundary 
+          conditions) converging to the singular endpoint.  The eigen-
+          values of the regular problems selected by the user should be
+          arranged so as to converge to those of the desired singular
+          problem. For example, if the user wishes to compute eigen-
+          values associated with a non-Friedrichs' boundary condition 
+          for problems in spectral category 1, the user can experiment
+          with choosing a sequence of regular approximating intervals,
+          and vary the boundary conditions appropriately by means of a
+          `boundary condition function' or known solution of the 
+          equation for a real value of EV on the sequence of regular 
+          intervals until convergence of the regular eigenvalues to 
+          the desired singular one is observed.  Similarly, for 
+          problems in spectral category 3 or 5 which involve one or two
+          endpoints which are LC and OSC, the (necessarily discrete) 
+          spectrum is known to be unbounded below and above. To 
+          implement a given LC boundary condition at a singular LC 
+          endpoint one may choose a `boundary condition function' or 
+          known solution of the equation for a real value of EV and 
+          make use of it on a sequence of regular approximating 
+          intervals to vary the boundary condition on successive calls
+          to sledge for the sequence of regular intervals until 
+          convergence to the desired singular eigenvalue is observed. 
+          At present these methods are highly experimental and problem-
+          dependent as good heuristics for the choice of the rate of 
+          convergence of the regular intervals to the singular one 
+          which work well over a wide class of problems are not known.
+          (The only case in which sledge automatically selects regular
+          approximating subintervals is for spectral density function
+          calculations for problems in spectral category 2; but
+          here the singular endpoint is of LP type, so no singular
+          boundary condition is required to be implemented.)
+     (13) Problems of slow convergence can sometimes be avoided by a
+          judicious change of either dependent or independent variable
+          (or both).
+     (14) If the Liouville normal form potential Q(t) has a minimum
+          far from zero, then the heuristics for generating the initial
+          mesh may well miss it.  In this case, it is advisable to
+          shift the independent variable.
+     (15) The determination of the total number of eigenvalues is the
+          most difficult part of the classification process.  When the
+          theory provides this number, of course, there is no problem;
+          otherwise, it should be viewed with some skepticism.  A more
+          reliable count of the eigenvalues below the cutoff point of
+          the continuous spectrum can be gained (at some expense) by
+          trying to compute many eigenvalues near that point.
+*************************************************************************/
+

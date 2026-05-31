@@ -1,0 +1,48 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>F2C for Visual C 4.0</title>
+<meta name="keywords" content="win32">
+<meta name="Description" content="f2c compiler adapted for Microsoft Visual C 4.0">
+<meta name="Template" content="D:\Program Files\Microsoft Office\Office\html.dot">
+</head>
+
+<body link="#0000FF" vlink="#800080" bgcolor="#EBEBEB">
+
+<p align="center"><font face="Trebuchet MS"><big><big>F2C for Visual C 5.0</big></big></font></p>
+<font face="Trebuchet MS">
+
+<p>&nbsp;</p>
+
+<p>This is an adaption of the Fortran77 to C translator f2c from <a
+href="http://www.netlib.org">netlib</a>. The f2c &quot;compiler&quot; works as expected,
+the only deviation from the original documentation is in the fact that you can not use a
+*.f file specifier, i.e. it will compile only one source file at a time. I have included a
+slightly modified f2c.h include file that conditionally undefines huge etc. modifiers.<br>
+The compiler produces C code that must be linked against the runtime libraries libf77.lib
+and libi77.lib. While the translator itself runs in native Win32 mode, it may be necessary
+to install the Downhill library available at&nbsp; <a href="http://www.ede.com/free/u2nt/">http://www.ede.com/free/u2nt</a>
+(a lightweight Un*x to Win32 compatibility library) if you get unresolved externals during
+linking. </p>
+</font>
+
+<p><font face="Trebuchet MS"><big>Remarks on building:</big><br>
+A sample Fortran test program is provided with the source distribution. The Fortran source
+is translated to C by VC5 custom build step and the resulting C program is compiled with
+the -MD option to link with libf77.lib and libi77.lib.<br>
+There is a potential problem with the binary/text dichotomy of the file opening modes. To
+be on the safe side, I would recommend to link your program with binmode.obj to set the
+default file mode to binary. In general, this is required if your Fortran program uses a
+BACKSPACE. </font></p>
+
+<p><font face="Trebuchet MS">Original location of this page: <a
+href="http://www.weihenstephan.de/~syring/f2c/f2c.html">http://www.weihenstephan.de/~syring/f2c/f2c.html</a></font></p>
+
+<p><font face="Trebuchet MS">Last change on 07/13/1999 by <a
+href="mailto:syring@weihenstephan.de">K. M. Syring</a> </font></p>
+
+<hr>
+</body>
+</html>

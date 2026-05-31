@@ -1,0 +1,13 @@
+/***************************************************************************
+
+         Scanner for the SolveIt language
+         
+win_bison.exe -o parser_2020.cpp .\SolveIt.y
+win_flex --wincompat -o lexer_2020.cpp SolveIt.lex
+
+***************************************************************************/
+
+
+// in SolveIt.y:
+
+%defines "parser_2020.h"

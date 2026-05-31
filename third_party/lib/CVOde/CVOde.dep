@@ -1,0 +1,83 @@
+# Microsoft Developer Studio Generated Dependency File, included by CVOde.mak
+
+.\BAND.CPP : \
+	".\band.h"\
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	".\vector.h"\
+	
+
+.\CVBAND.CPP : \
+	".\band.h"\
+	".\cvband.h"\
+	".\cvode.h"\
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	".\vector.h"\
+	
+
+.\CVDENSE.CPP : \
+	".\cvdense.h"\
+	".\cvode.h"\
+	".\dense.h"\
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	".\vector.h"\
+	
+
+.\CVDIAG.CPP : \
+	".\cvdiag.h"\
+	".\cvode.h"\
+	".\llnltyps.h"\
+	".\vector.h"\
+	
+
+.\CVODE.CPP : \
+	".\cvode.h"\
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	".\vector.h"\
+	
+
+.\CVSPGMR.CPP : \
+	".\cvode.h"\
+	".\cvspgmr.h"\
+	".\iterativ.h"\
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	".\spgmr.h"\
+	".\vector.h"\
+	
+
+.\DENSE.CPP : \
+	".\dense.h"\
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	".\vector.h"\
+	
+
+.\ITERATIV.CPP : \
+	".\iterativ.h"\
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	".\vector.h"\
+	
+
+.\LLNLMATH.CPP : \
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	
+
+.\SPGMR.CPP : \
+	".\iterativ.h"\
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	".\spgmr.h"\
+	".\vector.h"\
+	
+
+.\VECTOR.CPP : \
+	".\llnlmath.h"\
+	".\llnltyps.h"\
+	".\vector.h"\
+	

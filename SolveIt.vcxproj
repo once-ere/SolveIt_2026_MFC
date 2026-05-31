@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5FF7AF61-74C9-479B-8A90-15C5B5FB3DC6}</ProjectGuid>
+    <RootNamespace>SolveIt</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>Release\</OutDir>
+    <IntDir>Release\</IntDir>
+    <TargetName>SolveIt</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>x64\Release\</OutDir>
+    <IntDir>x64\Release\</IntDir>
+    <TargetName>SolveIt</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
+    <TargetName>SolveIt</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>x64\Debug\</OutDir>
+    <IntDir>x64\Debug\</IntDir>
+    <TargetName>SolveIt</TargetName>
+  </PropertyGroup>
+  <!-- Release compile options -->
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>src;src\app;resources;third_party;third_party\stlport;third_party\lib\zlib;third_party\lib\png;third_party\lib\cvode;third_party\SolveIt.Lib\lib\CVOde;third_party\SolveIt.Lib\lib\CVOde\include;third_party\lib\pqp;vendor\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_OPENGL32_;BUILD_GL32;NO_PARALLEL;NO_STEREO;WIN32;NDEBUG;_WINDOWS;UNICODE;_UNICODE;_WINSTATIC;_SILENCE_CXX23_DENORM_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>top.lib;Libi77.lib;Libf77.lib;WinMM.lib;vfw32.lib;dformt.LIB;BLAS.lib;LAPACK.lib;arpack.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>third_party\lib;third_party\SolveIt.Lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>lib\matherr.obj %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>src;src\app;resources;third_party;third_party\stlport;third_party\lib\zlib;third_party\lib\png;third_party\lib\cvode;third_party\SolveIt.Lib\lib\CVOde;third_party\SolveIt.Lib\lib\CVOde\include;third_party\lib\pqp;vendor\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_OPENGL32_;BUILD_GL32;NO_PARALLEL;NO_STEREO;WIN32;NDEBUG;_WINDOWS;UNICODE;_UNICODE;_WINSTATIC;_SILENCE_CXX23_DENORM_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>top_x64.lib;cvode_legacy.lib;WinMM.lib;vfw32.lib;dformt_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>x64\$(Configuration);third_party\lib;third_party\SolveIt.Lib\lib;vendor\vcpkg\installed\x64-windows\lib;vendor\vcpkg\installed\x64-windows\debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreLinkEvent>
+      <Command>powershell -ExecutionPolicy Bypass -File "$(ProjectDir)third_party\SolveIt.Lib\lib\build_dformt_x64_stub.ps1" -ProjectDir "$(MSBuildProjectDirectory)"
+powershell -ExecutionPolicy Bypass -File "$(ProjectDir)third_party\SolveIt.Lib\lib\CVOde\build_clang_cl_lib.ps1" -Configuration "$(Configuration)" -Platform "$(Platform)" -ProjectDir "$(MSBuildProjectDirectory)"</Command>
+    </PreLinkEvent>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <!-- Debug compile options -->
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>src;src\app;resources;third_party;third_party\stlport;third_party\lib\zlib;third_party\lib\png;third_party\lib\cvode;third_party\SolveIt.Lib\lib\CVOde;third_party\SolveIt.Lib\lib\CVOde\include;third_party\lib\pqp;vendor\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;UNICODE;_UNICODE;_SILENCE_CXX23_DENORM_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>topD.lib;Libi77D.lib;Libf77D.lib;WinMM.lib;vfw32.lib;dformt.LIB;BLASd.lib;LAPACKd.lib;arpackd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>third_party\lib;third_party\SolveIt.Lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>LIBC.lib;GLAUX.LIB;glut32.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>src;src\app;resources;third_party;third_party\stlport;third_party\lib\zlib;third_party\lib\png;third_party\lib\cvode;third_party\SolveIt.Lib\lib\CVOde;third_party\SolveIt.Lib\lib\CVOde\include;third_party\lib\pqp;vendor\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;UNICODE;_UNICODE;_SILENCE_CXX23_DENORM_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>top_x64d.lib;cvode_legacy.lib;WinMM.lib;vfw32.lib;dformt_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>x64\$(Configuration);third_party\lib;third_party\SolveIt.Lib\lib;vendor\vcpkg\installed\x64-windows\lib;vendor\vcpkg\installed\x64-windows\debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>LIBC.lib;GLAUX.LIB;glut32.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PreLinkEvent>
+      <Command>powershell -ExecutionPolicy Bypass -File "$(ProjectDir)third_party\SolveIt.Lib\lib\build_dformt_x64_stub.ps1" -ProjectDir "$(MSBuildProjectDirectory)"
+powershell -ExecutionPolicy Bypass -File "$(ProjectDir)third_party\SolveIt.Lib\lib\CVOde\build_clang_cl_lib.ps1" -Configuration "$(Configuration)" -Platform "$(Platform)" -ProjectDir "$(MSBuildProjectDirectory)"</Command>
+    </PreLinkEvent>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <!-- Main source files -->
+    <ClCompile Include="src\\app\\3DAxes.cpp" />
+    <ClCompile Include="src\\app\\array.cpp" />
+    <ClCompile Include="src\\app\\BlockingStatusBar.cpp" />
+    <ClCompile Include="src\\app\\Box.cpp" />
+    <ClCompile Include="src\\app\\CalcMap.cpp" />
+    <ClCompile Include="src\\app\\ChangeCharge.cpp" />
+    <ClCompile Include="src\\app\\ChildFrm.cpp" />
+    <ClCompile Include="src\\app\\ChildFrm2.cpp" />
+    <ClCompile Include="src\\app\\CodeFiber.cpp" />
+    <ClCompile Include="src\\app\\Coords.cpp" />
+    <ClCompile Include="src\\app\\CreateWindow.cpp" />
+    <ClCompile Include="src\\app\\Cruncher.cpp" />
+    <ClCompile Include="src\\app\\DIBSECTN.CPP" />
+    <ClCompile Include="src\\app\\ExportEps.cpp" />
+    <ClCompile Include="src\\app\\FetchExecute.cpp" />
+    <ClCompile Include="src\\app\\GetSystem.cpp" />
+    <ClCompile Include="src\\app\\glDrawMap.cpp" />
+    <ClCompile Include="src\\app\\glDrawMap2.cpp" />
+    <ClCompile Include="src\\app\\GLView.cpp" />
+    <ClCompile Include="src\\app\\GLViewBackground.cpp" />
+    <ClCompile Include="src\\app\\HIPNG.CPP" />
+    <ClCompile Include="src\\app\\instruction.cpp" />
+    <ClCompile Include="src\\app\\KeyWords.cpp" />
+    <ClCompile Include="src\\app\\LeftView.cpp" />
+    <ClCompile Include="src\\app\\Lexer.cpp" />
+    <ClCompile Include="src\\app\\MainFrm.cpp" />
+    <ClCompile Include="src\\app\\MakePNGImage.cpp" />
+    <ClCompile Include="src\\app\\Mapping.cpp" />
+    <ClCompile Include="src\\app\\Math.cpp" />
+    <ClCompile Include="src\\app\\Matherror.cpp" />
+    <ClCompile Include="src\\app\\ObjArith.cpp" />
+    <ClCompile Include="src\\app\\objects.cpp" />
+    <ClCompile Include="src\\app\\OnPaste.cpp" />
+    <ClCompile Include="src\\app\\parser.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\app\\PixelBuffer.cpp" />
+    <ClCompile Include="src\\app\\PlayMap.cpp" />
+    <ClCompile Include="src\\app\\ReadWrite.cpp" />
+    <ClCompile Include="src\\app\\scan.cpp" />
+    <ClCompile Include="src\\app\\SetGetParam.cpp" />
+    <ClCompile Include="src\\app\\SetSystem.cpp" />
+    <ClCompile Include="src\\app\\SolveIt.cpp" />
+    <ClCompile Include="src\\app\\SolveItDoc.cpp" />
+    <ClCompile Include="src\\app\\SolveItView.cpp" />
+    <ClCompile Include="src\\app\\StackMachine.cpp" />
+    <ClCompile Include="src\\app\\StdAfx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\app\\StepStop.cpp" />
+    <ClCompile Include="src\\app\\symbol.cpp" />
+    <ClCompile Include="src\\app\\SymbolTable.cpp" />
+    <ClCompile Include="src\\app\\System.cpp" />
+    <ClCompile Include="src\\app\\SystemPlot.cpp" />
+    <ClCompile Include="src\\app\\SysUserFunc.cpp" />
+    <ClCompile Include="src\\app\\TextBoxWindow.cpp" />
+    <ClCompile Include="src\\app\\trackball2.cpp" />
+    <ClCompile Include="src\\app\\TransformCoords.cpp" />
+    <ClCompile Include="src\\app\\Tree.cpp" />
+    <ClCompile Include="src\\app\\Types.cpp" />
+    <ClCompile Include="src\\app\\Vector3D.cpp" />
+    <!-- Examples -->
+    <ClCompile Include="src\\Examples\Ex.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\Examples\Examples.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\Examples\Examples2.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\Examples\ExSerway.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\Examples\ExTest.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\Examples\QMExamples.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\Examples\UserDefined.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\Examples\Superposition\Superposition.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\Examples\Superposition\WaveNumbers.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <!-- Help -->
+    <ClCompile Include="src\\Help\HtmlCtrl.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\Help\TraceWin.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <!-- Math/fit -->
+    <ClCompile Include="src\\math\fit\curfit.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\fpback.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\fpbspl.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\fpchec.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\fpcurf.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\fpdisc.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\fpgivs.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\fpknot.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\fprati.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\fprota.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\math\fit\splev.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <!-- QM -->
+    <ClCompile Include="src\\QM\BUILDHULL.CPP">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\DataQM_Scatt1D.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\DataQM_Scatt2D.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\DataQM_Stationary2D.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\EigenStatesTRLan.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\qm_1dscatt.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\qm_2dscatt.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\qm_ground_mc_1d.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\QMEvolve.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\QMEvolve1D.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\QMStationary1D.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\QM\QMStationary2D.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <!-- RigidBody -->
+    <ClCompile Include="src\\RigidBody\AddConstraint.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\ANALYZEPERIOD.CPP">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\CMPulley.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\ComputeEnergy.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\ComputeExtForcesTorques.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\Constraint.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\ConstraintManager.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\Contact.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\ContactCnstr.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\CreateContourPlotBitmap.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\CurrentLoop.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\DrawEquipotential.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\DrawShape.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\DrawState.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\ExamineCollisionTimes.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\ExaminePair.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\FieldLineODE.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\FieldsManager.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\Impact.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\ImposeConstraints.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\Joint1DOF.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\MAGNETICFIELD.CPP">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\MAT3.CPP">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\MatX.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\MomentumChanges.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\OdeSolverCollision.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\PLOTTRAJECTORY.CPP">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\PulleyConstraint.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\RBTension.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\ResolveCollisions.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\RigidBody.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\RigidBodyManager.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\RigidBodySet.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\RigidLink.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\RigidLink2.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\RigidLink3.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\SE3.CPP">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\shapes.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\SixDim.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\SMutex.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\State.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\TrajectoryRecord.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\UserDefinedForce.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\\RigidBody\tensions\PulleyTensions.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <!-- External lib C sources (png, zlib, qhull, cvode, pqp, gl2ps) -->
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNG.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGERROR.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGGET.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGMEM.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGPREAD.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGREAD.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGRIO.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGRTRAN.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGRUTIL.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGSET.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGTRANS.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGVCRD.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGWIO.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGWRITE.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGWTRAN.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\PNGWUTIL.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\READPNG.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\png\READPNG2.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\gl2ps\gl2ps.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\GEOM.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\GEOM2.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\GLOBAL.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\IO.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\MEM.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\MERGE.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\POLY.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\POLY2.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\QHULL.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\QSET.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\STAT.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\qhull\USER.C">
+      <CompileAs>CompileAsC</CompileAs>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\ADLER32.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\COMPRESS.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\CRC32.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\DEFLATE.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\GZIO.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\INFBLOCK.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\INFCODES.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\INFFAST.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\INFLATE.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\INFTREES.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\INFUTIL.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\TREES.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\UNCOMPR.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\zlib\ZUTIL.C">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\\SolveIt.Lib\lib\CVOde\CVOdeShim.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\pqp\Build.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\pqp\BV.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\pqp\PQP.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="third_party\SolveIt.Lib\lib\pqp\TriDist.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\\SolveIt.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\\StdAfx.h" />
+    <ClInclude Include="resources\\resource.h" />
+    <ClInclude Include="src\\SolveIt.h" />
+    <ClInclude Include="src\\SolveItDoc.h" />
+    <ClInclude Include="src\\SolveItView.h" />
+    <ClInclude Include="src\\MainFrm.h" />
+    <ClInclude Include="src\\LeftView.h" />
+    <ClInclude Include="src\\Frame.h" />
+    <ClInclude Include="src\\GenExamp.h" />
+    <ClInclude Include="src\\instruction.h" />
+    <ClInclude Include="src\\KeyWords.h" />
+    <ClInclude Include="src\\Lexer.h" />
+    <ClInclude Include="src\\Matherror.h" />
+    <ClInclude Include="src\\objects.h" />
+    <ClInclude Include="src\\parser.h" />
+    <ClInclude Include="src\\PlayMap.h" />
+    <ClInclude Include="src\\StackMachine.h" />
+    <ClInclude Include="src\\symbol.h" />
+    <ClInclude Include="src\\SymbolTable.h" />
+    <ClInclude Include="src\\System.h" />
+    <ClInclude Include="src\\TextBoxWindow.h" />
+    <ClInclude Include="src\\Types.h" />
+    <ClInclude Include="src\\Vector3D.h" />
+    <ClInclude Include="src\\Help\HTML_Content.h" />
+    <ClInclude Include="src\\QM\DataQM_Scatt1D.h" />
+    <ClInclude Include="src\\QM\DataQM_Scatt2D.h" />
+    <ClInclude Include="src\\QM\DataQM_Stationary1D.h" />
+    <ClInclude Include="src\\QM\DataQM_Stationary2D.h" />
+    <ClInclude Include="src\\QM\qm_1dscatt.h" />
+    <ClInclude Include="src\\QM\qm_2dscatt.h" />
+    <ClInclude Include="src\\QM\qm_ground_mc_1d.h" />
+    <ClInclude Include="src\\QM\qmstationary1d.h" />
+    <ClInclude Include="src\\QM\QMStationary2D.h" />
+    <ClInclude Include="src\\RigidBody\Constraint.h" />
+    <ClInclude Include="src\\RigidBody\ConstraintManager.h" />
+    <ClInclude Include="src\\RigidBody\Contact.h" />
+    <ClInclude Include="src\\RigidBody\FieldLineODE.h" />
+    <ClInclude Include="src\\RigidBody\FieldsManager.h" />
+    <ClInclude Include="src\\RigidBody\Joint1DOF.h" />
+    <ClInclude Include="src\\RigidBody\MAT3.H" />
+    <ClInclude Include="src\\RigidBody\MatX.h" />
+    <ClInclude Include="src\\RigidBody\PointMassConstraint.h" />
+    <ClInclude Include="src\\RigidBody\PtToPtConstraint.h" />
+    <ClInclude Include="src\\RigidBody\RigidBody.h" />
+    <ClInclude Include="src\\RigidBody\RigidBodyManager.h" />
+    <ClInclude Include="src\\RigidBody\RigidBodySet.h" />
+    <ClInclude Include="src\\RigidBody\SE3.H" />
+    <ClInclude Include="src\\RigidBody\SixDim.h" />
+    <ClInclude Include="src\\RigidBody\State.h" />
+    <ClInclude Include="src\\RigidBody\TrajectoryRecord.h" />
+    <ClInclude Include="src\\Examples\Superposition\Superposition.h" />
+    <ClInclude Include="src\\Examples\Superposition\WaveNumbers.h" />
+    <ClInclude Include="src\\Examples\ScriptColors.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

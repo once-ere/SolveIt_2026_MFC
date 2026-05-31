@@ -1,0 +1,2123 @@
+\input texinfo   @c -*-texinfo-*-      
+@c %**start of header
+@setfilename trlan.info
+@settitle TRLAN User Guide
+@setchapternewpage on
+@finalout
+@c %**end of header
+
+@comment version number
+@set TRLVERSION 1.0
+@set DOCVERSION 1.0
+
+@ifinfo
+Copyright (C) 1999 Kesheng Wu and Horst Simon
+
+Users guide for TRLAN version:  Edition @value{DOCVERSION}
+@value{TRLVERSION}
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided that the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+@end ignore
+@end ifinfo
+
+@c Smaller amounts of whitespace for the 8.5 by 11 inch format.
+@c @tex
+@c \global\chapheadingskip = 15pt plus 4pt minus 2pt
+@c \global\secheadingskip = 12pt plus 3pt minus 2pt
+@c \global\subsecheadingskip = 9pt plus 2pt minus 2pt
+@c \global\parskip 6pt plus 1pt
+@c @end tex
+
+@titlepage
+@title{TRLAN User Guide}
+
+@subtitle{Edition @value{DOCVERSION} for TRLAN version @value{TRLVERSION}}
+
+@sp 2
+March 1999
+@sp 4
+@author Kesheng Wu
+@author Horst Simon
+@vskip 0pt plus 1filll
+
+This work was supported by the Director, Office of Science, Office of
+Laboratory Policy and Infrastructure Management, of the U.S. Department
+of Energy under Contract No. DE-AC03-76SF00098.
+
+The development and testing of this software used resources of the
+National Energy Research Scientific Computing Center, which is supported
+by the Office of Science of the U.S. Department of Energy.
+
+@c @page
+@c @vskip 0pt plus 1filll
+@c @center{Copyright @copyright{} 1999 Kesheng Wu and Horst Simon}
+@c @sp 5
+@end titlepage
+
+@contents
+
+@iftex
+@headings off
+@everyheading TRLAN Ver @value{TRLVERSION} @| @| @thispage
+@end iftex
+
+@ifinfo
+@node    Top,       Overview,      (dir),    (dir)
+@comment node-name, next,          previous, up
+@top
+This is edition @value{DOCVERSION} of the user's guide for TRLAN version
+@value{TRLVERSION}.  It describes how to use TRLAN to solve real
+symmetric eigenvalue problems.  The main focus is on how to set up the
+data required by TRLAN so that TRLAN can do its job.  It also includes
+information on installation and debugging.
+@end ifinfo
+
+@menu
+* Overview::
+         a short overview of what TRLAN is designed to do.
+* Installation::
+         how to install the package and run the examples.
+* Example::
+         this short example demonstrates the basic concepts.
+* TRL_INFO module::
+         information used/produced by TRLAN is packaged in this module.
+* TRLAN interface::
+         details of @code{trlan} calling sequence and the operator
+         interface. 
+* Parameters::
+         recommendations on how to set the parameters.
+* Miscellaneous::
+         workspace size requirement, interface for other languages, et al.
+* About Lanczos::
+         list of books on the Lanczos algorithm and related journal
+         papers on restarting the Lanczos algorithm.
+* Index::
+@end menu
+
+@node    Overview, Installation,   Top,      Top
+@comment node-name,     next,      previous, up
+@chapter Overview
+
+@c index Thick-restart Lanczos, dynamic thick-restart
+TRLAN is a program designed to find a small number of extreme
+eigenvalues and their corresponding eigenvectors of a real symmetric
+matrix.  Denote the matrix as
+@ifinfo
+A,
+@end ifinfo
+@tex
+$A$,
+@end tex
+the eigenvalue as
+@ifinfo
+lambda,
+@end ifinfo
+@tex
+$\lambda$,
+@end tex
+and the corresponding eigenvector as
+@ifinfo
+x,
+@end ifinfo
+@tex
+$x$,
+@end tex
+they are defined by the following equation,
+
+@ifinfo
+A x = lambda x.
+@end ifinfo
+@tex
+$$A x = \lambda x.$$
+@end tex
+
+@cindex algorithm
+There are a number of different implementations of the Lanczos algorithm
+available@footnote{Many mathematical packages are available from NETLIB
+@code{(http://www.netlib.org/)} and ACM TOMS
+@code{(http://www.acm.org/toms/)}.}.  Why another one?  Our main
+motivation is to develop a specialized version that only target the case
+where one wants both eigenvalues and eigenvectors of a large real
+symmetric eigenvalue problems that can not use the shift-and-invert
+scheme.  In this case the standard non-restarted Lanczos algorithm
+requires one to store a large number of Lanczos vectors which can cause
+storage problem and make each iteration of the method very expensive.
+The underlying algorithm of TRLAN is a dynamic thick-restart Lanczos
+algorithm.  Like all restarted methods, the user can choose how many
+vectors can be generated at once.  Typically, the user choose a moderate
+size so that all Lanczos vectors can be stored in core.  This allows the
+restarted methods to execute efficiently.  This implementation of the
+thick-restart Lanczos method also uses the latest restarting technique,
+it is very effective in reducing the time required to compute a desired
+solutions compared to similar restarted Lanczos schemes, e.g.,
+@cite{ARPACK}@footnote{ARPACK can be found at
+@code{http://www.caam.rice.edu/software/ARPACK/}.}.
+
+@cindex Lanczos basis
+When solving most problems, the three most time-consuming procedures in
+the Lanczos method are the matrix-vector multiplication,
+re-orthogonalization and computation of the Ritz vectors.  To make this
+package as small as possible, we have delegated the task of performing
+the matrix-vector multiplication to the user.  This is a reasonable
+approach because there is simply too many possible ways of performing
+the operation and the user usually can construct a specialize version
+that is better than a generic matrix-vector multiplication routine.  In
+addition, there are high quality matrix-vector multiplication routines
+available as parts of larger packages, for example, P_SPARSLIB, AZTEC,
+BLOCKSOLVE and PETSc, see @ref{operator interface}, for details.  To
+reduce the amount of the time spent in re-orthogonalization, we only
+perform re-orthogonalization if it is necessary.  The Ritz vectors are
+computed as during the restarting process, in TRLAN, we only compute
+those that are determined to be needed.  This reduces the number of Ritz
+vectors computed.  To compute them efficiently, we call the @code{BLAS}
+library to perform the actual computation.
+
+@cindex Fortran 90, advantages
+The program is implemented in @code{Fortran 90}.  The main advantages of
+using @code{Fortran 90} compared to @code{Fortran 77} is that
+@code{Fortran 90} offers dynamic memory management which make it more
+flexible in terms of allocating temporary work arrays.  If there is an
+array not used for other task, it can be passed into TRLAN, else the
+user can simple let TRLAN allocate its own work arrays.  TRLAN internal
+allocate all the space it requires up front to avoid repeated call to
+allocated small pieces of workspace.
+
+@cindex C/C++
+Similar to other languages, such as C/C++, @code{Fortran 90} offers data
+encapsulation which makes it convenient to pass a significant amount of
+information cleanly.  TRLAN packages a large amount of information in a
+single object to reduce the size of the external user interface.
+@xref{TRL_INFO module}, for details.  A significant advantage of using
+@code{Fortran} compared to C/C++ is the ease of using computational
+libraries such as @code{BLAS} and @code{LAPACK}.  In fact, most
+numerical computations of TRLAN are performed using those library
+functions.  Because most machines have vendor optimized @code{BLAS} and
+@code{LAPACK}, being able to effectively use them is crucial to the
+effectiveness of TRLAN package.
+
+@code{Fortran 90} also provides some utility functions such as query
+function for the machine precision, random number generator and timing
+functions.  They make the program more portable across different
+platforms.
+
+Parts of this document contains details about the software package which
+may not be of interest to every user.  Here are some advice on how to
+use this document.  If you just want to get a feel of how TRLAN looks
+like in a program, take a look at @ref{Example} or the examples come
+with the software package.  Chapter 3 contains a short example that uses
+mostly default parameters.  To assert more control over TRLAN, see
+@ref{TRL_INFO module}, and @ref{TRLAN interface}.  If you are somewhat
+puzzled about how to choose the parameters, see @ref{Parameters}, for
+our recommendations.  If you don't use @code{Fortran 90}, see @ref{other
+languages}, for what to do.  For most users, there is no need to read
+everything in @ref{elements}, and @ref{error code}.  If you read the
+entire document and are still puzzled, contact the authors, see
+@ref{contacting authors}.
+
+
+@node    Installation, Example,   Overview,      Top
+@comment node-name,     next,          previous, up
+@chapter Installation
+@cindex installation
+
+The source code of the package is available at
+
+@center @code{http://www.nersc.gov/~kewu/trlan.tar.gz}.
+
+@noindent This document is distributed with the package and is
+also separately available at
+
+@center @code{http://www.nersc.gov/~kewu/ps/trlan-ug.ps}.  
+
+@noindent The package may be unpacked by
+@smallexample
+tar -xzf trlan.tar.gz
+@end smallexample
+@noindent If you @code{tar} program does not recognize flag @code{z},
+you can unpack it in two steps
+@smallexample
+gunzip trlan.tar.gz
+tar -xf trlan.tar
+@end smallexample
+@noindent After this, the files in the package will be unpacked into a
+directory called @file{TRLan}.
+
+To install the package, you will need a @code{Fortran 90} compiler, the
+@code{BLAS} and @code{LAPACK} libraries.  On parallel machines, MPI is
+also needed.  The compiler name and the options used are specified in
+the file called @file{Make.inc}.  A number of examples are provided in
+the file for different machines.  If your compiler name and library
+locations are same as one of the examples, you can uncomment the
+section, comment out the default values, and use the settings.  If your
+compiler has a different name or the libraries are located at a
+different place, you will need to modify the file to refer to their
+correct values.  The package may be compiled into one of the two library
+files @code{libtrlan.a} and @code{libtrlan_mpi.a} where the former is
+the sequential version of the package and the latter is the parallel
+version.  To generate them go to @file{TRLan} and type
+@smallexample
+make libtrlan.a
+@exdent or
+make libtrlan_mpi.a
+@end smallexample
+
+To compile the examples, go to the appropriate subdirectory in
+@file{examples}.  If you are on a sequential or a shared memory computer
+and there is no subdirectory that matches your computer, the source code
+in the @code{SUN} directory can be used.  The examples in @file{T3E} and
+@file{psp} can be run on parallel machines that support MPI.
+@file{Makefile} in the @file{T3E} and @file{psp} directories are only
+tested on a Cray T3E.  They will need modification in order to be used
+elsewhere.  The examples in directory @file{psp} also need a special
+supporting library called P_SPARSLIB, read the file @file{README} before
+try to use it.
+
+There are three examples in most example directories (except
+@file{psp}), @code{simple}, @code{simple77} and @code{simplec}.  These
+are three programs should be doing the same thing using three different
+languages.  The executables can be generated by @code{make}
+@smallexample
+make simple simplec simple77
+@end smallexample
+They should output the same eigenvalues, however the actual printout may
+differ slightly due floating-point round-off errors.
+
+For further questions, consult the @file{README} files in the
+directories.  To report errors in the installation procedure or suggest
+improvements, the authors can be reached at @code{kwu@@lbl.gov} (Kesheng
+Wu) and @code{hdsimon@@lbl.gov} (Horst Simon).
+
+
+@node    Example, TRL_INFO module,  Installation,      Top
+@chapter A small example
+
+This is a simple example in @code{Fortran 90}.  It is short because we
+have used a very simple matrix and used default parameters wherever
+possible.  It uses MPI to handle data communication required by TRLAN.
+This example comes with the distribution of the source code in directory
+@file{examples/T3E}.  The name of the file is @file{s1.f90} and on T3E
+is can be compiled by @code{make s1} which generates the executable
+@code{s1}.
+
+@cindex small example
+@cindex example
+@smallexample
+!!! a really simple example of how to use TRLAN
+Program simple
+  Use trl_info
+  Use trl_interface
+  Implicit None
+  Include 'mpif.h'
+  ! local variable declaration
+  Integer, Parameter :: nrow=100, lohi=-1, ned=5, maxlan=40, mev=10
+  Double Precision :: eval(mev), evec(nrow, mev)
+  Type(trl_info_t) :: info
+  Integer :: i
+  External diag_op  ! name of the matrix-vector multiplication routine
+  Call MPI_INIT(i)  ! initialize MPI
+  ! initialize info -- tell TRLAN to compute NED smallest eigenvalues
+  Call trl_init_info(info, nrow, maxlan, lohi, ned)
+  ! call TRLAN to compute the eigenvalues
+  Call trlan(diag_op, info, nrow, mev, eval, evec, nrow)
+  Call trl_print_info(info, nrow+nrow)
+  If (info%my_pe .Eq. 0) Then
+     write (6, FMT=100) (i, eval(i), i=1,info%nec)
+  End If
+100 Format('E(', I1, ') = ', 1PG25.17)
+  Call MPI_finalize(i)
+End Program simple
+!!!
+! a simple matrix-vector multiplications routine
+! defines a diagonal matrix with value (1, 4, 9, 16, 25, 36, ...)
+!!!
+Subroutine diag_op(nrow, ncol, xin, ldx, yout, ldy)
+  Implicit None
+  Integer, Intent(in) :: nrow, ncol, ldx, ldy
+  Double Precision, Dimension(ldx*ncol), Intent(in) :: xin
+  Double Precision, Dimension(ldy*ncol), Intent(out) :: yout
+  Include 'mpif.h'
+  ! local variables
+  Integer :: i, j, ioff, joff, doff
+  Call MPI_COMM_RANK(MPI_COMM_WORLD, i, j)
+  doff = nrow*i
+  Do j = 1, ncol
+     ioff = (j-1)*ldx
+     joff = (j-1)*ldy
+     Do i = 1, nrow
+        yout(joff+i) = (doff+i)*(doff+i)*xin(ioff+i)
+     End Do
+  End Do
+End Subroutine diag_op
+@end smallexample
+
+There are two parts in this example, the main program and the
+matrix-vector multiplication subroutine.  The main program sets up the
+@code{info} variable to carry information to and from TRLAN, calls
+TRLAN, and prints the information carried out in @code{info} and the
+eigenvalues computed.  Here is a short explanation of the arguments to
+@code{trl_init_info}.
+
+@smallexample
+  call trl_init_info(info,      ! the variable to be set
+                     nrow=100,  ! there are 100 rows on each processor
+                     maxlan=40, ! maximum Lanczos basis size is 40
+                     lohi=-1,   ! compute the smallest eigenvalues
+                     ned=5)     ! compute 5 eigenvalues
+@end smallexample
+
+@noindent  The calling sequence of TRLAN is fairly simple because all
+the gory details are hidden inside @code{info}.  The following listing
+describes the information required by TRLAN to solve an eigenvalue
+problem.
+
+@smallexample
+  call trlan(diag_op,           ! matrix-vector multiplication routine
+             info,              ! what eigenvalues to compute, etc.
+             nrow,              ! 100 rows on this processor
+             mev,               ! number of eigenpairs can be stored in
+                                ! eval and evec
+             eval,              ! real(8) :: eval(mev)
+                                ! array to store eigenvalue
+             evec,              ! real(8) :: evec(lde,mev)
+                                ! array to store the eigenvectors
+             lde)               ! the leading dimension of evec
+@end smallexample
+
+@noindent The content of @code{info} and the eigenvalues are printed
+separately.  The content of @code{info} is printed by calling
+@code{trl_print_info} which accepts two arguments, @code{info} to be
+printed and the number of floating-point operations used for one
+matrix-vector multiplication on this processor.  The second parameter is
+needed because the matrix-vector multiplication is user-supplied.  The
+information is used to compute the speed of the matrix-vector
+multiplication and the speed of the whole program.  It can be ignored,
+in which case @code{trl_print_info} will leave the related fields blank.
+
+The short matrix-vector multiplication routine, @code{diag_op}, performs
+multiplication with a very simple matrix, @code{diag(1, 4, 9, ...)}.
+The example tries to find 5 smallest eigenvalues of this matrix, 1, 4,
+9, 16, 25.  The following is the output from a run on a T3E/900 located
+at the National Energy Research Supercomputing Center@footnote{Information
+about the National Energy Research Supercomputing Center can be found on
+the web at @code{http://www.nersc.gov/}.}.
+
+@cindex print, long
+@cindex long output
+@c out from the example on 4 PEs of T3E/900 at NERSC
+@smallexample
+                                      1998/09/24 18:37:16.834 (-07:00)
+ TRLAN execution summary (exit status = 0 ) on PE  0
+Number of SMALLEST eigenpairs:          6 (computed),      5 (wanted)
+Times the operator is applied:        847 (MAX:         2000 )
+Problem size:                         100 (PE:   0),     400 (Global)
+Convergence tolerance:          1.490E-08 (rel),   2.384E-03 (abs)
+Maximum basis size:                    40
+Restarting scheme:                      0
+Number of re-orthogonalizations       847
+Number of (re)start loops:             36
+Number of MPI processes:                4
+Number of eigenpairs locked:            0
+OP(MATVEC):                 9.35440E-03 sec,      1.81091E+01 MFLOPS
+Re-Orthogonalization:       2.12016E-01 sec,      4.68742E+01 MFLOPS
+Restarting:                 2.36795E-01 sec,      2.02369E+01 MFLOPS
+TRLAN on this PE:           5.29851E-01 sec,      3.00020E+01 MFLOPS
+ -- Global summary --
+             Overall     MATVEC    Re-orth    Restart
+Time(ave) 5.2985E-01 9.4129E-03 2.1143E-01 2.3685E-01
+Rate(tot) 1.2001E+02 7.1990E+01 1.8801E+02 8.0930E+01
+E(1) =   0.99999999997742750
+E(2) =    3.9999999999816311
+E(3) =    8.9999999999916049
+E(4) =    16.000000000026944
+E(5) =    25.000000000089663
+E(6) =    36.000000000367905
+@end smallexample
+
+In short, to use TRLAN to find some extreme eigenvalues, the user
+defines a matrix-vector multiplication routine with the same interface
+as @code{diag_op}, calls @code{trl_init_info} to specify what
+eigenvalues to compute and calls @code{trlan} to perform the bulk of the
+computation.  The remainder of this manual will explain the user
+interface and how to control TRLAN in more detail.  How to Write a
+particular matrix-vector multiplication for an operator is beyond the
+scope of this manual.  Some packages containing distributed
+matrix-vector multiplications routines are listed in @ref{operator
+interface}.
+
+@node    TRL_INFO module,  TRLAN interface,  Example,      Top
+@chapter TRL_INFO module
+
+The example in previous chapter uses two modules, TRL_INFO and
+TRL_INTERFACE.  As the name suggested, TRL_INTERFACE contains the user
+interface for accessing TRLAN.  The module TRL_INFO only contains the
+definition of the @code{Fortran 90} derived type @dfn{TRL_INFO_T}.  To
+make it easy to access, we have provided six access functions,
+@code{trl_init_info}, @code{trl_set_debug}, @code{trl_set_iguess},
+@code{trl_set_checkpoint}, @code{trl_print_info}, and
+@code{trl_terse_info}.  The first four are for manipulate input
+parameters to TRLAN and the last two are for printing the content of
+@dfn{TRL_INFO_T}.  We will discuss these access functions in this
+chapter.  The remaining interface functions are described in the next
+Chapter.  The last two sections of this chapter may be skipped if the
+reader is only seeking information on how to use the package.
+
+@menu
+* initialization::
+        user interface of @code{trl_init_info}
+* debug parameters::
+        user interface of @code{trl_set_debug}
+* initial guess::
+        user interface of @code{trl_set_iguess}
+* checkpointing::
+        user interface of @code{trl_set_checkpoint}
+* printing::
+        user interface of @code{trl_print_info} and
+        @code{trl_terse_info}
+* elements::
+        listing of the elements of @code{TRL_INFO_T}
+* error code::
+        the error code of TRLAN and recommended recovery schemes
+@end menu
+
+
+@node    initialization,  debug parameters,  TRL_INFO module, TRL_INFO module
+@section Initialization
+
+This initialization routine is equivalent to a generator function in
+@code{C++}.  It is intended to be called before any other TRLAN
+functions.  Any parameter not explicitly set by the caller is set to its
+default value and all internal counters are set to zero.  Its
+@code{Fortran 90} @code{interface} block is as follows,
+
+@cindex eigenvalue problem, set up
+@cindex set up
+@cindex info, initialization
+@smallexample
+     Subroutine trl_init_info(info, nrow, mxlan, lohi, ned, tol,&
+          & trestart, maxmv, mpicom)
+       Use trl_info
+       Integer, Intent(in) :: lohi, mxlan, ned, nrow
+       Integer, Intent(in), Optional :: maxmv, mpicom, trestart
+       Real(8), Intent(in), Optional :: tol
+       Type(TRL_INFO_T), Intent(out) :: info
+     End Subroutine trl_init_info
+@end smallexample
+
+@noindent We have seen the mandatory arguments in the example, however,
+there are four optional arguments that were not used before.  For
+completeness, we will give a short description of all arguments here.
+
+@table @code
+
+@item info:
+The @code{Fortran 90} derived type that will carry the information to
+the @code{trlan} subroutine.  It is set by this subroutine.  Any prior
+content will be cleared.
+
+@item nrow:
+The @emph{local} problem size.  The vectors are assumed to be
+distributed conformally, i.e., if 10 elements of a Lanczos vector are
+located on a processor, the same 10 elements of all other Lanczos
+vectors are located on the same processor.  The variable @code{nrow}
+refers to the number of rows located on the current processor.  It may
+vary from processor to processor.
+
+@item maxlan:
+The maximum Lanczos basis size.  This determines the maximum memory
+requirement of @code{trlan}.  The restarted Lanczos algorithm will store
+up to @code{maxlan} Lanczos vectors and one (1) residual vector.  An
+additional memory of size @code{maxlan*(maxlan+10)} is required to
+perform the Rayleigh-Ritz projection to compute the approximate
+solutions.  Generally, the larger @code{maxlan} is, the fewer
+matrix-vector multiplications are needed.  @xref{basis size}, for further
+discussion on this parameter.
+
+@item lohi:
+This parameter indicates which end of the spectrum to compute.  The
+Lanczos algorithm is only able to compute the extreme eigenvalues
+effectively.  The choices are either to compute the smallest ones
+(@code{lohi} < 0), or the largest ones (@code{lohi} > 0), or whatever
+converges first (@code{lohi} = 0).
+
+@item ned:
+The number of eigenvalues and eigenvectors desired.
+
+
+@exdent The parameters, @code{nrow}, @code{maxlan}, @code{lohi}, and
+@code{ned}, are mandatory when calling @code{trl_init_info}.  The
+following parameters are optional because a reasonable value can be
+determined by @code{trl_init_info}.
+
+@item tol:
+The relative tolerance on the residual norms.  The Lanczos algorithm
+computes the approximate solution to the eigenvalue problem.  As more
+steps are taken, the solutions become more accurate.  For symmetric
+eigenvalue problems, the residual norm is one of the most commonly used
+measure of the solution accuracy.  If the approximate eigenvalue is
+@ifinfo
+@code{lambda},
+@end ifinfo
+@tex
+$\lambda$,
+@end tex
+and the approximate eigenvector is 
+@ifinfo
+@code{x},
+@end ifinfo
+@tex
+$x$,
+@end tex
+the residual norm is defined to be
+@ifinfo
+@code{r = || A x - lambda x ||}.
+@end ifinfo
+@tex
+$r =  \Vert A x - \lambda x \Vert $.
+@end tex
+In TRLAN, the convergence test is relative the norm of the matrix
+@ifinfo
+@code{A}.
+@end ifinfo
+@tex
+$ A $.
+@end tex
+If
+@ifinfo
+@code{r < tol || A ||},
+@end ifinfo
+@tex
+$$ r < tol \Vert A \Vert,$$
+@end tex
+then the approximate solution is considered converged.  If this argument
+is not present, it is set to the square root of the unit round-off
+error.  If the 8-byte IEEE floating-point arithmetic is used, this
+default value is roughly
+@ifinfo
+1.49E-8.
+@end ifinfo
+@tex
+$1.49 \times 10^{-8}$.
+@end tex
+
+@item restart:
+The flag to indicate which thick-restart scheme to use.  In version
+@value{TRLVERSION} of TRLAN, there are five choices for this parameter,
+1, 2, 3, 4, 5.  If this parameter is not provided, the default choice is
+0 which is treated same as 1 in the current implementation.
+@xref{restarting scheme}, for further discussion on this parameter.
+
+@item maxmv:
+The maximum number of matrix-vector multiplications allowed.  The
+purpose of this parameter is usually to make sure the program stop
+eventually in case of stagnation.  The default value is @code{ned*ntot}
+where @code{ntot} the global problem size.
+
+@item mpicom:
+The MPI communicator to be used by @code{trlan}.  This parameter is only
+meaningful if MPI is used.  If the sequential version is used, this
+variable is simply ignored internally.  If MPI is used and this variable
+is not set, @code{trl_init_info} will duplicate @code{MPI_COMM_WORLD}
+and use the resulting communicator for its internal communication
+operations.
+
+@end table
+
+@node    debug parameters,  initial guess,  initialization, TRL_INFO module
+@section Setting debug parameters
+
+There are cases we would like to monitor the progress of the restarted
+Lanczos algorithm.  We can do this by setting a few logging parameters.
+Since the debug information may be voluminous, @code{trlan} writes them
+to files.  Each MPI process will write its own debug information to a
+separate file.  The name of the file and how much debug information to
+write is controlled by calling @code{trl_set_debug}.
+
+@cindex set debug flags
+@smallexample
+     Subroutine trl_set_debug(info, msglvl, iou, file)
+       Use trl_info
+       implicit none
+       Type(TRL_INFO_T), intent(inout) :: info
+       integer, intent(in) :: msglvl, iou
+       Character*(*), Optional :: file
+     End Subroutine trl_set_debug
+@end smallexample
+@cindex info, modifying
+
+@table @code
+
+@item info:
+The @code{TRL_INFO_T} type variable to be modified.  The function
+@code{trl_init_info} should have been called before calling
+@code{trl_set_debug}.
+
+@item msglvl:
+This parameter controls how much debug information to print.
+If it is zero or less, nothing is printed.  When its value is between 1
+and 10, the larger it is, the more information is printed.  When it is
+larger than 10, it has the same effect as 10.
+
+The function @code{trl_init_info} sets it to zero as the default value.
+
+@item iou:
+The Fortran I/O unit number to be used when writing debug information.
+The user should choose an I/O unit not used for anything else during the
+time @code{trlan} is being used.
+
+@code{Trl_init_info} sets it to 99 as the default value.
+
+@item file:
+The leading part of the debug file names.  The debug file names are form
+by appending the MPI processor rank to this string.  In sequential
+environment, MPI processor rank is always zero (0).  This is an optional
+argument to @code{trl_set_debug}.  When it is not set, the corresponding
+element of @code{TRL_INFO_T} is not changed.
+
+@code{Trl_init_info} sets this elements to @file{TRL_LOG_} by default.
+
+@end table
+
+@node    initial guess, checkpointing, debug parameters, TRL_INFO module
+@section Setting initial guess options
+
+TRLAN program can either use a user-supplied initial guess, generate
+an arbitrary initial guess or read a set of checkpoint file to get
+starting vectors.  The thick-restart Lanczos may start with arbitrary
+number of vectors, however, the starting vectors have to satisfy a
+strict relation.  The simplest way to start the algorithm is to simply
+provide one starting vector.  If the function @code{trl_set_iguess} is
+not called, the starting vector is set to [1, ..., 1] by default.  The
+checkpoint option is implemented to enable a user to continue improve
+the accuracy of the solutions progressively.
+
+@smallexample
+     Subroutine trl_set_iguess(info, nec, iguess, oldcpf)
+       Use trl_info
+       Implicit None
+       Type(TRL_INFO_T) :: info
+       Integer, Intent(in) :: iguess, nec
+       Character(*), Intent(in), Optional :: oldcpf
+     End Subroutine trl_set_iguess
+@end smallexample
+
+@table @code
+
+@item info:
+The @code{TRL_INFO_T} type variable to be modified.  The function
+@code{trl_init_trl} should have been called before calling
+@code{trl_set_iguess}.
+
+@item nec:
+The number of eigenvalues and eigenvectors already converged.  If
+@code{nec} is greater than zero (0), the first @code{nec} columns of
+array @code{evec} should contain eigenvectors of the operator and the
+first @code{nec} elements of @code{eval} should contain the
+corresponding eigenvalues.  This is designed to allow the user to return
+to @code{trlan} to compute more eigenvalues and eigenvectors.
+
+@code{Trl_init_info} sets this value to zero to indicate no converged
+eigenvalues.
+
+@item iguess:
+The parameter to indicate option for initial guess vector.
+@table @code
+@item <1:
+TRLAN will generate an arbitrary starting vector for the Lanczos
+algorithm.  If it is zero (0), vector [1, 1, ..., 1] is used.  When
+@code{iguess} is less than zero, a random perturbations will be added to
+this vector before it is taken as the starting vector.
+
+@item 1:
+The user has supplied a starting vector.  It will be used.
+
+@item >1:
+TRLAN will read a checkpoint file and use its content to start the
+Lanczos process.  The idea of checkpoint is explained later.
+@end table
+
+@item oldcpf:
+The leading portion of the existing checkpointing file names.  As with
+the log files, the checkpoint files are named by concatenating this
+leading portion and the MPI processor rank.  The default value set by
+@code{trl_init_info} for this is @file{TRL_CHECKPOINT_}.
+
+@end table
+
+NOTE: Reading the checkpoint files are done through I/O unit
+@code{cpio}.  @code{Trl_init_info} sets this value to 98 by default.  If
+I/O unit is used for another task already, use @code{trl_set_checkpoint}
+to set @code{cpio} to an unused I/O unit number.
+
+
+@node    checkpointing, printing, initial guess, TRL_INFO module
+@section Checkpointing
+@cindex checkpointing
+
+TRLAN has implemented a scheme of checkpointing to allow the user to
+stop and restart.  The checkpoint files of the thick-restart Lanczos
+algorithm contains all the information necessary for it to continue the
+Lanczos iterations.  To minimize the size of the files, the checkpoint
+files are written at the end of the restart process because the basis is
+the smallest in size at this point.  For efficiency reasons, each MPI
+processor writes its own checkpoint file in @code{FORTRAN} unformatted
+form.  These checkpoint files can only be read on the same type of
+machines and using the same number of MPI processors.  The function
+@code{trl_set_iguess} controls whether the checkpoint files are read.
+The following function controls when to write the checkpoint files.
+
+@smallexample
+     Subroutine trl_set_checkpoint(info, cpflag, cpio, file)
+       Use trl_info
+       Implicit None
+       Type(TRL_INFO_T) :: info
+       Integer, Intent(in) :: cpflag, cpio
+       Character(*), Optional :: file
+     End Subroutine trl_set_checkpoint
+@end smallexample
+@cindex info, modifying
+
+@table @code
+
+@item info:
+The @code{TRL_INFO_T} type variable to be modified.  The function
+@code{trl_init_trl} should have been called before calling
+@code{trl_set_checkpoint}.
+
+@item cpflag:
+If this value is greater than zero, then TRLAN will write @code{cpflag}
+set of checkpointing files in @code{maxmv} iterations.  If it is less or
+equal to zero, no checkpoint file is written.  Checkpointing files are
+only written if TRLAN runs correctly.  If @code{cpflag} is greater than
+zero, at least one set of checkpoint files is written when TRLAN
+completes successfully.  To debug the program, turn on verbose printing
+by using @code{trl_set_debug}.
+
+@code{Trl_init_info} sets this value to zero.
+
+@item cpio:
+The @code{FORTRAN} I/O unit number to be used for writing checkpoint
+files.  The value of @code{cpio} is set to 98 by default
+(@code{trl_init_info}).
+
+@item file:
+The leading portion of the checkpoint files.  The checkpoint file names
+are formed by concatenating the value of this variable and the MPI
+processor rank.  If this argument is not present internally, the
+corresponding element of @code{TRL_INFO_T} is not modified.
+
+@code{Trl_init_info} sets this variable to @file{TRL_CHECKPOINT_} by
+default.
+
+@end table
+
+@node    printing, elements, checkpointing, TRL_INFO module
+@section Printing functions
+
+Upon returning from @code{trlan}, the user may wish to exam the progress
+of @code{trlan}.  One simple way to do this is to printout the content
+of @code{info}.  There are two printing functions @code{trl_print_info}
+and @code{trl_terse_info}.  Function @code{trl_print_info} is the one
+that printed the results in @ref{Example}.  The following is the same
+information printed using @code{trl_terse_info}.
+
+NOTE: The eigenvalues are not stored in @code{info}.  The following
+printout is from a different run of the same example, there is slight
+difference in time.
+
+@cindex print, short
+@cindex short output
+@smallexample
+MAXLAN:      40, Restart:       0,   NED:  -    5,     NEC:       6
+MATVEC:     847,  Reorth:     847, Nloop:      36, Nlocked:       0
+Ttotal:0.535910,    T_op:0.008962, Torth:0.209496,  Tstart:0.238200
+@end smallexample
+@c E(1) =    1.0000000000096725
+@c E(2) =    3.9999999999967928
+@c E(3) =    9.0000000000138165
+@c E(4) =    16.000000000027473
+@c E(5) =    25.000000000105661
+@c E(6) =    36.000000000374833
+
+The @code{Fortran 90} @code{interface} of the two subroutines are as
+follows.
+
+@cindex info, printing
+@smallexample
+     Subroutine trl_print_info(info, mvop)
+       Use trl_info
+       Implicit None
+       Type(TRL_INFO_T), Intent(in) :: info
+       Integer, Intent(in) :: mvop
+     End Subroutine trl_print_info
+@end smallexample
+
+@smallexample
+     Subroutine trl_terse_info(info, iou)
+       Use trl_info
+       Implicit None
+       Type(TRL_INFO_T), Intent(in) :: info
+       Integer, Intent(in) :: iou
+     End Subroutine trl_terse_info
+@end smallexample
+
+
+@table @code
+
+@item info:
+The @code{TRL_INFO_T} variable to be printed.  In addition of keeping
+track of how many eigenvalues have converged and how many are wanted.
+There are significant amount of information about how many matrix-vector
+multiplications have been used, how much time is used in various parts
+of the program, and so forth.  The verbose version of the printing
+function will printout most of the recorded information that are deemed
+to be useful.  The terse version only printout the 12 most important
+fields.
+
+@item mvop:
+The number of floating-point operations performed on one processor
+during one matrix-vector multiplication.  This information is used by
+the printing function @code{trl_print_info} to determine the speed of
+the matrix-vector multiplication and the speed of the overall eigenvalue
+program.  If this information is not present, the relevant fields are
+left blank in the printout.  The variable @code{info} contains timing
+information and floating-point operations performed inside the
+@code{trlan}.  Since the matrix-vector multiplication is a user-supplied
+function, the user has to provide information about its complexity.
+
+@item iou:
+The terse printing function @code{trl_terse_info} is allowed to print to
+any valid @code{FORTRAN} I/O unit.  This is different from the verbose
+printing function where the printout is always sent to the I/O unit
+that is used for logging debugging information.
+
+@end table
+
+In addition to the differences mentioned already, the function
+@code{trl_print_info} requires every processor to participate but
+@code{trl_terse_info} can be called by each processor individually.
+Because of this reason, @code{trl_print_info} can provide global
+performance information but not @code{trl_terse_info}.
+
+The verbose version of the printout is designed to be self-explanatory.
+The rate fields for floating-point operations are in MFLOPS.  The rate
+of @code{Read} and @code{Write} refers to the speed of reading and
+writing checkpoint files, they are in MegaBytes per second.  Since the
+simple example shown does not use checkpointing, no information
+regarding @code{Read} and @code{Write} is presented in the printout.
+
+The heading for the terse version of the printout is bit cryptic.  They
+are 
+
+@table @code
+
+@item MAXLAN:
+The maximum Lanczos basis size.
+
+@item Restart:
+The flag of restarting scheme to be used, 0, ..., 5.
+
+@item NED:
+Number of eigenvalues desired.  It also contains an one-character sign
+which can be @code{+}, @code{-}, or @code{0} to indicate which end of
+the spectrum is being computed.
+
+@item NEC:
+Number of eigenvalues converged.
+
+@cindex MATVEC used
+@item MATVEC:
+number of times the operator has been applied, i.e., the number of
+matrix-vector multiplications, also the number of iterations.
+
+@item Reorth:
+Number of times re-orthogonalization has been applied.  Each time the
+Gram-Schmidt procedure is called, this counter is incremented by one.
+
+@item Nloop:
+Number of outer/restarted iterations.
+
+@cindex locked
+@item Nlocked:
+Number of Ritz pairs that have extremely small residual norms ( <
+@code{epsilon} @code{|| A ||}).  Because the residual norms are so
+small, we lock the Ritz pairs to reduce the among of arithmetic
+operations needed in Rayleigh-Ritz projection.
+
+@cindex timing
+@item Ttotal:
+The total time (seconds) used by TRLAN.
+
+@item T_op:
+The time (seconds) spent in performing matrix-vector multiplications.
+
+@item Torth:
+The time (seconds) spent in performing re-orthogonalizations.
+
+@item Tstart:
+The time (seconds) spent in restarting including performing
+Rayleigh-Ritz projections.
+
+@end table
+
+@node    elements,  error code,  printing, TRL_INFO module
+@section The elements of @code{TRL_INFO_T}
+
+In some instances, it might be necessary to directly access the status
+information in @code{info} rather than print out the information.
+Whether @code{trlan} terminated because of some kind of error, the two
+elements of @code{TRL_INFO_T} that are most like to be useful after
+returning from @code{trlan} are @code{stat} and @code{nec}, where the
+first one is the error flag of @code{trlan} and the second one indicates
+how many eigenvalues and eigenvectors have converged.
+
+The input parameters to TRLAN have appeared in the calling sequence of
+@code{trl_init_info}, @code{trl_set_debug}, @code{trl_set_iguess} and
+@code{trl_set_checkpoint} are described earlier in this chapter.  The
+following are elements of @code{TRL_INFO_T} are counters set by
+@code{trlan}.  To the user, they are part of the output from TRLAN.
+
+@cindex TRL_INFO_T elements
+@table @code
+
+@item my_pe
+@itemx npes
+The PE number and the number of PEs.
+
+@item ntot
+The global size of the problem.
+@tex
+$ {\tt ntot} = \sum_{all PEs} {\tt nrow} $.
+@end tex
+
+@cindex MATVEC used
+@item matvec
+The number of matrix-vector multiplications used by the restarted
+Lanczos algorithm.  It will not significantly exceed the value of
+@code{maxmv}.
+
+@item nloop
+The number of restarting loops, i.e., the number of times @code{trlan}
+has reached the maximum size and restarted.
+
+@item north
+The number of times the Gram-Schmidt process is invoked to perform
+re-orthogonalization.
+
+@item nrand
+The number of times @code{trlan} has generated random vectors in attempt
+to produce an vector that is orthogonal to the current basis vectors.
+
+@cindex locked
+@item locked
+The number of eigenpairs that has extremely small residual norms ( <
+@code{epsilon} @code{|| A ||}).  The accuracies of these eigenpairs can
+not be further improve by more Rayleigh-Ritz projection, therefore they
+are @emph{locked} to reduce arithmetic operations, they are only used to
+perform re-orthogonalization but nothing else.  TRLAN locks not only the
+wanted eigenpairs with small residual norm, it also locks unwanted ones
+depending the restarting strategy.  The rational is that if they
+converge quickly, it is not good idea to throw them away because they
+will reappear in the next basis built.
+
+
+@item clk_rate
+The clock rate of as measured by @code{Fortran 90} intrinsic function
+@code{system_clock}.
+
+@item clk_max
+The maximum clock ticks before it rolls over.
+
+@cindex timing
+@item clk_tot tick_t clk_op tick_o clk_orth tick_h clk_res tick_r
+These set of integer and floating-point variables are used to keep track
+of time spend in performing matrix-vector multiplication (@code{clk_op},
+@code{tick_o}), re-orthogonalization (@code{clk_orth}, @code{tick_h}),
+restarting (@code{clk_res}, @code{tick_r}), and the whole @code{trlan}
+(@code{clk_tot}, @code{tick_t}).  The four integer counters,
+@code{clk_op}, @code{clk_orth}, @code{clk_res}, and @code{clk_tot}, are
+output from @code{Fortran 90} intrinsic function @code{system_clock}.
+Since it is likely the integer counters will overflow in some cases,
+each of them has a floating-point counterpart.  If they become larger
+than a quarter of the maximum counter value @code{clk_max}, they are
+added to the floating-point counters and reset to zero.
+
+@cindex op count
+@item flop rflp flop_h rflp_h flop_r rflp_r
+These set of counters are for counting the number of floating-point
+operations used by TRLAN.  @code{Flop} and @code{rflp} are for counting
+the total floating pointer operations excluding those used by
+matrix-vector multiplications.  @code{Flop_h} and @code{rflp_h} are for
+counting the re-orthogonalization procedure.  @code{Flop_r} and
+@code{rflp_r} count operations used in restarting.  The integer
+counters are used initially until they become larger than
+@code{clk_max/4}.  Once they become too large, their values are added to
+the corresponding floating-point counter and they are reset to zero.
+Since the matrix-vector multiplication routine is supplied by the user,
+TRLAN can not account for the floating-point operations used in that
+procedure.
+
+@cindex convergence factor
+@item crat tmv tres trgt
+This set of variables are used to track the convergence factor of the
+eigenvalue method.  The variable @code{crat} is the convergence factor.
+It is measured after @code{tmv} number of matrix-vector multiplications
+are used.  The value of the target at @code{tmv} was @code{tres}.
+The convergence factor is updated as follows.  Among the Ritz values,
+search for the one that is closest to @code{trgt}.  This Ritz value is
+regarded as the updated version of the previous target Ritz value.  Let
+@code{res} be the residual norm of the Ritz value, the convergence
+factor is computed as @code{crat} = Exp(Log(@code{res / tres}) /
+(@code{matvec - tmv})).
+
+After @code{crat} is updated, the current target value is identified as
+the first Ritz value that is not converged yet.  The value of @code{tmv}
+and the corresponding residual norm @code{tres} are recorded.
+
+@item anrm
+The estimated norm of the matrix.  This is the largest absolute value of
+any Ritz value ever computed by TRLAN.  After a number of steps, this is
+a good estimate of the matrix 2-norm.  This variable is primarily used
+in the convergence test.  If the user specifies a tolerance @code{tol},
+all the Ritz pairs with residual norm less than @code{tol * anrm} are
+considered converged.
+
+@item stat
+The error flag.  The next section describes the meaning of the error
+codes in detail.
+
+@c end of table of elements of TRL_INFO_T
+@end table
+
+
+@node    error code, , elements, TRL_INFO module
+@section TRLAN error code
+
+This section lists all error numbers defined in TRLAN and discusses
+possible remedies to the errors.  Currently (TRLAN version
+@value{TRLVERSION}), defines the follow error numbers,
+
+@cindex troubleshooting
+@cindex error code
+@table @code
+@item 0
+No error.
+
+It is possible that @code{trlan} has not computed all wanted eigenpairs,
+check the value of @code{nec} to see exactly how many wanted eigenpairs
+have converged.  In case you have not computed all wanted eigenpairs,
+the possible solutions are:
+@itemize @bullet
+@item
+If checkpoint files were written, restart with the checkpoint files.
+
+@item
+If no checkpoint files were written, make a linear combination of the
+approximate eigenvectors and use the resulting vector as the initial
+guess.  In addition, make sure to set appropriate options with
+@code{trl_set_checkpoint} to generate checkpoint files for future use.
+
+@item
+Increase the maximum basis size @code{maxlan}, @xref{basis size} for
+more details.
+
+@item
+Increase the maximum number of iterations allowed @code{maxmv},
+@xref{maximum iterations} for more details.
+
+@item
+Use a different restarting strategy, @xref{restarting scheme} for more
+details.
+@end itemize
+
+@item -1
+The internal record of local problem size (@code{nloc}) does not match
+the value of @code{nrow} used when calling @code{trlan}.  Most likely
+the user has used the @code{info} variable defined for a different
+problem.
+
+@noindent @sc{Solution}: Make sure @code{trl_init_info} is called before
+@code{trlan} and the arguments to both functions are correct for the
+intended eigenvalue problem.
+
+@item -2
+The leading dimension of the eigenvector array @code{evec} is smaller
+than local problem size, @code{lde < nrow}.  There isn't enough space in
+@code{evec} to store the eigenvectors correctly.
+
+@noindent @sc{Solution}: Allocate the array @code{evec} with leading
+dimension larger or equal to @code{nrow}.
+
+@item -3
+The array size of @code{eval} is too small to store the eigenvalues,
+@code{mev < info%ned}.  There isn't enough columns in @code{evec}
+either.
+
+@cindex workspace size problems
+@noindent @sc{Solution}: Increase the size of array @code{eval} and
+increase the number of columns in @code{evec}.
+
+@item -4
+TRLAN failed to allocate space for storing the projection matrix, etc..
+The size of this work array (internally called @code{misc}) is
+@code{maxlan * (maxlan + 10)}.  TRLAN tries to allocate its own
+workspace if the user has not provided enough workspace to store the
+Lanczos basis vectors and the projection matrix, et al.
+
+@noindent @sc{Solution}:
+@itemize @bullet
+@item
+If there is addition workspace not used, given TRLAN more workspace.
+@item
+Decrease the size of @code{maxlan}.  This will decrease the among of
+workspace required.
+@item
+If you have control over the swap file/partition size, increase it will
+also solve this problem.
+@end itemize
+
+@item -5
+TRLAN failed to allocate space to store the Lanczos vectors.  The
+workspace (internally called @code{base}) size required here is
+@code{(maxlan + 1 - mev) * nrow}.
+
+@noindent @sc{Solution}: See solutions for error code @code{-4}.
+
+@item -11
+TRLAN does not have enough workspace to perform Gram-Schmidt procedure
+which is used to perform re-orthogonalization.  This should not happen
+unless the caller directly calls lower level routine @code{trlanczos}
+with insufficient workspace.
+
+@noindent @sc{Solution}: Increase workspace provided.
+
+@item -12
+TRLAN does not have enough workspace to compute eigenvalues of a
+symmetric tridiagonal matrix.  This should not happen unless the caller
+directly uses the lower level routine @code{trlanczos} with insufficient
+workspace.
+
+@noindent @sc{Solution}: Increase workspace provided.
+
+@item -101
+The orthogonalization routine of @code{TRLAN} does not have enough
+workspace.  This should not happen unless @code{trl_orth} is directly
+called outside of TRLAN with insufficient workspace.
+
+@noindent @sc{Solution}: Increase workspace provided.
+
+@item -102
+The norm of the residual vector of Lanczos iterations is not a set of
+valid finite floating-point numbers.  Unless the operator norm is
+exceeding large, say large than @code{1E160}, this error code should not
+be generated.  If it is, normally it is an indication of other errors.
+For example, the workspace given by the user is not as large as the user
+indicated to @code{trlan}, the array @code{evec} is actually smaller
+than @code{(lde, mev)}, the first @code{nec} columns of @code{evec} are
+not orthonormal vectors on input, or you have encounter a bug in TRLAN
+or one of the libraries used by TRLAN.
+
+@cindex failure due to workspace
+@noindent @sc{Solution}:
+@itemize @bullet
+@item
+Make sure the workspace array given to @code{trlan} is as large as
+claimed, i.e., the actual size of @code{wrk} is at least as large as
+@code{lwrk}.  If @code{wrk} is present but not @code{lwrk}, the actual
+size of @code{wrk} should be no less than @code{mev}.
+@item
+Make sure there is enough space to store the eigenvalues and
+eigenvectors even if you think @code{trlan} is not going to compute all
+the eigenvectors because @code{trlan} uses the space in @code{evec} to
+store the Lanczos vectors during its computations.
+@item
+If the initial @code{nec} is not zero, make sure that the
+known eigenvectors are stored in the first @code{nec} columns of
+@code{evec} and the eigenvalues in the first @code{nec} elements of
+@code{eval}.
+@end itemize
+
+The above solution should be considered applicable to all the following
+error conditions.  If you have checked everything suggested here, then
+you may have found an error in TRLAN program.  Report the problem to the
+authors.
+
+@item -111
+Insufficient workspace to one of a lower level routine used by TRLAN to
+reduce the arrowhead of the projection matrix into tridiagonal matrix.
+This should not happen unless the user directly calls the low level
+routine.
+
+@noindent @sc{Solution}: Report the problem to the authors.
+
+@item -112
+TRLAN has failed to generate an orthogonal transformation to reduce the
+projection matrix into a tridiagonal matrix, i.e., @code{LAPACK} routine
+@code{dsytrd}/@code{ssytrd} has failed.  This is extremely unlikely to
+happen.
+
+@noindent @sc{Solution}: Check to make sure you have a correct version
+of the @code{LAPACK}.  If your @code{LAPACK} is installed correctly, see
+suggestions for error @code{-102}.
+
+@item -113
+TRLAN has failed to apply the orthogonal transformation to reduce the
+projection matrix into a tridiagonal matrix, i.e., @code{LAPACK} routine
+@code{dorgtr}/@code{sorgtr} has failed.  This is extremely unlikely to
+happen.
+
+@noindent @sc{Solution}: See solutions to error @code{-102}.
+
+@item -121
+Insufficient workspace to compute the eigenvalues of a tridiagonal
+matrix.  This error should not occur if the size of workspace @code{wrk}
+passed to @code{trlan} is no less than @code{lwrk}.
+
+@noindent @sc{Solution}:  See solutions to error @code{-102}.
+
+@item -122
+TRLAN has failed to computed the eigenvalues of a tridiagonal matrix.
+This is extremely unlikely to happen.
+
+@noindent @sc{Solution}: See solutions to error @code{-102}.
+
+@item -131
+Insufficient workspace to compute the eigenvectors of a tridiagonal
+matrix.  This error should not occur if workspace of correct size was
+provided to TRLAN.
+
+@noindent @sc{Solution}: See solution to error @code{-102}.
+
+@item -132
+TRLAN has failed to compute the eigenvectors of the projection matrix,
+more specifically, @code{LAPACK} routine @code{dstein}/@code{sstein} has
+failed.  Normally, if this happens, TRLAN will switch to a different
+method of computing the eigenvectors.  It is very unlikely the user will
+see this error flag.  If it does show up, it might be an indication of
+error in the program.
+
+@noindent @sc{Solution}: See solutions to error @code{-102}.
+
+@item -141
+Insufficient workspace to compute the eigenvectors of a tridiagonal
+matrix.  This error should not occur if workspace of correct size was
+provided to TRLAN.
+
+@noindent @sc{Solution}: See solutions to error @code{-102}.
+
+@item -142
+TRLAN has failed because @code{LAPACK} routine @code{dsyev}/@code{ssyev}
+has failed to compute the eigenvalues and eigenvectors of the projection
+matrix.
+
+@noindent @sc{Solution}: Check to make sure @code{LAPACK} is installed
+correctly.  See solution to error @code{-102}.
+
+@item -143
+@itemx -144
+TRLAN is unable to match the Ritz values selected to be saved with the
+eigenvalue found by @code{dsyev}/@code{ssyev}.
+
+@noindent @sc{Solution}: See solutions to error @code{-102}.
+
+@cindex Gram-Schmidt, failure
+@cindex failure, Gram-Schmidt
+@item -201
+The Gram-Schmidt procedure is called with insufficient workspace.
+
+@noindent @sc{Solution}: Increase the workspace size.  If you did not
+call @code{trl_cgs} directly, make sure workspace size @code{lwrk}
+matches the actual size of @code{wrk} when calling @code{trlan}.
+
+@item -202
+@itemx -203
+The Gram-Schmidt process has failed to orthogonalize the given vector to
+the current basis vectors.  This is unlikely to happen.  If it does, it
+indicates two possibly source of problem, the current basis vectors are
+not orthogonal, or the random vectors generated by TRLAN fall in the
+space spanned by the current Lanczos vectors.
+
+@noindent @sc{Solution}: One possible solution to this problem is to call
+@code{FORTRAN 90} random number generator to set each processor with a
+different seed value.  For example, the following code segment will
+cause @code{random_number} to generate different random numbers on each
+processor the next time it is used and it also produces an random vector
+as initial guess for the Lanczos iterations.
+
+@smallexample
+        call random_number(evec(1:nrow,1))
+        do i = 1, info%my_pe
+           call random_number(evec(1:nrow,1))
+        end do
+@end smallexample
+
+If reseting the seed of the random number generator does not fix the
+problem, then there might be a more serious problem.
+
+See also solutions to error @code{-102}.
+
+@item -204
+The vector norm after orthogonalization is not a valid floating-point
+number.
+
+@noindent @sc{Solution}: See solutions to error @code{-102}.
+
+@item -211
+The leading dimension of the arrays are not large enough for storing the
+vectors in a checkpoint file.  This error should have been caught
+earlier as error @code{-2} unless the checkpoint files are not for the
+same problem or not produced with the same number of processors.
+
+@noindent @sc{Solution}: Make sure the checkpoint files are generated on
+the same type of machines and for the same problem using the same
+number of processors.
+
+@item -212
+Unable to open checkpoint files to read.
+
+@noindent @sc{Solution}: Make sure the checkpoint files exist, the
+names are correct, and the I/O unit number @code{cpio} is not used for
+something else already.
+
+@item -213
+The array size stored in checkpoint file is different from passed in by
+user.  The checkpoint file is probably for a different problem or was
+generated with different number of processors.
+
+@noindent @sc{Solution}: Make sure the checkpoint files are generated
+for the same problem and using the same number of processors.
+
+@item -214
+There are more vectors stored in the checkpoint file than
+@code{maxlan}.
+
+@noindent @sc{Solution}: Increase the size of @code{maxlan}.
+
+@item -215
+Error was encountered while reading the content of the checkpoint files.
+
+@noindent @sc{Solution}: Make sure the checkpoint files are generated
+for the same problem on the same type of machines.
+
+@item -216
+Error was encountered while trying to close the checkpoint file after
+completed reading.
+
+@noindent @sc{Solution}: This error probably can be ignored.  Consult
+you system administrator.
+
+@item -221
+Unable to open checkpoint files for writing.
+
+@noindent @sc{Solution}: Make sure the I/O unit number specified to be
+used for writing checkpoint files are not used for other tasks and make
+sure you have permission to write files in the location where the
+program is running.
+
+@item -222
+Error was encountered while writing the checkpoint files.
+
+@noindent @sc{Solution}: Make sure there is enough space on the disk
+to store the checkpoint files.  If there is @code{k} Lanczos vectors to
+be written out, the number of bytes is @code{8*(2+2*k+nrow*(k+1))} for
+each processor.  The maximum value for @code{k} is @code{maxlan}.
+
+@item -223
+Error was encountered while trying to close the checkpoint files after
+write them.
+
+@noindent @sc{Solution}: This error probably can be ignored.  Consult
+you system administrator.
+
+@c end of table of error codes
+@end table
+
+This list represents all error code defined in TRLAN version
+@value{TRLVERSION}.  The function @code{trlan} should never return an
+error code not listed here.  If you encountered one and you are sure
+that all the arguments to TRLAN functions are correct, you have
+uncovered a flaw in TRLAN, contact the authors with a description of
+your problem.  A short example is always welcome.
+
+
+@node    TRLAN interface,  Parameters, TRL_INFO module,      Top
+@chapter Main function interfaces
+
+The majority of the arithmetic computations to solve an eigenvalue
+problem are executed in the main function of TRLAN package and the
+user's own matrix-vector multiplication function.  This section gives a
+more detail description of the interfaces of these two functions.
+
+@menu
+* interface of trlan::
+* operator interface::
+@end menu
+
+@node interface of trlan, operator interface, , TRLAN interface
+@section Interface of @code{trlan}
+
+The main computation kernel of TRLAN package is named @code{trlan}.  We
+have see a short description of its arguments in @ref{Example}.
+To provide a different view of the interface, we show its @code{Fortran
+90} @code{interface} block.
+
+@cindex TRLAN interface
+@smallexample
+Subroutine trlan(op, info, nrow, mev, eval, evec, lde, wrk, lwrk)
+  Use trl_info
+  Implicit None
+  Type(TRL_INFO_T) :: info
+  Integer, Intent(in) :: lde, mev, nrow
+  Integer, Intent(in), Optional :: lwrk
+  Double Precision, Intent(inout) :: eval(mev), evec(lde,mev)
+  Double Precision, Target, Dimension(:), Optional :: wrk
+  Interface
+     Subroutine OP(nrow, ncol, xin, ldx, yout, ldy)
+       Integer, Intent(in) :: nrow, ncol, ldx, ldy
+       Double Precision, Dimension(ldx*ncol), Intent(in) :: xin
+       Double Precision, Dimension(ldy*ncol), Intent(out) :: yout
+     End Subroutine OP
+  End Interface
+End Subroutine trlan
+@end smallexample
+
+@noindent Most of the arguments of this subroutine are explained before
+in @ref{Example}.  However for completeness, we will list all
+of them here.
+
+@table @code
+
+@cindex operator, argument
+@item op
+The operator routine.  It applies the operator on @code{xin} and stores
+the resulting vectors in @code{yout}.  In linear algebra terms, this is
+a matrix-vector multiplication routine.  The vectors to be multiplied
+are stored in @code{xin} and the resulting vectors are stored in
+@code{yout}.
+
+@item info
+A variable of @code{Fortran 90} derived type @code{TRL_INFO_T}.  It
+carries the information to and from TRLAN.  @xref{TRL_INFO module}, for
+more details.
+
+@item nrow
+The number of rows on this processor if the problem is distributed using
+MPI, else the number of total rows in a Lanczos vector.
+
+@item mev
+The number of elements in array @code{eval} and the number of columns in
+array @code{evec}.  It denotes the maximum number of eigenpairs that can
+be stored in @code{eval} and @code{evec}.
+
+@exdent NOTE: Since the array @code{evec} will be used internal to store
+@code{mev} Lanczos vectors, even if you do not think TRLAN is able to
+compute @code{mev} eigenvectors at the end, you still declare
+@code{evec} as large as (@code{nrow, mev}).
+
+@item eval
+@item evec
+The arrays used to store the eigenvalue values (@code{eval}) and the
+eigenvectors (@code{evec}).  On entry to @code{trlan}, if
+@code{info%nec} is greater than zero (0), the first @code{info%nec}
+elements of @code{eval} shall contain the eigenvalues already known and
+the first @code{info%nec} columns of @code{evec} shall contain the
+corresponding eigenvectors.  These eigenpairs are assumed to have zero
+residual norms and will not be modified by TRLAN.  On exit from
+@code{trlan}, the converged solutions are stored in the front of
+@code{eval} and @code{evec}, i.e.  the first @code{info%nec} eigenvalues
+in @code{eval} contains the converged eigenvalues and the first
+@code{info%nec} columns of @code{evec} are the corresponding
+eigenvectors.
+
+@item lde
+The leading dimension of array @code{evec}.  It is expected to be no
+less than @code{nrow}, otherwise the eigenvectors can not be stored
+properly and @code{trlan} will abort with error code @code{info%stat =
+-2}.
+
+@cindex workspace, argument
+@item wrk
+@itemx lwrk
+These two are optional arguments.  If both are present, @code{wrk} will
+be used as workspace inside and @code{lwrk} shall be the number of
+elements in array @code{wrk}.  TRLAN will try to use this workspace if
+it is large enough for either @code{misc} (size @code{maxlan * (maxlan +
+10)}) or @code{base} (size @code{(maxlan + 1 - mev) * nrow}).  If
+@code{wrk} is present but not @code{lwrk}, the workspace size is assumed
+to be @code{mev}.  It does not make sense to have only @code{lwrk}
+without argument @code{wrk}.  If it is the case, @code{lwrk} is ignored.
+
+If argument @code{wrk} is present and there is enough space to store the
+residual norms of the solutions, the first @code{info%nec} elements of
+@code{wrk} will contain the residual norms corresponding to the
+@code{info%nec} converged solutions.
+
+@c end of table describing the arguments of trlan
+@end table
+
+@node    operator interface, , interface of trlan, TRLAN interface
+@section Operator interface
+
+TRLAN program require the user to provide his/her own matrix-vector
+multiplication routine.  The matrix-vector multiplication routine needs
+to have the following interface.
+
+@cindex operator interface
+@cindex matrix-vector multiplication
+@smallexample
+Subroutine OP(nrow, ncol, xin, ldx, yout, ldy)
+  Integer, Intent(in) :: nrow, ncol, ldx, ldy
+  Double Precision, Dimension(ldx*ncol), Intent(in) :: xin
+  Double Precision, Dimension(ldy*ncol), Intent(out) :: yout
+End Subroutine OP
+@end smallexample
+
+@c table describing the arguments of the operator interface
+@table @code
+
+@item nrow
+The number of rows on this processor if the problem is distributed using
+MPI, otherwise the number of total rows in a Lanczos vector.
+
+@item ncol
+The number of vectors (columns in @code{xin} and @code{yout}) to be
+multiplied.
+
+@item xin
+The array to store the input vectors to be multiplied.  The following
+two declarations are equivalent on most machines,
+@smallexample
+Double Precision, Dimension(1:ldx,1:ncol), Intent(in)::xin
+Real*8 xin(1:ldx, 1:ncol)
+@end smallexample
+The @code{i}th column of @code{xin} is @code{xin((i-1)*ldx+1 :
+(i-1)*ldx+nrow)} if @code{xin} is declared as one-dimensional array.  If
+the user routine actually declare it as a two-dimensional array, the
+@code{i}th column should be @code{xin(1:nrow, i)}.  TRLAN calls OP using
+Fortran 77 style argument matching, only starting address of @code{xin}
+will be passed.
+
+For those who are familiar with @code{C/C++}: @code{xin} is actually
+passed as @code{double *} that points to the first element of array.
+Elements in a column are ordered consecutively and the @code{i}th column
+starts at @code{(i-1)*ldx}.
+
+@item ldx
+The leading dimension of the array @code{xin} when it is declared as
+two-dimensional array.
+
+@item yout
+The array to store results of the multiplication.  It can be
+equivalently declared as
+@smallexample
+Double Precision,Dimension(1:ldy,1:ncol),Intent(out)::yout
+Real*8 yout(1:ldy, 1:ncol)
+@end smallexample
+The usage notes on @code{xin} also apply to @code{yout}.
+
+@item ldy
+The leading dimension of the array @code{yout} when it is declared as
+two-dimensional array.
+
+@c end of table describing the arguments of trlan
+@end table
+
+This simple interface only has enough information to describe the input
+and output vectors.  Here are some possible ways of passing the matrix
+information to this subroutine.  In @code{Fortran 90}, we recommend
+using a module to encapsulate information related to the matrix.  If
+@code{Fortran 77} is used, a @code{common block} may be used for the
+same purpose.  Normally, if another language like @code{C} or @code{C++}
+is used, the matrix can be packaged in a @code{struct} or a
+@code{class}, and accessed through a global variable.
+
+In case the user does not want to write his/her own matrix-vector
+multiplication routine.  There are a number of packages out there that
+can be used.  Useful software depots and information archives include
+@table @code
+@item ACM TOMS
+@kbd{http://www.acm.org/toms/}
+@item ACTS Toolkit
+@kbd{http://acts.nersc.gov/}
+@item National HPCC Software Exchange
+@kbd{http://nhse.cs.utk.edu/}
+@item NETLIB
+@kbd{http://www.netlib.org}
+@item Scientific Application on Linux
+@kbd{http://SAL.KachinaTech.COM/}
+@end table
+
+@noindent Potentially useful packages include
+@table @code
+@item Aztec
+@kbd{http://www.cs.sandia.gov/CRF/aztec1.html}
+@item BlockSolve
+@kbd{http://www.mcs.anl.gov/sumaa3d/BlockSolve/}
+@item P_SPARSLIB
+@kbd{http://www.cs.umn.edu/Research/arpa/p_sparslib/psp-abs.html}
+@item PETSc
+@kbd{http://www.mcs.anl.gov/petsc/}
+@item SPARSKIT
+@kbd{http://www.cs.umn.edu/Research/arpa/SPARSKIT/sparskit.html}
+@end table
+
+NOTE: All of the packages mentioned above have matrix-vector
+multiplications routines.  However some of them are designed for solving
+linear systems or even larger granularity tasks, some effort may be
+required to directly using their matrix-vector multiplication routines.
+
+
+@node    Parameters, Miscellaneous, TRLAN interface,       Top
+@chapter Recommended parameter choices
+
+@menu
+* basis size::
+* tolerance::
+* restarting scheme::
+* maximum iterations::
+@end menu
+
+Before calling @code{trlan}, the user needs to decide a few parameters.
+The most important parameters are arguments to function
+@code{trl_init_info}.  The parameters like @code{nrow}, @code{lohi} and
+@code{ned} are determined by the problem to be solved, other parameters
+to control the execution of TRLAN might not be familiar to casual users.
+This part of the manual will give some recommendations on how to
+determine those parameters.
+
+@node basis size, tolerance, , Parameters
+@section Selecting the maximum basis size (@code{maxlan})
+@cindex maximum basis size
+
+A few factors come into play when picking the maximum basis size
+@code{maxlan}, for example, the available computer memory size, the
+number of eigenvalues wanted, and the separation of wanted eigenvalues
+from the others.  The first rule of thumb is that @code{maxlan} should
+at least as large as
+
+@center @code{ned + min(6, ned)}.
+
+Generally, the larger it is, the better TRLAN will perform.  The
+limitation on using a very large basis is that there might not be enough
+computer memory to store the basis in memory.  Another concern regarding
+using a large basis is that the Gram-Schmidt orthogonalization process
+will be expensive.  In addition, if the basis size is larger than 1000,
+then the time spent in finding the eigenvectors of the projection matrix
+may be a substantial portion of the overall execution time.
+
+If the wanted eigenvalues are easier to compute compared to others, then
+it does not matter how large the basis size is, the restarted Lanczos
+method will find the solutions fairly quickly.  If the wanted
+eigenvalues converge slower than the unwanted ones, such as the example
+in @ref{Example}, then the above recommended minimum size is too small
+to be effective.  In this case, the user should look at how many
+eigenvalues were locked and compare it with the number of eigenvalues
+converged.  In difficult case, it is not unusually to see a large number
+of unwanted eigenpairs converge before the wanted one are finally
+computed.  In the previous example, the minimum recommended basis size
+is 11.  Since it is relatively small and we know the eigenvalue problem
+is relatively hard, we first tried @code{maxlan = 20}.  After 2,000
+matrix-vector multiplications, there are two wanted eigenvalues
+converged, and six eigenvalues were locked.  After this first test, we
+use the following guidelines to choose the next basis size.
+
+@enumerate
+
+@item
+Add two to @code{maxlan} for each locked eigenvalue.
+
+@item
+Increase the basis size by a factor of @code{ned / nec}.
+
+@end enumerate
+
+@noindent  The first rule suggests the new basis size of about 30 and the
+second suggest the next choice could be 50.  The basis size used in the
+example is 40.  We are able to find the five smallest eigenvalues with
+this choice.  Further tests show that using basis size of 30 can compute
+the same 5 eigenvalues in 1056 matrix-vector multiplications, and using
+a basis size of 50 TRLAN only need 777 matrix-vector multiplications.
+However, in both cases, more time was used.  This demonstrates the
+complexity of the choice.  In this particular case, either 30, 40 or 50
+is a reasonable choice.
+
+@node tolerance, restarting scheme, basis size, Parameters
+@section Selecting the tolerance
+@cindex residual tolerance
+
+The convergence test used in this program is @code{r < tol * || A ||}.
+Normally, if the matrix is stored, the accuracy of the matrix-vector
+multiplication routine is on the order of @code{epsilon * || A ||}.  The
+unit round-off error (@code{epsilon}) of a 64-bit IEEE floating-point
+number is approximately @code{2.2E-16}.  The default value of @code{tol}
+is about @code{1.49E-8}.  Typically, if 5 digits of accuracy is desired
+for the eigenvectors, @code{tol} should be set to @code{1E-5}.
+
+@node restarting scheme, maximum iterations, tolerance,Parameters
+@section Selecting a restarting scheme
+@cindex restarting schemes
+
+This is another parameter that can change the execution time
+dramatically.  However, effective restarting schemes are still subject
+of active academic researches.  On the example given before, schemes 1
+and 2 uses about the same amount of matrix-vector multiplications which
+are more than the number of matrix-vector multiplications used with
+schemes 3 and 4.  However, because schemes 3 and 4 perform more restarts
+and they save more basis vectors during restarting, their restarting
+procedures are more expensive.  The actual execution time with schemes 3
+and 4 are longer than those with schemes 1 and 2.  Based on these
+observations, schemes 3 and 4 are better if the matrix-vector
+multiplication is very time-consuming, say, one matrix-vector
+multiplication takes more time than an average restart.  If the
+matrix-vector multiplication is relatively inexpensive, then schemes 1
+and 2 are preferred. Scheme 5 attempts to mimic the restarting strategy
+in ARPACK, in many cases, it has comparable performance as the scheme 1.
+
+@node maximum iterations, , restarting scheme, Parameters
+@section Selecting the maximum iterations
+@cindex maximum matrix-vector multiplication
+
+TRLAN is stopped usually after it has found all the wanted eigenvalues
+and the corresponding eigenvectors.  The other normal stopping condition
+is to stop after @code{maxmv} number of matrix-vector multiplications.
+Typically, we would allow a fixed number of matrix-vector
+multiplications for each eigenvalue, for example, 100 per eigenvalue.
+When we are trying to find the correct value to use for @code{maxlan}
+and @code{restart} we may limit the number of matrix-vector
+multiplications used to reduce the time consumed.  The default value in
+@code{trl_init_info} is very large especially for large problems.  An
+more acceptable limit might be 1000 matrix-vector multiplications per
+eigenvalue.  This should be sufficient for most problems.  If more than
+1000 matrix-vector multiplications are used to compute one eigenvalue,
+other means of computing eigenvalues should be tried.  For example, the
+shift-and-invert Lanczos method is often able to compute the desired
+eigenvector in a few steps.  The shift-and-invert scheme computes the
+extreme eigenvalues of
+@ifinfo
+@code{inv(A - lambda I)}
+@end ifinfo
+@tex
+$ (A - \lambda I)^{-1} $
+@end tex
+first, then derive the actual eigenvalues of 
+@ifinfo
+@code{A}.
+@end ifinfo
+@tex
+$A$.
+@end tex
+To use this scheme, one need to either invert the matrix or at least
+being able to solve linear systems,
+@ifinfo
+@code{(A - lambda I) u = v}.
+@end ifinfo
+@tex
+$ (A - \lambda I) u = v $.
+@end tex
+If neither is feasible, then the Davidson method might be an alternative
+to consider.
+
+If TRLAN does not return with status 0, consult @ref{debug parameters},
+to setup a debugging session, and refer to @ref{error code}, for error
+encountered and possible solutions.
+
+@node    Miscellaneous,    About Lanczos,  Parameters, Top
+@comment node-name,    next,  previous,      up
+@chapter Miscellaneous issues
+
+@menu
+* workspace::
+* other versions::
+* other languages::
+* debugging::
+* contacting authors::
+@end menu
+
+@node workspace, other versions, , Miscellaneous
+@section Workspace requirement
+
+@cindex workspace
+Some of the issues related to workspace requirements have been mentioned
+through out this manual.  This section provide a central location to
+collect all the information for ease of reference.
+
+Inside of @code{trlan}, there are three large chucks of workspace,
+@code{evec}, @code{base} and @code{misc}.  The user always provides the
+array @code{evec}, since it is necessary to carry input and output
+information for TRLAN.  Its size is clearly defined in the calling
+sequence by @code{lde} and @code{mev}.  The array @code{base} is used to
+store the basis vectors if the array @code{evec} can not store
+@code{maxlan+1} vectors.  Given the maximum basis size @code{maxlan},
+the size of @code{base} is @code{(maxlan + 1 - mev) * nrow)}.  The array
+@code{misc} is used to store the projection matrix, the eigenvalues and
+eigenvectors of the projection matrix, workspace required by all lower
+level routines of TRLAN, library routines from @code{LAPACK} and
+@code{BLAS}.  Its size should be no less than @code{maxlan * (maxlan +
+10)}.  If it is larger in size, some library routines might run faster.
+Thus if there is large amount of computer memory, the user can let TRLAN
+use it by pass in a large array @code{wrk}.
+
+If the user provides a workspace @code{wrk} to @code{trlan}, then its
+size is checked to see either one of @code{misc} or @code{base} or both
+of them can fit inside the workspace.  If at lease one of them can fit
+into @code{wrk}, it would be used.  If @code{wrk} is large enough for
+both @code{base} and @code{misc}, the array @code{base} will use
+@code{(maxlan + 1 - mev) * nrow)} elements and the rest is given to
+@code{misc}.  If @code{trlan} can not use @code{wrk}, it will allocate
+workspace of appropriate size internally.
+
+If @code{wrk} is provided, its content is not used on input.  However
+before returning, @code{trlan} will copy the residual norms of the
+converged Ritz pairs in the first @code{nec} elements of @code{wrk}.
+
+@node other versions, other languages, workspace, Miscellaneous
+@section Variations of TRLAN
+
+We have isolated the communication needs of TRLAN in four subroutines,
+@code{trl_init_info}, @code{trl_sync_flag}, @code{trl_g_sum}, and
+@code{trl_g_dot}.  The four subroutines are located in a file called
+@file{trl_comm_mpi.f90} for the MPI version and @file{trl_comm_none.f90}
+for sequential version.  If the the matrix-vector multiplication routine
+and the main program are written for sequential machine, the user can
+simply compile with @file{trl_comm_none.f90} to get the sequential
+version of the program.  This setup makes it easy to adopt TRLAN for
+different types of eigenvalue problems.
+
+The function @code{trl_init_info} is used to initialize the
+@code{TRL_INFO_T} type variable to be used by @code{trlan}.  The
+function @code{trl_sync_flag} is used to synchronize the status flags
+used inside TRLAN.  In the current implementation, it computes the
+minimum value of @code{info%stat} on each processor and reset all
+@code{info%stat} to the minimum value.  Given that the error flags are
+all less than zero (0), if any processor has detected an error, all of
+them will be set to indicate an error.  @code{Trl_g_sum} computes the
+global sum of an input array and it returns the global sum in the same
+array.  The subroutine @code{trl_g_dot} computes the dot-products among
+the Lanczos vectors.
+
+If desired, one can change these four routines to suit different
+situations.  For example, if the physical domain of the eigenvalue
+problem has certain symmetry, usually the discretization does not
+contain the whole domain but only a portion of it.  Since not every
+element of a vector is stored, the dot-product routine needs to be
+modified.  In this case, only @code{trl_g_dot} and @code{trl_g_sum} need
+to be modified in order for TRLAN for function properly.
+
+@node other languages, debugging, other versions, Miscellaneous
+@section Calling from other languages
+
+TRLAN program is implemented in @code{Fortran 90}.  Since @code{Fortran
+90} is backward compatible with previous versions of @code{Fortran}.
+There should be no problem to use it in any other @code{Fortran}
+program.  However, at the moment, the authors are not aware of a scheme
+to reliably access @code{Fortran 90} subroutine with optional arguments,
+a subroutine with fixed arguments is created to get around this problem.
+The fixed arguments subroutine has the following interface,
+
+@cindex Fortran 77 version
+@smallexample
+      subroutine trlan77(op, ipar, nrow, mev, eval, evec, lde,
+     &                    wrk, lwrk)
+      integer ipar(32), nrow, mev, lde, lwrk
+      double precision eval(mev), evec(lde, mev), wrk(lwrk)
+      external op
+@end smallexample
+
+@noindent The @code{Fortran 90} derived type @code{TRL_INFO_T} variable
+is removed from this user interface since its primary access function
+@code{trl_init_info} contains optional arguments as well.  Here is a
+list showing how the integer array @code{ipar} is mapped to the elements
+of @code{TRL_INFO_T},
+
+@itemize @minus{}
+@item @code{ipar(1)  = stat},
+@item @code{ipar(2)  = lohi},
+@item @code{ipar(3)  = ned},
+@item @code{ipar(4)  = nec},
+@item @code{ipar(5)  = maxlan},
+@item @code{ipar(6)  = restart},
+@item @code{ipar(7)  = maxmv},
+@item @code{ipar(8)  = mpicom},
+@item @code{ipar(9)  = verbose},
+@item @code{ipar(10) = log_io},
+@item @code{ipar(11) = iguess},
+@item @code{ipar(12) = cpflag},
+@item @code{ipar(13) = cpio},
+@item @code{ipar(14) = mvop},
+@item @code{ipar(24) = locked},
+@item @code{ipar(25) = matvec},
+@item @code{ipar(26) = nloop},
+@item @code{ipar(27) = north},
+@item @code{ipar(28) = nrand},
+@item @code{ipar(29) = total time in milliseconds},
+@item @code{ipar(30) = MATVEC time in milliseconds}.
+@item @code{ipar(31) = re-orthogonalization time in milliseconds}.
+@item @code{ipar(32) = restarting time in milliseconds}.
+@end itemize
+
+@noindent Among the parameters, @code{ipar(2 : 14)} are input parameters,
+@code{ipar(1)}, @code{ipar(4)} and @code{ipar(24 : 32)} are output
+parameters.
+
+There are two floating-point number elements in @code{TRL_INFO_T},
+@code{tol} and @code{crat}.  Before calling @code{trlan77}, the first
+element of @code{wrk} should be set to the residual tolerance
+@code{tol}.  Inside @code{trlan77}, @code{wrk(1)} is transfered to
+@code{tol}.  On return from @code{trlan77}, the first @code{ipar(4)}
+elements of @code{wrk} store the residual norms corresponding to the
+converged eigenvalues and eigenvectors.  Element @code{ipar(4)+1} of
+@code{wrk} will store the last known value of @code{crat}.
+@strong{Caution}: Fail to set @code{wrk(1)} to a valid floating-point
+number will cause TRLAN to produce floating-point exceptions!
+
+@cindex C/C++
+The subroutine @code{trlan77} is relative simple to call from
+@code{C/C++}.  The file @file{simplec.c} in the distribution of TRLAN
+version @value{TRLVERSION} has equivalent functionalities as
+@file{simple.f90} and @file{simple.f77}.
+
+@node debugging, contacting authors, other languages, Miscellaneous
+@section Debugging
+Here are a few suggestions on what to watch out for when using TRLAN.
+Some of suggestions are simply good programming practices.
+
+@itemize @minus{}
+@item
+Use @code{implicit none} in @code{Fortran} programs.  This is very
+effective in catching typos.  It is also a good practice to check the
+programs with automated tools such as @code{lint} and @code{ftnchek}.
+
+@item
+Make sure the arrays passed to TRLAN have correct dimensions and make
+sure the argument @code{lwrk} is actually the size of array @code{wrk}.
+
+@item
+Make sure all input variables to TRLAN are initialized correctly and
+arguments to @code{trlan} matches arguments to @code{trl_init_info}.
+
+@item
+When encountering problems, turn on debugging options in TRLAN by
+calling @code{trl_set_debug} prior to calling @code{trlan}.  Set the
+ninth and tenth element of array @code{ipar} to appropriate values when
+@code{trlan77} is used.  Consult @ref{debug parameters} to setup a
+debugging session.  Refer to @ref{error code} for error encountered and
+possible solutions.
+
+@item
+If all above have been done and there is still a problem, contact the
+author at the address given in @ref{contacting authors}.
+@end itemize
+
+@node contacting authors, , debugging, Miscellaneous
+@section Contacting the authors
+
+@cindex authors' email
+The authors of TRLAN and this document can be contacted at the following
+email addresses: @code{kwu@@lbl.gov} (Kesheng Wu),
+@code{hdsimon@@lbl.gov} (Horst Simon).  Kesheng Wu can also be reached
+at @code{kwu@@ieee.org} and @code{kwu@@computer.org}.  The authors also
+maintain their own research pages on the web at
+@kbd{http://www.nersc.gov/~kewu} and
+@kbd{http://www.nersc.gov/research/SIMON}.  The updated software package
+can also be found at both web addresses.
+
+@node About Lanczos, Index, Miscellaneous, Top
+@chapter References
+
+This is a list books and research papers on the Lanczos algorithm and
+restarting.  @xref{operator interface}, for a list of software archives.
+
+@cindex references
+@enumerate
+@item
+J. Baglama, D. Calvetti, and L. Reichel.
+Iterative methods for the computation of a few eigenvalues of a large
+symmetric matrix.
+@emph{BIT}, 36:400--421, 1996.
+
+@item
+F. Chatelin.  @emph{Eigenvalues of Matrices}.  Wiley, 1993.
+
+@item
+J. Cullum and R. A. Willoughby.  @emph{Lanczos Algorithms for Large
+Symmetric Eigenvalue Computations: Theory}, volume 3 of @emph{Progress
+in Scientific Computing}.  Birkhauser, Boston, 1985.
+
+@item
+J. Cullum and R. A. Willoughby.  @emph{Lanczos Algorithms for Large
+Symmetric Eigenvalue Computations: Programs}, volume 4 of @emph{Progress
+in Scientific Computing}.  Birkhauser, Boston, 1985.
+
+@item
+T. Ericsson and A. Ruhe.
+The spectral transformation Lanczos method for numerical solution
+of large sparse generalized symmetric eigenvalue problems.
+@emph{Math. Comp.}, 35:1251--1268, 1980.
+
+@item
+R. G. Grimes, J. G. Lewis, and H. D. Simon.
+A shifted block Lanczos algorithm for solving sparse symmetric
+  generalized eigenproblems.
+@emph{SIAM J. Matrix Anal. Appl.}, 15(1):228--272, 1994.
+
+@item
+Beresford N. Parlett.
+@emph{The symmetric eigenvalue problem}.
+SIAM, Philadelphia, PA, 1998.
+
+@item
+A. Ruhe.
+Rational Krylov sequence methods for eigenvalue computation.
+@emph{Lin. Alg. Appl.}, 58:391--405, 1984.
+
+@item
+A. Ruhe.
+Rational Krylov algorithm for nonsymmetric eigenvalue problems
+  II: matrix pairs.
+@emph{Lin. Alg. Appl.}, 197/198:283--296, 1994.
+
+@item
+A. Ruhe.
+The rational Krylov algorithm for nonsymmetric eigenvalue problems
+  III: Complex shifts for real matrices.
+@emph{BIT}, 34:165--176, 1994.
+
+@item
+Yousef Saad.
+@emph{Numerical Methods for Large Eigenvalue Problems}.
+Manchester University Press, 1993.
+
+@item
+D. S. Sorensen.
+Implicit application of polynomial filters in a K-step Arnoldi
+  method.
+@emph{SIAM J. Matrix Anal. Appl.}, 13(1):357--385, 1992.
+
+@item
+A. Stathopoulos, Y. Saad, and K. Wu.
+Dynamic thick restarting of the Davidson and the implicitly
+  restarted Arnoldi methods.
+Technical Report UMSI 96/123, Minnesota Supercomputer Institute,
+  University of Minnesota, 1996.
+
+@item
+K. Wu and H. Simon.
+Thick-restart Lanczos method for symmetric eigenvalue problems.
+Technical Report 41412, Lawrence Berkeley National Laboratory, 1998.
+
+@item
+K. Wu and H. Simon.
+Dynamic Retarting Schemes For Thick-Restart Lanczos Method.
+Technical Report xxxxx, Lawrence Berkeley National Laboratory, 1999.
+
+@end enumerate
+
+
+@node    Index,    ,  About Lanczos, Top
+@comment node-name,    next,  previous,      up
+@unnumbered Index
+@printindex cp
+
+@bye

@@ -1,0 +1,65 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: QHull - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\PROFPN~1.CRA\LOCALS~1\Temp\RSP40F.tmp" with contents
+[
+/nologo /MT /W3 /GX /O2 /I "." /I ".." /I "..\qhull" /I "..\zlib" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /Fp"Release/QHull.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"C:\Projects\ATL\Simulator\Scene\QHull\GEOM.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\GEOM2.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\GLOBAL.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\IO.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\MEM.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\MERGE.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\POLY.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\POLY2.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\QHULL.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\QSET.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\STAT.C"
+"C:\Projects\ATL\Simulator\Scene\QHull\USER.C"
+]
+Creating command line "cl.exe @C:\DOCUME~1\PROFPN~1.CRA\LOCALS~1\Temp\RSP40F.tmp" 
+Creating temporary file "C:\DOCUME~1\PROFPN~1.CRA\LOCALS~1\Temp\RSP410.tmp" with contents
+[
+/nologo /out:"..\lib\QHull.lib" 
+.\Release\GEOM.OBJ
+.\Release\GEOM2.OBJ
+.\Release\GLOBAL.OBJ
+.\Release\IO.OBJ
+.\Release\MEM.OBJ
+.\Release\MERGE.OBJ
+.\Release\POLY.OBJ
+.\Release\POLY2.OBJ
+.\Release\QHULL.OBJ
+.\Release\QSET.OBJ
+.\Release\STAT.OBJ
+.\Release\USER.OBJ
+]
+Creating command line "link.exe -lib @C:\DOCUME~1\PROFPN~1.CRA\LOCALS~1\Temp\RSP410.tmp"
+<h3>Output Window</h3>
+Compiling...
+GEOM.C
+GEOM2.C
+GLOBAL.C
+IO.C
+MEM.C
+MERGE.C
+POLY.C
+POLY2.C
+QHULL.C
+QSET.C
+STAT.C
+USER.C
+Creating library...
+
+
+
+<h3>Results</h3>
+QHull.lib - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,38 @@
+// DataQM_Stationary2D.h: interface for the CDataQM_Stationary2D class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#if !defined(AFX_DATAQM_STATIONARY2D_H__483F654F_0372_489C_B92E_A706EDCA2442__INCLUDED_)
+#define AFX_DATAQM_STATIONARY2D_H__483F654F_0372_489C_B92E_A706EDCA2442__INCLUDED_
+
+#include "qmstationary2d.h"
+
+#if _MSC_VER > 2000
+#pragma once
+#endif // _MSC_VER > 2000
+/////////////////////////////////////////////////////////////////////////////////
+namespace SolveIt
+{
+///////////////////////////////////////////////////////////////////////////////
+
+class CDataQM_Stationary2D  
+{
+public:
+	CDataQM_Stationary2D();
+	virtual ~CDataQM_Stationary2D();
+	void CreateQMStationary2DThread(bool bCREATE_SUSPENDED = false);
+	BOOL StopQMStationary2D(void);
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//	long eigenvalueIndex;
+	long	&m_nSeekEigenvalues;
+	double energy_eigenvalue;
+	CQMStationary2D*	m_pCQMStationary2D;
+
+};
+////////////////////////////////////////////////////////////////////////
+}//end namespace SolveIt
+
+///////////////////////////////////////////////////////////////////////////////
+
+#endif // !defined(AFX_DATAQM_STATIONARY2D_H__483F654F_0372_489C_B92E_A706EDCA2442__INCLUDED_)

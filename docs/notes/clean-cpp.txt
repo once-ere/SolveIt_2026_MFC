@@ -1,0 +1,19 @@
+
+==========================================================
+ls *.cpp | xargs  cat >> data0.cpp 
+copy all *.cpp into data0.cpp
+==========================================================
+
+
+
+gcc -fpreprocessed -dD -E data0.cpp > data1.cpp
+remove comments from a C/C++ source file
+
+sed -i '/^[[:space:]]*$/d;s/[[:space:]]*$//' data1.cpp
+
+
+cat data1.cpp | sed -En '/^[[:space:]]*$/d;s/[[:space:]]*$//' >> lmap.cpp
+
+delete empty lines
+
+you may have space/tabs in your "empty" line. If so, this will help:

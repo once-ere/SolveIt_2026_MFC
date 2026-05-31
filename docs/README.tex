@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\title{SolveIt Modern Build Notes}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Overview}
+
+SolveIt is a legacy MFC/OpenGL desktop application with a substantial numerical backend in Fortran and legacy CVODE/CVOde support. This repository has been migrated to a Visual Studio 2022 x64 build that targets Unicode and C++23 while preserving the existing application structure and behavior.
+
+\section*{Current Status}
+
+\begin{itemize}[leftmargin=*]
+\item \texttt{SolveIt.vcxproj} is the primary modern build entry point.
+\item \texttt{Debug|x64} and \texttt{Release|x64} are the validated target configurations.
+\item Expected application outputs:
+\begin{itemize}[leftmargin=*]
+\item \texttt{x64/Debug/SolveIt.exe}
+\item \texttt{x64/Release/SolveIt.exe}
+\end{itemize}
+\item The Intel oneAPI Fortran static libraries are built by \texttt{fortran/build\_top\_oneapi.ps1} and placed in \texttt{SolveIt.Lib/lib}.
+\item The legacy CVODE/CVOde C sources are compiled into \texttt{x64/<Configuration>/cvode\_legacy.lib} by \texttt{SolveIt.Lib/lib/CVOde/build\_clang\_cl\_lib.ps1} during the project pre-link step.
+\item The x64 build also generates \texttt{SolveIt.Lib/lib/dformt\_x64.lib} from \texttt{SolveIt.Lib/lib/dformt\_x64\_stub.c} via \texttt{SolveIt.Lib/lib/build\_dformt\_x64\_stub.ps1}.
+\item \texttt{SolveIt.Lib/lib/CVOde/CVOdeShim.cpp} preserves the historical \texttt{CVODE::...} API that the application expects.
+\end{itemize}
+
+\section*{Prerequisites}
+
+\begin{itemize}[leftmargin=*]
+\item Visual Studio 2022 with MFC/ATL desktop C++ tooling
+\item Visual Studio LLVM tools (\texttt{clang-cl}) for the legacy CVOde static library build
+\item Intel oneAPI Fortran compiler (\texttt{ifx})
+\item \texttt{vcpkg} packages for the x64 build, including \texttt{eigen3:x64-windows} and \texttt{spectra:x64-windows}
+\item MiKTeX or another LaTeX distribution if you want to regenerate \texttt{README.pdf}
+\end{itemize}
+
+\section*{Build Workflow}
+
+Build the Fortran libraries first:
+
+\begin{verbatim}
+powershell -ExecutionPolicy Bypass -File .\fortran\build_top_oneapi.ps1 -Configuration Debug
+powershell -ExecutionPolicy Bypass -File .\fortran\build_top_oneapi.ps1 -Configuration Release
+\end{verbatim}
+
+Then build the application project:
+
+\begin{verbatim}
+MSBuild.exe .\SolveIt.vcxproj /p:Configuration=Debug /p:Platform=x64 /m /nologo
+MSBuild.exe .\SolveIt.vcxproj /p:Configuration=Release /p:Platform=x64 /m /nologo
+\end{verbatim}
+
+Notes:
+
+\begin{itemize}[leftmargin=*]
+\item The x64 project automatically rebuilds \texttt{cvode\_legacy.lib} during pre-link.
+\item The x64 project automatically regenerates \texttt{dformt\_x64.lib} during pre-link. The original \texttt{SolveIt.Lib/lib/dformt.LIB} is left in place for the legacy Win32 configuration only.
+\item The validated modern target is x64. The older Win32 configuration is kept for reference, not as the primary migration target.
+\end{itemize}
+
+\section*{Migration Notes}
+
+\begin{itemize}[leftmargin=*]
+\item Unicode compatibility is handled at API boundaries rather than by a global string rewrite. The shared helpers live in \texttt{StdAfx.h}.
+\item The legacy CVODE/CVOde wrapper headers were adjusted so their public C-facing types have stable C++ linkage.
+\item High-value x64 warning cleanup has already been applied in several concentrated hotspots, including pointer-to-\texttt{long} payload storage in the rigid-body, tree, and plotting paths.
+\item The legacy CVOde build still uses separate compilation with \texttt{clang-cl} in \texttt{gnu89} mode to avoid destabilizing the main C++ build.
+\end{itemize}
+
+\section*{Known Limitations}
+
+\begin{itemize}[leftmargin=*]
+\item The project still emits legacy warnings, mainly deprecated CRT calls, deprecated \texttt{strstream} usage, and older OpenGL or Win32 narrowing conversions.
+\item The original \texttt{dformt.LIB} is a legacy x86 Digital/Compaq Visual Fortran archive. Current x64 builds do not consume symbols from it, so x64 now links against the generated \texttt{dformt\_x64.lib} placeholder instead.
+\end{itemize}
+
+\section*{Artifacts}
+
+\begin{itemize}[leftmargin=*]
+\item \texttt{README.md} is the primary plain-text documentation.
+\item \texttt{README.pdf} is generated from this file with \texttt{pdflatex}.
+\end{itemize}
+
+\end{document}

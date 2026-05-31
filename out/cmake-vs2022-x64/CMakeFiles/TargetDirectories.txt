@@ -1,0 +1,4 @@
+C:/Users/nsh/Developer/Projects/SolveIt_migration_gpt/SolveIt_2026_MFC/out/cmake-vs2022-x64/CMakeFiles/SolveIt.dir
+C:/Users/nsh/Developer/Projects/SolveIt_migration_gpt/SolveIt_2026_MFC/out/cmake-vs2022-x64/CMakeFiles/SolveItExe.dir
+C:/Users/nsh/Developer/Projects/SolveIt_migration_gpt/SolveIt_2026_MFC/out/cmake-vs2022-x64/CMakeFiles/ALL_BUILD.dir
+C:/Users/nsh/Developer/Projects/SolveIt_migration_gpt/SolveIt_2026_MFC/out/cmake-vs2022-x64/CMakeFiles/ZERO_CHECK.dir

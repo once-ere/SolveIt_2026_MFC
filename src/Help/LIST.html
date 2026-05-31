@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html><HEAD>
+<title>Contents</title>
+<script>
+var comp = new Array(42);
+comp[0]='n'; //CE623AB1-AC6E-11d0-84BF-00A0C9111212
+comp[1]='y'; //F9CC8741-A1F3-11d0-B3B8-00AA00C08FD5
+comp[2]='y'; //F9CC8742-A1F3-11d0-B3B8-00AA00C08FD5
+comp[3]='y'; //F9CC8743-A1F3-11d0-B3B8-00AA00C08FD5
+comp[4]='y'; //F9CC8744-A1F3-11d0-B3B8-00AA00C08FD5
+comp[5]='n'; //6C26C0B1-A648-11d0-84AD-00A0C9111212
+comp[6]='n'; //F9CC8745-A1F3-11d0-B3B8-00AA00C08FD5
+comp[7]='n'; //F9CC8746-A1F3-11d0-B3B8-00AA00C08FD5
+comp[8]='n'; //F9CC8747-A1F3-11d0-B3B8-00AA00C08FD5
+comp[9]='y'; //F9CC8748-A1F3-11d0-B3B8-00AA00C08FD5
+comp[10]='y'; //F9CC8749-A1F3-11d0-B3B8-00AA00C08FD5
+comp[11]='n'; //F9CC874A-A1F3-11d0-B3B8-00AA00C08FD5
+comp[12]='n'; //F9CC874B-A1F3-11d0-B3B8-00AA00C08FD5
+comp[14]='n'; //BD409361-A6BD-11d0-B3B8-00AA00C08FD5
+comp[16]='n'; //BD409362-A6BD-11d0-B3B8-00AA00C08FD5
+comp[21]='n'; //F9CC874C-A1F3-11d0-B3B8-00AA00C08FD5
+comp[22]='n'; //F9CC874D-A1F3-11d0-B3B8-00AA00C08FD5
+comp[31]='n'; //F9CC874E-A1F3-11d0-B3B8-00AA00C08FD5
+comp[37]='n'; //F9CC8751-A1F3-11d0-B3B8-00AA00C08FD5
+comp[39]='n'; //F9CC8752-A1F3-11d0-B3B8-00AA00C08FD5
+comp[41]='n'; //F9CC8753-A1F3-11d0-B3B8-00AA00C08FD5
+comp[43]='n'; //F9CC8754-A1F3-11d0-B3B8-00AA00C08FD5
+comp[45]='n'; //E15EB852-A645-11d0-84AD-00A0C9111212
+comp[47]='n'; //E15EB853-A645-11d0-84AD-00A0C9111212
+comp[49]='n'; //E15EB854-A645-11d0-84AD-00A0C9111212
+comp[53]='y'; //D285EFE2-B062-11d0-84C3-00A0C9111212
+comp[61]='n'; //14D4B561-D973-11d0-BDCC-00A0C9111212
+comp[80]='n'; //9E769FE1-E673-11d0-BDCE-00A0C9111212
+comp[81]='n'; //9E769FE2-E673-11d0-BDCE-00A0C9111212
+comp[99]='y'; //96B3A4B1-D78D-11d0-BDCC-00A0C9111212
+comp[421]='n'; //59024A21-0EC8-11d1-BDDE-00A0C9111212
+comp[422]='n'; //F9CC874F-A1F3-11d0-B3B8-00AA00C08FD5
+comp[431]='n'; //59024A22-0EC8-11d1-BDDE-00A0C9111212
+comp[432]='n'; //F9CC8750-A1F3-11d0-B3B8-00AA00C08FD5
+comp[511]='n'; //59024A24-0EC8-11d1-BDDE-00A0C9111212
+comp[512]='n'; //59024A23-0EC8-11d1-BDDE-00A0C9111212
+comp[521]='n'; //ED35D530-1F3D-11d1-BEF0-00C04FD7082B
+comp[523]='n'; //ED35D531-1F3D-11d1-BEF0-00C04FD7082B
+comp[525]='n'; //ED35D532-1F3D-11d1-BEF0-00C04FD7082B
+comp[527]='n'; //ED35D533-1F3D-11d1-BEF0-00C04FD7082B
+comp[529]='n'; //ED35D534-1F3D-11d1-BEF0-00C04FD7082B
+comp[600]='n'; //2DE54A50-1F30-11d1-BEF0-00C04FD7082B
+</script>
+<style> <!-- .bold {font-weight: bold; font-size: 10pt; color: #FFFFFF; font-family: Verdana, Helvetica, Arial;}
+	A:link {color: #FFFFFF; text-decoration:none}
+	A:visited {color: #FFFFFF; text-decoration:none}
+	A:active {color: #FFFFFF; text-decoration:none}
+	UL {margin-left:14pt; margin-top:0}
+	LI {line-height:10pt}
+	BODY {background: url(art/fadeit.jpg) repeat-x black}
+	--> 
+	</style>
+<script>
+//<!--
+var ver = 0;
+
+function doInit() {
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf ( "MSIE " )
+    if ( msie > 0 )        // is Microsoft Internet Explorer; return version number
+        ver = parseInt ( ua.substring ( msie+5, ua.indexOf ( ".", msie ) ) );
+    
+}
+
+function DoOver(color) {
+    if (ver >= 4) window.event.srcElement.style.color=color;
+}
+
+function DoOut() {
+    if (ver >= 4) window.event.srcElement.style.color="white";
+}
+
+function collapseChildren(parentDiv) {
+    var i;
+    var div = document.all.tags("DIV");
+
+    for (i=0; i<div.length; i++) {
+        if (div(i).sourceIndex < parentDiv.sourceIndex)
+            continue;
+        if (parentDiv.contains(div(i)) != true)
+            return;
+        if (div(i).className == "Outline")
+            div(i).style.display = "none";
+    }
+}
+
+function ExpandCollapse()
+{
+    if (ver < 4) return;
+    var targetElement, parentDiv;
+    i = window.event.srcElement.sourceIndex;
+    // is this link already nested in a DIV?
+    for (parentDiv = window.event.srcElement.parentElement; parentDiv!=null; parentDiv = parentDiv.parentElement) {
+        if (parentDiv.tagName=="DIV") {
+            j=1;
+            break;
+        }
+        if (parentDiv.tagName=="BODY") {
+           for (j=1; (i+j) < document.all.length && document.all(i+j).tagName=="BR"; j++);
+            j+=2;
+            break;
+        }
+    }
+    if (parentDiv==null) {
+       for (j=1; (i+j) < document.all.length && document.all(i+j).tagName=="BR"; j++);
+        j+=2;
+        parentDiv = document.body;
+    }
+
+    //make sure element is not off page (test for last link)
+    if ( ((i+j)<document.all.length)  && (document.all(i+j).tagName == "DIV")) {
+
+        if ( parentDiv.contains(document.all(i+j))==true 
+            &&  (document.all(i+j).className == "Outline") ) {
+            targetElement = document.all(i+j);
+            if (targetElement.style.display == "none")
+                targetElement.style.display = "";
+            else {
+                targetElement.style.display = "none";
+                collapseChildren(targetElement);
+            }
+        } 
+    }
+
+    window.event.cancelBubble = true;
+}
+//-->
+</script>
+<script>
+//<!--
+function ALink(d,u,a,t)
+{
+var f = window.top.frames;
+var force = false;
+var target = f['article'];
+if (window.top.frames.length<1 || f[1].comp==null || f['article']==null) {
+    if (!confirm("The file " + u + " may not be available. Continue anyway?")) {
+        return false;
+    }
+    force = true;
+    if (target==null) target = self;
+}
+var x = window.top.location.href;
+i=x.lastIndexOf("/"); 
+if (i<x.lastIndexOf("\\")) i=x.lastIndexOf("\\");
+var p=x.substring(0,i);
+if (force || f[1].comp[d]=='y') { 
+	if (t==null || t!="_top") {
+		p=p+'/'+u;
+		if (a!=null){
+			p=p+'#'+a;target.location.href=p
+		}
+		else{	if(target.location.href!=p) target.location.href=p}
+	} 
+	else {window.top.location.href=p+'/'+u;} 
+} 
+else { target.location.href=p+'/comp'+d+'.htm';}
+return false;
+}
+//-->
+</script>
+
+<base target="article">
+
+<meta name="Microsoft Border" content="none, default"></HEAD>
+
+<body onload="doInit()" bgcolor="black" topmargin="0" leftmargin="0">
+
+<table border="0" cellpadding="0" cellspacing="0" width="185">
+  <tr>
+    <td align="right" valign="top" width="185"> 
+    <a CLASS="BOLD" HREF="#" onclick="return ALink(1,'Simulations/Simulations.html')">
+    <span style="COLOR: #ffcc00"><font color="#ffcc00" face="Verdana, Arial, Helvetica" onmouseover="this.style.color='white'" onmouseout="this.style.color='#FFCC00'" size="-1">
+    Simulations</font></span></a> <br>
+    <a CLASS="BOLD" HREF="http://physics.nist.gov/cuu/Constants/index.html?/codata86.html" TARGET="_blank"><span style="COLOR: #ffcc00"><font color="#ffcc00" face="Verdana, Arial, Helvetica" onmouseover="this.style.color='white'" onmouseout="this.style.color='#FFCC00'" size="-1">Physical Constants</font></span></a> </td>
+  </tr>
+</table>
+<font SIZE="1" FACE="Verdana,Arial,Helvetica">
+
+
+
+<p><img SRC="art/line_grn.gif" WIDTH="201" HEIGHT="9">&nbsp;</p> <font COLOR="#ff3300">
+
+<table BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="195">
+  <tr>
+    <td ALIGN="right"><a onmouseover="DoOver('#FF3300')" onmouseout="DoOut()" CLASS="BOLD" HREF="#" onclick="if (ver>=4){ExpandCollapse()};return ALink(4,'Notes/180203.mht')">Electricity and Magnetism</a></td>
+    <td VALIGN="bottom"><img SRC="art/dnarr.gif" ALT="*" WIDTH="7" HEIGHT="4"></td>
+  </tr>
+</table>
+<DIV class=Outline style="DISPLAY: none">
+<UL>
+  <li><a onmouseover="DoOver('#FF3300')" onmouseout="DoOut()" HREF="#" onclick="if (ver>=4){ExpandCollapse()};return ALink(4,'Notes/180203.mht')">Chapter 2</a> 
+ <div class="Outline" style="DISPLAY: none">
+  <ul>
+      <li><a onmouseover="DoOver('#FF3300')" onmouseout="DoOut()" HREF="#" onclick="if (ver>=4){ExpandCollapse()};return ALink(4,'Notes/180203.mht')">static electric field; electric potential</a>
+      <li><a onmouseover="DoOver('#FF3300')" onmouseout="DoOut()" HREF="#" onclick="if (ver>=4){ExpandCollapse()};return ALink(4,'Notes/200203.mht')">electrostatic energy</a>
+      <li><a onmouseover="DoOver('#FF3300')" onmouseout="DoOut()" HREF="#" onclick="if (ver>=4){ExpandCollapse()};return ALink(4,'Notes/270203.mht')">exam; more electrostatic energy</a></li>
+      <li><a onmouseover="DoOver('#FF3300')" onmouseout="DoOut()" HREF="#" onclick="if (ver>=4){ExpandCollapse()};return ALink(4,'Notes/Griffiths problem 2.43 page ion.mht')">
+      Problem 2.43</a>
+      <li><a onmouseover="DoOver('#FF3300')" onmouseout="DoOut()" HREF="#" onclick="if (ver>=4){ExpandCollapse()};return ALink(4,'Notes/Hour Exam 1 solutions.mht')">Hour Exam 1 Solutions</a></li>
+    </ul>
+    </div>
+  <LI><a onmouseover="DoOver('#FF3300')" onmouseout="DoOut()" HREF="#" onclick="if (ver>=4){ExpandCollapse()};return    ALink(4,'Electricy&amp;Magnetism/ElectricFields.htm')">Chapter 3</a> 
+  <DIV class=Outline style="DISPLAY: none">
+  <UL>
+      <li><a onmouseover="DoOver('#FF3300')" onmouseout="DoOut()" HREF="#" onclick="if (ver>=4){ExpandCollapse()};return ALink(4,'Notes/Special techniques Section a.mht')">
+      Special techniques: Section 1</a>
+      <li>&nbsp;</li>
+      </UL>
+      </DIV></LI></UL></DIV>
+<P></font>&nbsp;</P>
+
+<p><img SRC="art/line_yel.gif" WIDTH="201" HEIGHT="9"> <font COLOR="#ffcc00"></p> <font COLOR="#66cc33"> <font COLOR="#0099ff">
+
+
+
+
+
+
+
+
+
+
+<p>&nbsp;</font></font></font></P></FONT>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+From: Zlatko Koinov
+Sent: Wednesday, June 18, 2003 8:55 PM
+To: Patrick Nash
+Subject: RE: BEC
+
+Hi Dr. Nash,
+
+The dimensionless chemical potential, calculated by applying the variational principle, has a value of 1 – 0.0053, or the chemical potential is 1.6205 eV. You have calculated the dimensionless chemical potential to be 1 – 0.0044, or 1.6049 eV. This is OK because the ground-state energy, obtained by means of the variational principle always must exceed the exact ground-state value. 
+The next step to calculate the first corrections to the chemical potential by using the ground-state wave function. 
+I’ll see you tomorrow (tomorrow I have lab classes from 8:00 a.m to 6:00 p.m., so probably on Friday) to discuss this opportunity. 
+
+Zlatko
+
+-0.00439559
+
+
+-----Original Message-----
+From: Patrick Nash
+To: Zlatko Koinov
+Sent: 6/18/03 6:13 PM
+Subject: BEC
+
+ <<BEC.nb>> Hi Zlatko,
+
+Using 
+E_  ~ 46.68
+xi  ~ 13.05
+
+and approximating
+f(k) ~ If[k< 14.9107, 1/(1. + 0.20668185378041107*k +
+0.010044647169942791*k^2 - 0.0004056465234669683*k^3), 3/k]
+
+and forgetting about the singularity in the potential V at r=0,
+
+V(r) = -2/(pi sqrt( E_ ) ) int f(k xi) J_0(k r) dk
+     ~   -0.0931783/( 0.005105158639020407*(0.8209178912839936 +
+r)*(238.6113166148295 + (r - 14.186872366069968)*r))
+
+I find
+lambda = mu / E_B * E_ = 1  - 0.00439556
+
+Does this give a reasonable value for the chem pot?
+
+
+Pat
+
+

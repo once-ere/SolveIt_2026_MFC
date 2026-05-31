@@ -1,0 +1,2390 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from trlan.texi on 9 March 1999 -->
+
+<TITLE>TRLAN User Guide</TITLE>
+
+</HEAD>
+<BODY>
+<H1>TRLAN User Guide</H1>
+<ADDRESS>Kesheng Wu</ADDRESS>
+<ADDRESS>Horst Simon</ADDRESS>
+<P>
+<P><HR><P>
+
+
+<H1><A NAME="SEC1" HREF="trlan_toc.html#TOC1">Overview</A></H1>
+
+<P>
+TRLAN is a program designed to find a small number of extreme
+eigenvalues and their corresponding eigenvectors of a real symmetric
+matrix.  Denote the matrix as
+the eigenvalue as
+and the corresponding eigenvector as
+they are defined by the following equation,
+
+</P>
+
+<P>
+<A NAME="IDX1"></A>
+There are a number of different implementations of the Lanczos algorithm
+available<A NAME="DOCF1" HREF="trlan_foot.html#FOOT1">(1)</A>.  Why another one?  Our main
+motivation is to develop a specialized version that only target the case
+where one wants both eigenvalues and eigenvectors of a large real
+symmetric eigenvalue problems that can not use the shift-and-invert
+scheme.  In this case the standard non-restarted Lanczos algorithm
+requires one to store a large number of Lanczos vectors which can cause
+storage problem and make each iteration of the method very expensive.
+The underlying algorithm of TRLAN is a dynamic thick-restart Lanczos
+algorithm.  Like all restarted methods, the user can choose how many
+vectors can be generated at once.  Typically, the user choose a moderate
+size so that all Lanczos vectors can be stored in core.  This allows the
+restarted methods to execute efficiently.  This implementation of the
+thick-restart Lanczos method also uses the latest restarting technique,
+it is very effective in reducing the time required to compute a desired
+solutions compared to similar restarted Lanczos schemes, e.g.,
+<CITE>ARPACK</CITE><A NAME="DOCF2" HREF="trlan_foot.html#FOOT2">(2)</A>.
+
+</P>
+<P>
+<A NAME="IDX2"></A>
+When solving most problems, the three most time-consuming procedures in
+the Lanczos method are the matrix-vector multiplication,
+re-orthogonalization and computation of the Ritz vectors.  To make this
+package as small as possible, we have delegated the task of performing
+the matrix-vector multiplication to the user.  This is a reasonable
+approach because there is simply too many possible ways of performing
+the operation and the user usually can construct a specialize version
+that is better than a generic matrix-vector multiplication routine.  In
+addition, there are high quality matrix-vector multiplication routines
+available as parts of larger packages, for example, P_SPARSLIB, AZTEC,
+BLOCKSOLVE and PETSc, see section <A HREF="trlan.html#SEC14">Operator interface</A>, for details.  To
+reduce the amount of the time spent in re-orthogonalization, we only
+perform re-orthogonalization if it is necessary.  The Ritz vectors are
+computed as during the restarting process, in TRLAN, we only compute
+those that are determined to be needed.  This reduces the number of Ritz
+vectors computed.  To compute them efficiently, we call the <CODE>BLAS</CODE>
+library to perform the actual computation.
+
+</P>
+<P>
+<A NAME="IDX3"></A>
+The program is implemented in <CODE>Fortran 90</CODE>.  The main advantages of
+using <CODE>Fortran 90</CODE> compared to <CODE>Fortran 77</CODE> is that
+<CODE>Fortran 90</CODE> offers dynamic memory management which make it more
+flexible in terms of allocating temporary work arrays.  If there is an
+array not used for other task, it can be passed into TRLAN, else the
+user can simple let TRLAN allocate its own work arrays.  TRLAN internal
+allocate all the space it requires up front to avoid repeated call to
+allocated small pieces of workspace.
+
+</P>
+<P>
+<A NAME="IDX4"></A>
+Similar to other languages, such as C/C++, <CODE>Fortran 90</CODE> offers data
+encapsulation which makes it convenient to pass a significant amount of
+information cleanly.  TRLAN packages a large amount of information in a
+single object to reduce the size of the external user interface.
+See section <A HREF="trlan.html#SEC4">TRL_INFO module</A>, for details.  A significant advantage of using
+<CODE>Fortran</CODE> compared to C/C++ is the ease of using computational
+libraries such as <CODE>BLAS</CODE> and <CODE>LAPACK</CODE>.  In fact, most
+numerical computations of TRLAN are performed using those library
+functions.  Because most machines have vendor optimized <CODE>BLAS</CODE> and
+<CODE>LAPACK</CODE>, being able to effectively use them is crucial to the
+effectiveness of TRLAN package.
+
+</P>
+<P>
+<CODE>Fortran 90</CODE> also provides some utility functions such as query
+function for the machine precision, random number generator and timing
+functions.  They make the program more portable across different
+platforms.
+
+</P>
+<P>
+Parts of this document contains details about the software package which
+may not be of interest to every user.  Here are some advice on how to
+use this document.  If you just want to get a feel of how TRLAN looks
+like in a program, take a look at section <A HREF="trlan.html#SEC3">A small example</A> or the examples come
+with the software package.  Chapter 3 contains a short example that uses
+mostly default parameters.  To assert more control over TRLAN, see
+section <A HREF="trlan.html#SEC4">TRL_INFO module</A>, and section <A HREF="trlan.html#SEC12">Main function interfaces</A>.  If you are somewhat
+puzzled about how to choose the parameters, see section <A HREF="trlan.html#SEC15">Recommended parameter choices</A>, for
+our recommendations.  If you don't use <CODE>Fortran 90</CODE>, see section <A HREF="trlan.html#SEC23">Calling from other languages</A>, for what to do.  For most users, there is no need to read
+everything in section <A HREF="trlan.html#SEC10">The elements of <CODE>TRL_INFO_T</CODE></A>, and section <A HREF="trlan.html#SEC11">TRLAN error code</A>.  If you read the
+entire document and are still puzzled, contact the authors, see
+section <A HREF="trlan.html#SEC25">Contacting the authors</A>.
+
+</P>
+
+
+
+<H1><A NAME="SEC2" HREF="trlan_toc.html#TOC2">Installation</A></H1>
+<P>
+<A NAME="IDX5"></A>
+
+</P>
+<P>
+The source code of the package is available at
+
+</P>
+<P>
+<CODE>http://www.nersc.gov/~kewu/trlan.tar.gz</CODE>.
+
+</P>
+<P>
+This document is distributed with the package and is
+also separately available at
+
+</P>
+<P>
+<CODE>http://www.nersc.gov/~kewu/ps/trlan-ug.ps</CODE>.  
+
+</P>
+<P>
+The package may be unpacked by
+
+<PRE>
+tar -xzf trlan.tar.gz
+</PRE>
+
+<P>
+If you <CODE>tar</CODE> program does not recognize flag <CODE>z</CODE>,
+you can unpack it in two steps
+
+<PRE>
+gunzip trlan.tar.gz
+tar -xf trlan.tar
+</PRE>
+
+<P>
+After this, the files in the package will be unpacked into a
+directory called <TT>`TRLan'</TT>.
+
+</P>
+<P>
+To install the package, you will need a <CODE>Fortran 90</CODE> compiler, the
+<CODE>BLAS</CODE> and <CODE>LAPACK</CODE> libraries.  On parallel machines, MPI is
+also needed.  The compiler name and the options used are specified in
+the file called <TT>`Make.inc'</TT>.  A number of examples are provided in
+the file for different machines.  If your compiler name and library
+locations are same as one of the examples, you can uncomment the
+section, comment out the default values, and use the settings.  If your
+compiler has a different name or the libraries are located at a
+different place, you will need to modify the file to refer to their
+correct values.  The package may be compiled into one of the two library
+files <CODE>libtrlan.a</CODE> and <CODE>libtrlan_mpi.a</CODE> where the former is
+the sequential version of the package and the latter is the parallel
+version.  To generate them go to <TT>`TRLan'</TT> and type
+
+<PRE>
+make libtrlan.a
+or
+make libtrlan_mpi.a
+</PRE>
+
+<P>
+To compile the examples, go to the appropriate subdirectory in
+<TT>`examples'</TT>.  If you are on a sequential or a shared memory computer
+and there is no subdirectory that matches your computer, the source code
+in the <CODE>SUN</CODE> directory can be used.  The examples in <TT>`T3E'</TT> and
+<TT>`psp'</TT> can be run on parallel machines that support MPI.
+<TT>`Makefile'</TT> in the <TT>`T3E'</TT> and <TT>`psp'</TT> directories are only
+tested on a Cray T3E.  They will need modification in order to be used
+elsewhere.  The examples in directory <TT>`psp'</TT> also need a special
+supporting library called P_SPARSLIB, read the file <TT>`README'</TT> before
+try to use it.
+
+</P>
+<P>
+There are three examples in most example directories (except
+<TT>`psp'</TT>), <CODE>simple</CODE>, <CODE>simple77</CODE> and <CODE>simplec</CODE>.  These
+are three programs should be doing the same thing using three different
+languages.  The executables can be generated by <CODE>make</CODE>
+
+<PRE>
+make simple simplec simple77
+</PRE>
+
+<P>
+They should output the same eigenvalues, however the actual printout may
+differ slightly due floating-point round-off errors.
+
+</P>
+<P>
+For further questions, consult the <TT>`README'</TT> files in the
+directories.  To report errors in the installation procedure or suggest
+improvements, the authors can be reached at <CODE>kwu@lbl.gov</CODE> (Kesheng
+Wu) and <CODE>hdsimon@lbl.gov</CODE> (Horst Simon).
+
+</P>
+
+
+
+<H1><A NAME="SEC3" HREF="trlan_toc.html#TOC3">A small example</A></H1>
+
+<P>
+This is a simple example in <CODE>Fortran 90</CODE>.  It is short because we
+have used a very simple matrix and used default parameters wherever
+possible.  It uses MPI to handle data communication required by TRLAN.
+This example comes with the distribution of the source code in directory
+<TT>`examples/T3E'</TT>.  The name of the file is <TT>`s1.f90'</TT> and on T3E
+is can be compiled by <CODE>make s1</CODE> which generates the executable
+<CODE>s1</CODE>.
+
+</P>
+<P>
+<A NAME="IDX6"></A>
+<A NAME="IDX7"></A>
+
+<PRE>
+!!! a really simple example of how to use TRLAN
+Program simple
+  Use trl_info
+  Use trl_interface
+  Implicit None
+  Include 'mpif.h'
+  ! local variable declaration
+  Integer, Parameter :: nrow=100, lohi=-1, ned=5, maxlan=40, mev=10
+  Double Precision :: eval(mev), evec(nrow, mev)
+  Type(trl_info_t) :: info
+  Integer :: i
+  External diag_op  ! name of the matrix-vector multiplication routine
+  Call MPI_INIT(i)  ! initialize MPI
+  ! initialize info -- tell TRLAN to compute NED smallest eigenvalues
+  Call trl_init_info(info, nrow, maxlan, lohi, ned)
+  ! call TRLAN to compute the eigenvalues
+  Call trlan(diag_op, info, nrow, mev, eval, evec, nrow)
+  Call trl_print_info(info, nrow+nrow)
+  If (info%my_pe .Eq. 0) Then
+     write (6, FMT=100) (i, eval(i), i=1,info%nec)
+  End If
+100 Format('E(', I1, ') = ', 1PG25.17)
+  Call MPI_finalize(i)
+End Program simple
+!!!
+! a simple matrix-vector multiplications routine
+! defines a diagonal matrix with value (1, 4, 9, 16, 25, 36, ...)
+!!!
+Subroutine diag_op(nrow, ncol, xin, ldx, yout, ldy)
+  Implicit None
+  Integer, Intent(in) :: nrow, ncol, ldx, ldy
+  Double Precision, Dimension(ldx*ncol), Intent(in) :: xin
+  Double Precision, Dimension(ldy*ncol), Intent(out) :: yout
+  Include 'mpif.h'
+  ! local variables
+  Integer :: i, j, ioff, joff, doff
+  Call MPI_COMM_RANK(MPI_COMM_WORLD, i, j)
+  doff = nrow*i
+  Do j = 1, ncol
+     ioff = (j-1)*ldx
+     joff = (j-1)*ldy
+     Do i = 1, nrow
+        yout(joff+i) = (doff+i)*(doff+i)*xin(ioff+i)
+     End Do
+  End Do
+End Subroutine diag_op
+</PRE>
+
+<P>
+There are two parts in this example, the main program and the
+matrix-vector multiplication subroutine.  The main program sets up the
+<CODE>info</CODE> variable to carry information to and from TRLAN, calls
+TRLAN, and prints the information carried out in <CODE>info</CODE> and the
+eigenvalues computed.  Here is a short explanation of the arguments to
+<CODE>trl_init_info</CODE>.
+
+</P>
+
+<PRE>
+  call trl_init_info(info,      ! the variable to be set
+                     nrow=100,  ! there are 100 rows on each processor
+                     maxlan=40, ! maximum Lanczos basis size is 40
+                     lohi=-1,   ! compute the smallest eigenvalues
+                     ned=5)     ! compute 5 eigenvalues
+</PRE>
+
+<P>
+The calling sequence of TRLAN is fairly simple because all
+the gory details are hidden inside <CODE>info</CODE>.  The following listing
+describes the information required by TRLAN to solve an eigenvalue
+problem.
+
+</P>
+
+<PRE>
+  call trlan(diag_op,           ! matrix-vector multiplication routine
+             info,              ! what eigenvalues to compute, etc.
+             nrow,              ! 100 rows on this processor
+             mev,               ! number of eigenpairs can be stored in
+                                ! eval and evec
+             eval,              ! real(8) :: eval(mev)
+                                ! array to store eigenvalue
+             evec,              ! real(8) :: evec(lde,mev)
+                                ! array to store the eigenvectors
+             lde)               ! the leading dimension of evec
+</PRE>
+
+<P>
+The content of <CODE>info</CODE> and the eigenvalues are printed
+separately.  The content of <CODE>info</CODE> is printed by calling
+<CODE>trl_print_info</CODE> which accepts two arguments, <CODE>info</CODE> to be
+printed and the number of floating-point operations used for one
+matrix-vector multiplication on this processor.  The second parameter is
+needed because the matrix-vector multiplication is user-supplied.  The
+information is used to compute the speed of the matrix-vector
+multiplication and the speed of the whole program.  It can be ignored,
+in which case <CODE>trl_print_info</CODE> will leave the related fields blank.
+
+</P>
+<P>
+The short matrix-vector multiplication routine, <CODE>diag_op</CODE>, performs
+multiplication with a very simple matrix, <CODE>diag(1, 4, 9, ...)</CODE>.
+The example tries to find 5 smallest eigenvalues of this matrix, 1, 4,
+9, 16, 25.  The following is the output from a run on a T3E/900 located
+at the National Energy Research Supercomputing Center<A NAME="DOCF3" HREF="trlan_foot.html#FOOT3">(3)</A>.
+
+</P>
+<P>
+<A NAME="IDX8"></A>
+<A NAME="IDX9"></A>
+
+<PRE>
+                                      1998/09/24 18:37:16.834 (-07:00)
+ TRLAN execution summary (exit status = 0 ) on PE  0
+Number of SMALLEST eigenpairs:          6 (computed),      5 (wanted)
+Times the operator is applied:        847 (MAX:         2000 )
+Problem size:                         100 (PE:   0),     400 (Global)
+Convergence tolerance:          1.490E-08 (rel),   2.384E-03 (abs)
+Maximum basis size:                    40
+Restarting scheme:                      0
+Number of re-orthogonalizations       847
+Number of (re)start loops:             36
+Number of MPI processes:                4
+Number of eigenpairs locked:            0
+OP(MATVEC):                 9.35440E-03 sec,      1.81091E+01 MFLOPS
+Re-Orthogonalization:       2.12016E-01 sec,      4.68742E+01 MFLOPS
+Restarting:                 2.36795E-01 sec,      2.02369E+01 MFLOPS
+TRLAN on this PE:           5.29851E-01 sec,      3.00020E+01 MFLOPS
+ -- Global summary --
+             Overall     MATVEC    Re-orth    Restart
+Time(ave) 5.2985E-01 9.4129E-03 2.1143E-01 2.3685E-01
+Rate(tot) 1.2001E+02 7.1990E+01 1.8801E+02 8.0930E+01
+E(1) =   0.99999999997742750
+E(2) =    3.9999999999816311
+E(3) =    8.9999999999916049
+E(4) =    16.000000000026944
+E(5) =    25.000000000089663
+E(6) =    36.000000000367905
+</PRE>
+
+<P>
+In short, to use TRLAN to find some extreme eigenvalues, the user
+defines a matrix-vector multiplication routine with the same interface
+as <CODE>diag_op</CODE>, calls <CODE>trl_init_info</CODE> to specify what
+eigenvalues to compute and calls <CODE>trlan</CODE> to perform the bulk of the
+computation.  The remainder of this manual will explain the user
+interface and how to control TRLAN in more detail.  How to Write a
+particular matrix-vector multiplication for an operator is beyond the
+scope of this manual.  Some packages containing distributed
+matrix-vector multiplications routines are listed in section <A HREF="trlan.html#SEC14">Operator interface</A>.
+
+</P>
+
+
+<H1><A NAME="SEC4" HREF="trlan_toc.html#TOC4">TRL_INFO module</A></H1>
+
+<P>
+The example in previous chapter uses two modules, TRL_INFO and
+TRL_INTERFACE.  As the name suggested, TRL_INTERFACE contains the user
+interface for accessing TRLAN.  The module TRL_INFO only contains the
+definition of the <CODE>Fortran 90</CODE> derived type <STRONG>TRL_INFO_T</STRONG>.  To
+make it easy to access, we have provided six access functions,
+<CODE>trl_init_info</CODE>, <CODE>trl_set_debug</CODE>, <CODE>trl_set_iguess</CODE>,
+<CODE>trl_set_checkpoint</CODE>, <CODE>trl_print_info</CODE>, and
+<CODE>trl_terse_info</CODE>.  The first four are for manipulate input
+parameters to TRLAN and the last two are for printing the content of
+<STRONG>TRL_INFO_T</STRONG>.  We will discuss these access functions in this
+chapter.  The remaining interface functions are described in the next
+Chapter.  The last two sections of this chapter may be skipped if the
+reader is only seeking information on how to use the package.
+
+</P>
+
+
+
+<H2><A NAME="SEC5" HREF="trlan_toc.html#TOC5">Initialization</A></H2>
+
+<P>
+This initialization routine is equivalent to a generator function in
+<CODE>C++</CODE>.  It is intended to be called before any other TRLAN
+functions.  Any parameter not explicitly set by the caller is set to its
+default value and all internal counters are set to zero.  Its
+<CODE>Fortran 90</CODE> <CODE>interface</CODE> block is as follows,
+
+</P>
+<P>
+<A NAME="IDX10"></A>
+<A NAME="IDX11"></A>
+<A NAME="IDX12"></A>
+
+<PRE>
+     Subroutine trl_init_info(info, nrow, mxlan, lohi, ned, tol,&#38;
+          &#38; trestart, maxmv, mpicom)
+       Use trl_info
+       Integer, Intent(in) :: lohi, mxlan, ned, nrow
+       Integer, Intent(in), Optional :: maxmv, mpicom, trestart
+       Real(8), Intent(in), Optional :: tol
+       Type(TRL_INFO_T), Intent(out) :: info
+     End Subroutine trl_init_info
+</PRE>
+
+<P>
+We have seen the mandatory arguments in the example, however,
+there are four optional arguments that were not used before.  For
+completeness, we will give a short description of all arguments here.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>info:</CODE>
+<DD>
+The <CODE>Fortran 90</CODE> derived type that will carry the information to
+the <CODE>trlan</CODE> subroutine.  It is set by this subroutine.  Any prior
+content will be cleared.
+
+<DT><CODE>nrow:</CODE>
+<DD>
+The <EM>local</EM> problem size.  The vectors are assumed to be
+distributed conformally, i.e., if 10 elements of a Lanczos vector are
+located on a processor, the same 10 elements of all other Lanczos
+vectors are located on the same processor.  The variable <CODE>nrow</CODE>
+refers to the number of rows located on the current processor.  It may
+vary from processor to processor.
+
+<DT><CODE>maxlan:</CODE>
+<DD>
+The maximum Lanczos basis size.  This determines the maximum memory
+requirement of <CODE>trlan</CODE>.  The restarted Lanczos algorithm will store
+up to <CODE>maxlan</CODE> Lanczos vectors and one (1) residual vector.  An
+additional memory of size <CODE>maxlan*(maxlan+10)</CODE> is required to
+perform the Rayleigh-Ritz projection to compute the approximate
+solutions.  Generally, the larger <CODE>maxlan</CODE> is, the fewer
+matrix-vector multiplications are needed.  See section <A HREF="trlan.html#SEC16">Selecting the maximum basis size (<CODE>maxlan</CODE>)</A>, for further
+discussion on this parameter.
+
+<DT><CODE>lohi:</CODE>
+<DD>
+This parameter indicates which end of the spectrum to compute.  The
+Lanczos algorithm is only able to compute the extreme eigenvalues
+effectively.  The choices are either to compute the smallest ones
+(<CODE>lohi</CODE> &#60; 0), or the largest ones (<CODE>lohi</CODE> &#62; 0), or whatever
+converges first (<CODE>lohi</CODE> = 0).
+
+<DT><CODE>ned:</CODE>
+<DD>
+The number of eigenvalues and eigenvectors desired.
+
+The parameters, <CODE>nrow</CODE>, <CODE>maxlan</CODE>, <CODE>lohi</CODE>, and
+<CODE>ned</CODE>, are mandatory when calling <CODE>trl_init_info</CODE>.  The
+following parameters are optional because a reasonable value can be
+determined by <CODE>trl_init_info</CODE>.
+
+<DT><CODE>tol:</CODE>
+<DD>
+The relative tolerance on the residual norms.  The Lanczos algorithm
+computes the approximate solution to the eigenvalue problem.  As more
+steps are taken, the solutions become more accurate.  For symmetric
+eigenvalue problems, the residual norm is one of the most commonly used
+measure of the solution accuracy.  If the approximate eigenvalue is
+and the approximate eigenvector is 
+the residual norm is defined to be
+In TRLAN, the convergence test is relative the norm of the matrix
+If
+then the approximate solution is considered converged.  If this argument
+is not present, it is set to the square root of the unit round-off
+error.  If the 8-byte IEEE floating-point arithmetic is used, this
+default value is roughly
+
+<DT><CODE>restart:</CODE>
+<DD>
+The flag to indicate which thick-restart scheme to use.  In version
+1.0 of TRLAN, there are five choices for this parameter,
+1, 2, 3, 4, 5.  If this parameter is not provided, the default choice is
+0 which is treated same as 1 in the current implementation.
+See section <A HREF="trlan.html#SEC18">Selecting a restarting scheme</A>, for further discussion on this parameter.
+
+<DT><CODE>maxmv:</CODE>
+<DD>
+The maximum number of matrix-vector multiplications allowed.  The
+purpose of this parameter is usually to make sure the program stop
+eventually in case of stagnation.  The default value is <CODE>ned*ntot</CODE>
+where <CODE>ntot</CODE> the global problem size.
+
+<DT><CODE>mpicom:</CODE>
+<DD>
+The MPI communicator to be used by <CODE>trlan</CODE>.  This parameter is only
+meaningful if MPI is used.  If the sequential version is used, this
+variable is simply ignored internally.  If MPI is used and this variable
+is not set, <CODE>trl_init_info</CODE> will duplicate <CODE>MPI_COMM_WORLD</CODE>
+and use the resulting communicator for its internal communication
+operations.
+
+</DL>
+
+
+
+<H2><A NAME="SEC6" HREF="trlan_toc.html#TOC6">Setting debug parameters</A></H2>
+
+<P>
+There are cases we would like to monitor the progress of the restarted
+Lanczos algorithm.  We can do this by setting a few logging parameters.
+Since the debug information may be voluminous, <CODE>trlan</CODE> writes them
+to files.  Each MPI process will write its own debug information to a
+separate file.  The name of the file and how much debug information to
+write is controlled by calling <CODE>trl_set_debug</CODE>.
+
+</P>
+<P>
+<A NAME="IDX13"></A>
+
+<PRE>
+     Subroutine trl_set_debug(info, msglvl, iou, file)
+       Use trl_info
+       implicit none
+       Type(TRL_INFO_T), intent(inout) :: info
+       integer, intent(in) :: msglvl, iou
+       Character*(*), Optional :: file
+     End Subroutine trl_set_debug
+</PRE>
+
+<P>
+<A NAME="IDX14"></A>
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>info:</CODE>
+<DD>
+The <CODE>TRL_INFO_T</CODE> type variable to be modified.  The function
+<CODE>trl_init_info</CODE> should have been called before calling
+<CODE>trl_set_debug</CODE>.
+
+<DT><CODE>msglvl:</CODE>
+<DD>
+This parameter controls how much debug information to print.
+If it is zero or less, nothing is printed.  When its value is between 1
+and 10, the larger it is, the more information is printed.  When it is
+larger than 10, it has the same effect as 10.
+
+The function <CODE>trl_init_info</CODE> sets it to zero as the default value.
+
+<DT><CODE>iou:</CODE>
+<DD>
+The Fortran I/O unit number to be used when writing debug information.
+The user should choose an I/O unit not used for anything else during the
+time <CODE>trlan</CODE> is being used.
+
+<CODE>Trl_init_info</CODE> sets it to 99 as the default value.
+
+<DT><CODE>file:</CODE>
+<DD>
+The leading part of the debug file names.  The debug file names are form
+by appending the MPI processor rank to this string.  In sequential
+environment, MPI processor rank is always zero (0).  This is an optional
+argument to <CODE>trl_set_debug</CODE>.  When it is not set, the corresponding
+element of <CODE>TRL_INFO_T</CODE> is not changed.
+
+<CODE>Trl_init_info</CODE> sets this elements to <TT>`TRL_LOG_'</TT> by default.
+
+</DL>
+
+
+
+<H2><A NAME="SEC7" HREF="trlan_toc.html#TOC7">Setting initial guess options</A></H2>
+
+<P>
+TRLAN program can either use a user-supplied initial guess, generate
+an arbitrary initial guess or read a set of checkpoint file to get
+starting vectors.  The thick-restart Lanczos may start with arbitrary
+number of vectors, however, the starting vectors have to satisfy a
+strict relation.  The simplest way to start the algorithm is to simply
+provide one starting vector.  If the function <CODE>trl_set_iguess</CODE> is
+not called, the starting vector is set to [1, ..., 1] by default.  The
+checkpoint option is implemented to enable a user to continue improve
+the accuracy of the solutions progressively.
+
+</P>
+
+<PRE>
+     Subroutine trl_set_iguess(info, nec, iguess, oldcpf)
+       Use trl_info
+       Implicit None
+       Type(TRL_INFO_T) :: info
+       Integer, Intent(in) :: iguess, nec
+       Character(*), Intent(in), Optional :: oldcpf
+     End Subroutine trl_set_iguess
+</PRE>
+
+<DL COMPACT>
+
+<DT><CODE>info:</CODE>
+<DD>
+The <CODE>TRL_INFO_T</CODE> type variable to be modified.  The function
+<CODE>trl_init_trl</CODE> should have been called before calling
+<CODE>trl_set_iguess</CODE>.
+
+<DT><CODE>nec:</CODE>
+<DD>
+The number of eigenvalues and eigenvectors already converged.  If
+<CODE>nec</CODE> is greater than zero (0), the first <CODE>nec</CODE> columns of
+array <CODE>evec</CODE> should contain eigenvectors of the operator and the
+first <CODE>nec</CODE> elements of <CODE>eval</CODE> should contain the
+corresponding eigenvalues.  This is designed to allow the user to return
+to <CODE>trlan</CODE> to compute more eigenvalues and eigenvectors.
+
+<CODE>Trl_init_info</CODE> sets this value to zero to indicate no converged
+eigenvalues.
+
+<DT><CODE>iguess:</CODE>
+<DD>
+The parameter to indicate option for initial guess vector.
+<DL COMPACT>
+
+<DT><CODE>&#60;1:</CODE>
+<DD>
+TRLAN will generate an arbitrary starting vector for the Lanczos
+algorithm.  If it is zero (0), vector [1, 1, ..., 1] is used.  When
+<CODE>iguess</CODE> is less than zero, a random perturbations will be added to
+this vector before it is taken as the starting vector.
+
+<DT><CODE>1:</CODE>
+<DD>
+The user has supplied a starting vector.  It will be used.
+
+<DT><CODE>&#62;1:</CODE>
+<DD>
+TRLAN will read a checkpoint file and use its content to start the
+Lanczos process.  The idea of checkpoint is explained later.
+</DL>
+
+<DT><CODE>oldcpf:</CODE>
+<DD>
+The leading portion of the existing checkpointing file names.  As with
+the log files, the checkpoint files are named by concatenating this
+leading portion and the MPI processor rank.  The default value set by
+<CODE>trl_init_info</CODE> for this is <TT>`TRL_CHECKPOINT_'</TT>.
+
+</DL>
+
+<P>
+NOTE: Reading the checkpoint files are done through I/O unit
+<CODE>cpio</CODE>.  <CODE>Trl_init_info</CODE> sets this value to 98 by default.  If
+I/O unit is used for another task already, use <CODE>trl_set_checkpoint</CODE>
+to set <CODE>cpio</CODE> to an unused I/O unit number.
+
+</P>
+
+
+
+<H2><A NAME="SEC8" HREF="trlan_toc.html#TOC8">Checkpointing</A></H2>
+<P>
+<A NAME="IDX15"></A>
+
+</P>
+<P>
+TRLAN has implemented a scheme of checkpointing to allow the user to
+stop and restart.  The checkpoint files of the thick-restart Lanczos
+algorithm contains all the information necessary for it to continue the
+Lanczos iterations.  To minimize the size of the files, the checkpoint
+files are written at the end of the restart process because the basis is
+the smallest in size at this point.  For efficiency reasons, each MPI
+processor writes its own checkpoint file in <CODE>FORTRAN</CODE> unformatted
+form.  These checkpoint files can only be read on the same type of
+machines and using the same number of MPI processors.  The function
+<CODE>trl_set_iguess</CODE> controls whether the checkpoint files are read.
+The following function controls when to write the checkpoint files.
+
+</P>
+
+<PRE>
+     Subroutine trl_set_checkpoint(info, cpflag, cpio, file)
+       Use trl_info
+       Implicit None
+       Type(TRL_INFO_T) :: info
+       Integer, Intent(in) :: cpflag, cpio
+       Character(*), Optional :: file
+     End Subroutine trl_set_checkpoint
+</PRE>
+
+<P>
+<A NAME="IDX16"></A>
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>info:</CODE>
+<DD>
+The <CODE>TRL_INFO_T</CODE> type variable to be modified.  The function
+<CODE>trl_init_trl</CODE> should have been called before calling
+<CODE>trl_set_checkpoint</CODE>.
+
+<DT><CODE>cpflag:</CODE>
+<DD>
+If this value is greater than zero, then TRLAN will write <CODE>cpflag</CODE>
+set of checkpointing files in <CODE>maxmv</CODE> iterations.  If it is less or
+equal to zero, no checkpoint file is written.  Checkpointing files are
+only written if TRLAN runs correctly.  If <CODE>cpflag</CODE> is greater than
+zero, at least one set of checkpoint files is written when TRLAN
+completes successfully.  To debug the program, turn on verbose printing
+by using <CODE>trl_set_debug</CODE>.
+
+<CODE>Trl_init_info</CODE> sets this value to zero.
+
+<DT><CODE>cpio:</CODE>
+<DD>
+The <CODE>FORTRAN</CODE> I/O unit number to be used for writing checkpoint
+files.  The value of <CODE>cpio</CODE> is set to 98 by default
+(<CODE>trl_init_info</CODE>).
+
+<DT><CODE>file:</CODE>
+<DD>
+The leading portion of the checkpoint files.  The checkpoint file names
+are formed by concatenating the value of this variable and the MPI
+processor rank.  If this argument is not present internally, the
+corresponding element of <CODE>TRL_INFO_T</CODE> is not modified.
+
+<CODE>Trl_init_info</CODE> sets this variable to <TT>`TRL_CHECKPOINT_'</TT> by
+default.
+
+</DL>
+
+
+
+<H2><A NAME="SEC9" HREF="trlan_toc.html#TOC9">Printing functions</A></H2>
+
+<P>
+Upon returning from <CODE>trlan</CODE>, the user may wish to exam the progress
+of <CODE>trlan</CODE>.  One simple way to do this is to printout the content
+of <CODE>info</CODE>.  There are two printing functions <CODE>trl_print_info</CODE>
+and <CODE>trl_terse_info</CODE>.  Function <CODE>trl_print_info</CODE> is the one
+that printed the results in section <A HREF="trlan.html#SEC3">A small example</A>.  The following is the same
+information printed using <CODE>trl_terse_info</CODE>.
+
+</P>
+<P>
+NOTE: The eigenvalues are not stored in <CODE>info</CODE>.  The following
+printout is from a different run of the same example, there is slight
+difference in time.
+
+</P>
+<P>
+<A NAME="IDX17"></A>
+<A NAME="IDX18"></A>
+
+<PRE>
+MAXLAN:      40, Restart:       0,   NED:  -    5,     NEC:       6
+MATVEC:     847,  Reorth:     847, Nloop:      36, Nlocked:       0
+Ttotal:0.535910,    T_op:0.008962, Torth:0.209496,  Tstart:0.238200
+</PRE>
+
+<P>
+The <CODE>Fortran 90</CODE> <CODE>interface</CODE> of the two subroutines are as
+follows.
+
+</P>
+<P>
+<A NAME="IDX19"></A>
+
+<PRE>
+     Subroutine trl_print_info(info, mvop)
+       Use trl_info
+       Implicit None
+       Type(TRL_INFO_T), Intent(in) :: info
+       Integer, Intent(in) :: mvop
+     End Subroutine trl_print_info
+</PRE>
+
+
+<PRE>
+     Subroutine trl_terse_info(info, iou)
+       Use trl_info
+       Implicit None
+       Type(TRL_INFO_T), Intent(in) :: info
+       Integer, Intent(in) :: iou
+     End Subroutine trl_terse_info
+</PRE>
+
+<DL COMPACT>
+
+<DT><CODE>info:</CODE>
+<DD>
+The <CODE>TRL_INFO_T</CODE> variable to be printed.  In addition of keeping
+track of how many eigenvalues have converged and how many are wanted.
+There are significant amount of information about how many matrix-vector
+multiplications have been used, how much time is used in various parts
+of the program, and so forth.  The verbose version of the printing
+function will printout most of the recorded information that are deemed
+to be useful.  The terse version only printout the 12 most important
+fields.
+
+<DT><CODE>mvop:</CODE>
+<DD>
+The number of floating-point operations performed on one processor
+during one matrix-vector multiplication.  This information is used by
+the printing function <CODE>trl_print_info</CODE> to determine the speed of
+the matrix-vector multiplication and the speed of the overall eigenvalue
+program.  If this information is not present, the relevant fields are
+left blank in the printout.  The variable <CODE>info</CODE> contains timing
+information and floating-point operations performed inside the
+<CODE>trlan</CODE>.  Since the matrix-vector multiplication is a user-supplied
+function, the user has to provide information about its complexity.
+
+<DT><CODE>iou:</CODE>
+<DD>
+The terse printing function <CODE>trl_terse_info</CODE> is allowed to print to
+any valid <CODE>FORTRAN</CODE> I/O unit.  This is different from the verbose
+printing function where the printout is always sent to the I/O unit
+that is used for logging debugging information.
+
+</DL>
+
+<P>
+In addition to the differences mentioned already, the function
+<CODE>trl_print_info</CODE> requires every processor to participate but
+<CODE>trl_terse_info</CODE> can be called by each processor individually.
+Because of this reason, <CODE>trl_print_info</CODE> can provide global
+performance information but not <CODE>trl_terse_info</CODE>.
+
+</P>
+<P>
+The verbose version of the printout is designed to be self-explanatory.
+The rate fields for floating-point operations are in MFLOPS.  The rate
+of <CODE>Read</CODE> and <CODE>Write</CODE> refers to the speed of reading and
+writing checkpoint files, they are in MegaBytes per second.  Since the
+simple example shown does not use checkpointing, no information
+regarding <CODE>Read</CODE> and <CODE>Write</CODE> is presented in the printout.
+
+</P>
+<P>
+The heading for the terse version of the printout is bit cryptic.  They
+are 
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>MAXLAN:</CODE>
+<DD>
+The maximum Lanczos basis size.
+
+<DT><CODE>Restart:</CODE>
+<DD>
+The flag of restarting scheme to be used, 0, ..., 5.
+
+<DT><CODE>NED:</CODE>
+<DD>
+Number of eigenvalues desired.  It also contains an one-character sign
+which can be <CODE>+</CODE>, <CODE>-</CODE>, or <CODE>0</CODE> to indicate which end of
+the spectrum is being computed.
+
+<DT><CODE>NEC:</CODE>
+<DD>
+Number of eigenvalues converged.
+
+<A NAME="IDX20"></A>
+<DT><CODE>MATVEC:</CODE>
+<DD>
+number of times the operator has been applied, i.e., the number of
+matrix-vector multiplications, also the number of iterations.
+
+<DT><CODE>Reorth:</CODE>
+<DD>
+Number of times re-orthogonalization has been applied.  Each time the
+Gram-Schmidt procedure is called, this counter is incremented by one.
+
+<DT><CODE>Nloop:</CODE>
+<DD>
+Number of outer/restarted iterations.
+
+<A NAME="IDX21"></A>
+<DT><CODE>Nlocked:</CODE>
+<DD>
+Number of Ritz pairs that have extremely small residual norms ( &#60;
+<CODE>epsilon</CODE> <CODE>|| A ||</CODE>).  Because the residual norms are so
+small, we lock the Ritz pairs to reduce the among of arithmetic
+operations needed in Rayleigh-Ritz projection.
+
+<A NAME="IDX22"></A>
+<DT><CODE>Ttotal:</CODE>
+<DD>
+The total time (seconds) used by TRLAN.
+
+<DT><CODE>T_op:</CODE>
+<DD>
+The time (seconds) spent in performing matrix-vector multiplications.
+
+<DT><CODE>Torth:</CODE>
+<DD>
+The time (seconds) spent in performing re-orthogonalizations.
+
+<DT><CODE>Tstart:</CODE>
+<DD>
+The time (seconds) spent in restarting including performing
+Rayleigh-Ritz projections.
+
+</DL>
+
+
+
+<H2><A NAME="SEC10" HREF="trlan_toc.html#TOC10">The elements of <CODE>TRL_INFO_T</CODE></A></H2>
+
+<P>
+In some instances, it might be necessary to directly access the status
+information in <CODE>info</CODE> rather than print out the information.
+Whether <CODE>trlan</CODE> terminated because of some kind of error, the two
+elements of <CODE>TRL_INFO_T</CODE> that are most like to be useful after
+returning from <CODE>trlan</CODE> are <CODE>stat</CODE> and <CODE>nec</CODE>, where the
+first one is the error flag of <CODE>trlan</CODE> and the second one indicates
+how many eigenvalues and eigenvectors have converged.
+
+</P>
+<P>
+The input parameters to TRLAN have appeared in the calling sequence of
+<CODE>trl_init_info</CODE>, <CODE>trl_set_debug</CODE>, <CODE>trl_set_iguess</CODE> and
+<CODE>trl_set_checkpoint</CODE> are described earlier in this chapter.  The
+following are elements of <CODE>TRL_INFO_T</CODE> are counters set by
+<CODE>trlan</CODE>.  To the user, they are part of the output from TRLAN.
+
+</P>
+<P>
+<A NAME="IDX23"></A>
+<DL COMPACT>
+
+<DT><CODE>my_pe</CODE>
+<DD>
+<DT><CODE>npes</CODE>
+<DD>
+The PE number and the number of PEs.
+
+<DT><CODE>ntot</CODE>
+<DD>
+The global size of the problem.
+
+<A NAME="IDX24"></A>
+<DT><CODE>matvec</CODE>
+<DD>
+The number of matrix-vector multiplications used by the restarted
+Lanczos algorithm.  It will not significantly exceed the value of
+<CODE>maxmv</CODE>.
+
+<DT><CODE>nloop</CODE>
+<DD>
+The number of restarting loops, i.e., the number of times <CODE>trlan</CODE>
+has reached the maximum size and restarted.
+
+<DT><CODE>north</CODE>
+<DD>
+The number of times the Gram-Schmidt process is invoked to perform
+re-orthogonalization.
+
+<DT><CODE>nrand</CODE>
+<DD>
+The number of times <CODE>trlan</CODE> has generated random vectors in attempt
+to produce an vector that is orthogonal to the current basis vectors.
+
+<A NAME="IDX25"></A>
+<DT><CODE>locked</CODE>
+<DD>
+The number of eigenpairs that has extremely small residual norms ( &#60;
+<CODE>epsilon</CODE> <CODE>|| A ||</CODE>).  The accuracies of these eigenpairs can
+not be further improve by more Rayleigh-Ritz projection, therefore they
+are <EM>locked</EM> to reduce arithmetic operations, they are only used to
+perform re-orthogonalization but nothing else.  TRLAN locks not only the
+wanted eigenpairs with small residual norm, it also locks unwanted ones
+depending the restarting strategy.  The rational is that if they
+converge quickly, it is not good idea to throw them away because they
+will reappear in the next basis built.
+
+<DT><CODE>clk_rate</CODE>
+<DD>
+The clock rate of as measured by <CODE>Fortran 90</CODE> intrinsic function
+<CODE>system_clock</CODE>.
+
+<DT><CODE>clk_max</CODE>
+<DD>
+The maximum clock ticks before it rolls over.
+
+<A NAME="IDX26"></A>
+<DT><CODE>clk_tot tick_t clk_op tick_o clk_orth tick_h clk_res tick_r</CODE>
+<DD>
+These set of integer and floating-point variables are used to keep track
+of time spend in performing matrix-vector multiplication (<CODE>clk_op</CODE>,
+<CODE>tick_o</CODE>), re-orthogonalization (<CODE>clk_orth</CODE>, <CODE>tick_h</CODE>),
+restarting (<CODE>clk_res</CODE>, <CODE>tick_r</CODE>), and the whole <CODE>trlan</CODE>
+(<CODE>clk_tot</CODE>, <CODE>tick_t</CODE>).  The four integer counters,
+<CODE>clk_op</CODE>, <CODE>clk_orth</CODE>, <CODE>clk_res</CODE>, and <CODE>clk_tot</CODE>, are
+output from <CODE>Fortran 90</CODE> intrinsic function <CODE>system_clock</CODE>.
+Since it is likely the integer counters will overflow in some cases,
+each of them has a floating-point counterpart.  If they become larger
+than a quarter of the maximum counter value <CODE>clk_max</CODE>, they are
+added to the floating-point counters and reset to zero.
+
+<A NAME="IDX27"></A>
+<DT><CODE>flop rflp flop_h rflp_h flop_r rflp_r</CODE>
+<DD>
+These set of counters are for counting the number of floating-point
+operations used by TRLAN.  <CODE>Flop</CODE> and <CODE>rflp</CODE> are for counting
+the total floating pointer operations excluding those used by
+matrix-vector multiplications.  <CODE>Flop_h</CODE> and <CODE>rflp_h</CODE> are for
+counting the re-orthogonalization procedure.  <CODE>Flop_r</CODE> and
+<CODE>rflp_r</CODE> count operations used in restarting.  The integer
+counters are used initially until they become larger than
+<CODE>clk_max/4</CODE>.  Once they become too large, their values are added to
+the corresponding floating-point counter and they are reset to zero.
+Since the matrix-vector multiplication routine is supplied by the user,
+TRLAN can not account for the floating-point operations used in that
+procedure.
+
+<A NAME="IDX28"></A>
+<DT><CODE>crat tmv tres trgt</CODE>
+<DD>
+This set of variables are used to track the convergence factor of the
+eigenvalue method.  The variable <CODE>crat</CODE> is the convergence factor.
+It is measured after <CODE>tmv</CODE> number of matrix-vector multiplications
+are used.  The value of the target at <CODE>tmv</CODE> was <CODE>tres</CODE>.
+The convergence factor is updated as follows.  Among the Ritz values,
+search for the one that is closest to <CODE>trgt</CODE>.  This Ritz value is
+regarded as the updated version of the previous target Ritz value.  Let
+<CODE>res</CODE> be the residual norm of the Ritz value, the convergence
+factor is computed as <CODE>crat</CODE> = Exp(Log(<CODE>res / tres</CODE>) /
+(<CODE>matvec - tmv</CODE>)).
+
+After <CODE>crat</CODE> is updated, the current target value is identified as
+the first Ritz value that is not converged yet.  The value of <CODE>tmv</CODE>
+and the corresponding residual norm <CODE>tres</CODE> are recorded.
+
+<DT><CODE>anrm</CODE>
+<DD>
+The estimated norm of the matrix.  This is the largest absolute value of
+any Ritz value ever computed by TRLAN.  After a number of steps, this is
+a good estimate of the matrix 2-norm.  This variable is primarily used
+in the convergence test.  If the user specifies a tolerance <CODE>tol</CODE>,
+all the Ritz pairs with residual norm less than <CODE>tol * anrm</CODE> are
+considered converged.
+
+<DT><CODE>stat</CODE>
+<DD>
+The error flag.  The next section describes the meaning of the error
+codes in detail.
+
+</DL>
+
+
+
+<H2><A NAME="SEC11" HREF="trlan_toc.html#TOC11">TRLAN error code</A></H2>
+
+<P>
+This section lists all error numbers defined in TRLAN and discusses
+possible remedies to the errors.  Currently (TRLAN version
+1.0), defines the follow error numbers,
+
+</P>
+<P>
+<A NAME="IDX29"></A>
+<A NAME="IDX30"></A>
+<DL COMPACT>
+
+<DT><CODE>0</CODE>
+<DD>
+No error.
+
+It is possible that <CODE>trlan</CODE> has not computed all wanted eigenpairs,
+check the value of <CODE>nec</CODE> to see exactly how many wanted eigenpairs
+have converged.  In case you have not computed all wanted eigenpairs,
+the possible solutions are:
+
+<UL>
+<LI>
+
+If checkpoint files were written, restart with the checkpoint files.
+
+<LI>
+
+If no checkpoint files were written, make a linear combination of the
+approximate eigenvectors and use the resulting vector as the initial
+guess.  In addition, make sure to set appropriate options with
+<CODE>trl_set_checkpoint</CODE> to generate checkpoint files for future use.
+
+<LI>
+
+Increase the maximum basis size <CODE>maxlan</CODE>, See section <A HREF="trlan.html#SEC16">Selecting the maximum basis size (<CODE>maxlan</CODE>)</A> for
+more details.
+
+<LI>
+
+Increase the maximum number of iterations allowed <CODE>maxmv</CODE>,
+See section <A HREF="trlan.html#SEC19">Selecting the maximum iterations</A> for more details.
+
+<LI>
+
+Use a different restarting strategy, See section <A HREF="trlan.html#SEC18">Selecting a restarting scheme</A> for more
+details.
+</UL>
+
+<DT><CODE>-1</CODE>
+<DD>
+The internal record of local problem size (<CODE>nloc</CODE>) does not match
+the value of <CODE>nrow</CODE> used when calling <CODE>trlan</CODE>.  Most likely
+the user has used the <CODE>info</CODE> variable defined for a different
+problem.
+
+SOLUTION: Make sure <CODE>trl_init_info</CODE> is called before
+<CODE>trlan</CODE> and the arguments to both functions are correct for the
+intended eigenvalue problem.
+
+<DT><CODE>-2</CODE>
+<DD>
+The leading dimension of the eigenvector array <CODE>evec</CODE> is smaller
+than local problem size, <CODE>lde &#60; nrow</CODE>.  There isn't enough space in
+<CODE>evec</CODE> to store the eigenvectors correctly.
+
+SOLUTION: Allocate the array <CODE>evec</CODE> with leading
+dimension larger or equal to <CODE>nrow</CODE>.
+
+<DT><CODE>-3</CODE>
+<DD>
+The array size of <CODE>eval</CODE> is too small to store the eigenvalues,
+<CODE>mev &#60; info%ned</CODE>.  There isn't enough columns in <CODE>evec</CODE>
+either.
+
+<A NAME="IDX31"></A>
+SOLUTION: Increase the size of array <CODE>eval</CODE> and
+increase the number of columns in <CODE>evec</CODE>.
+
+<DT><CODE>-4</CODE>
+<DD>
+TRLAN failed to allocate space for storing the projection matrix, etc..
+The size of this work array (internally called <CODE>misc</CODE>) is
+<CODE>maxlan * (maxlan + 10)</CODE>.  TRLAN tries to allocate its own
+workspace if the user has not provided enough workspace to store the
+Lanczos basis vectors and the projection matrix, et al.
+
+SOLUTION:
+
+<UL>
+<LI>
+
+If there is addition workspace not used, given TRLAN more workspace.
+<LI>
+
+Decrease the size of <CODE>maxlan</CODE>.  This will decrease the among of
+workspace required.
+<LI>
+
+If you have control over the swap file/partition size, increase it will
+also solve this problem.
+</UL>
+
+<DT><CODE>-5</CODE>
+<DD>
+TRLAN failed to allocate space to store the Lanczos vectors.  The
+workspace (internally called <CODE>base</CODE>) size required here is
+<CODE>(maxlan + 1 - mev) * nrow</CODE>.
+
+SOLUTION: See solutions for error code <CODE>-4</CODE>.
+
+<DT><CODE>-11</CODE>
+<DD>
+TRLAN does not have enough workspace to perform Gram-Schmidt procedure
+which is used to perform re-orthogonalization.  This should not happen
+unless the caller directly calls lower level routine <CODE>trlanczos</CODE>
+with insufficient workspace.
+
+SOLUTION: Increase workspace provided.
+
+<DT><CODE>-12</CODE>
+<DD>
+TRLAN does not have enough workspace to compute eigenvalues of a
+symmetric tridiagonal matrix.  This should not happen unless the caller
+directly uses the lower level routine <CODE>trlanczos</CODE> with insufficient
+workspace.
+
+SOLUTION: Increase workspace provided.
+
+<DT><CODE>-101</CODE>
+<DD>
+The orthogonalization routine of <CODE>TRLAN</CODE> does not have enough
+workspace.  This should not happen unless <CODE>trl_orth</CODE> is directly
+called outside of TRLAN with insufficient workspace.
+
+SOLUTION: Increase workspace provided.
+
+<DT><CODE>-102</CODE>
+<DD>
+The norm of the residual vector of Lanczos iterations is not a set of
+valid finite floating-point numbers.  Unless the operator norm is
+exceeding large, say large than <CODE>1E160</CODE>, this error code should not
+be generated.  If it is, normally it is an indication of other errors.
+For example, the workspace given by the user is not as large as the user
+indicated to <CODE>trlan</CODE>, the array <CODE>evec</CODE> is actually smaller
+than <CODE>(lde, mev)</CODE>, the first <CODE>nec</CODE> columns of <CODE>evec</CODE> are
+not orthonormal vectors on input, or you have encounter a bug in TRLAN
+or one of the libraries used by TRLAN.
+
+<A NAME="IDX32"></A>
+SOLUTION:
+
+<UL>
+<LI>
+
+Make sure the workspace array given to <CODE>trlan</CODE> is as large as
+claimed, i.e., the actual size of <CODE>wrk</CODE> is at least as large as
+<CODE>lwrk</CODE>.  If <CODE>wrk</CODE> is present but not <CODE>lwrk</CODE>, the actual
+size of <CODE>wrk</CODE> should be no less than <CODE>mev</CODE>.
+<LI>
+
+Make sure there is enough space to store the eigenvalues and
+eigenvectors even if you think <CODE>trlan</CODE> is not going to compute all
+the eigenvectors because <CODE>trlan</CODE> uses the space in <CODE>evec</CODE> to
+store the Lanczos vectors during its computations.
+<LI>
+
+If the initial <CODE>nec</CODE> is not zero, make sure that the
+known eigenvectors are stored in the first <CODE>nec</CODE> columns of
+<CODE>evec</CODE> and the eigenvalues in the first <CODE>nec</CODE> elements of
+<CODE>eval</CODE>.
+</UL>
+
+The above solution should be considered applicable to all the following
+error conditions.  If you have checked everything suggested here, then
+you may have found an error in TRLAN program.  Report the problem to the
+authors.
+
+<DT><CODE>-111</CODE>
+<DD>
+Insufficient workspace to one of a lower level routine used by TRLAN to
+reduce the arrowhead of the projection matrix into tridiagonal matrix.
+This should not happen unless the user directly calls the low level
+routine.
+
+SOLUTION: Report the problem to the authors.
+
+<DT><CODE>-112</CODE>
+<DD>
+TRLAN has failed to generate an orthogonal transformation to reduce the
+projection matrix into a tridiagonal matrix, i.e., <CODE>LAPACK</CODE> routine
+<CODE>dsytrd</CODE>/<CODE>ssytrd</CODE> has failed.  This is extremely unlikely to
+happen.
+
+SOLUTION: Check to make sure you have a correct version
+of the <CODE>LAPACK</CODE>.  If your <CODE>LAPACK</CODE> is installed correctly, see
+suggestions for error <CODE>-102</CODE>.
+
+<DT><CODE>-113</CODE>
+<DD>
+TRLAN has failed to apply the orthogonal transformation to reduce the
+projection matrix into a tridiagonal matrix, i.e., <CODE>LAPACK</CODE> routine
+<CODE>dorgtr</CODE>/<CODE>sorgtr</CODE> has failed.  This is extremely unlikely to
+happen.
+
+SOLUTION: See solutions to error <CODE>-102</CODE>.
+
+<DT><CODE>-121</CODE>
+<DD>
+Insufficient workspace to compute the eigenvalues of a tridiagonal
+matrix.  This error should not occur if the size of workspace <CODE>wrk</CODE>
+passed to <CODE>trlan</CODE> is no less than <CODE>lwrk</CODE>.
+
+SOLUTION:  See solutions to error <CODE>-102</CODE>.
+
+<DT><CODE>-122</CODE>
+<DD>
+TRLAN has failed to computed the eigenvalues of a tridiagonal matrix.
+This is extremely unlikely to happen.
+
+SOLUTION: See solutions to error <CODE>-102</CODE>.
+
+<DT><CODE>-131</CODE>
+<DD>
+Insufficient workspace to compute the eigenvectors of a tridiagonal
+matrix.  This error should not occur if workspace of correct size was
+provided to TRLAN.
+
+SOLUTION: See solution to error <CODE>-102</CODE>.
+
+<DT><CODE>-132</CODE>
+<DD>
+TRLAN has failed to compute the eigenvectors of the projection matrix,
+more specifically, <CODE>LAPACK</CODE> routine <CODE>dstein</CODE>/<CODE>sstein</CODE> has
+failed.  Normally, if this happens, TRLAN will switch to a different
+method of computing the eigenvectors.  It is very unlikely the user will
+see this error flag.  If it does show up, it might be an indication of
+error in the program.
+
+SOLUTION: See solutions to error <CODE>-102</CODE>.
+
+<DT><CODE>-141</CODE>
+<DD>
+Insufficient workspace to compute the eigenvectors of a tridiagonal
+matrix.  This error should not occur if workspace of correct size was
+provided to TRLAN.
+
+SOLUTION: See solutions to error <CODE>-102</CODE>.
+
+<DT><CODE>-142</CODE>
+<DD>
+TRLAN has failed because <CODE>LAPACK</CODE> routine <CODE>dsyev</CODE>/<CODE>ssyev</CODE>
+has failed to compute the eigenvalues and eigenvectors of the projection
+matrix.
+
+SOLUTION: Check to make sure <CODE>LAPACK</CODE> is installed
+correctly.  See solution to error <CODE>-102</CODE>.
+
+<DT><CODE>-143</CODE>
+<DD>
+<DT><CODE>-144</CODE>
+<DD>
+TRLAN is unable to match the Ritz values selected to be saved with the
+eigenvalue found by <CODE>dsyev</CODE>/<CODE>ssyev</CODE>.
+
+SOLUTION: See solutions to error <CODE>-102</CODE>.
+
+<A NAME="IDX33"></A>
+<A NAME="IDX34"></A>
+<DT><CODE>-201</CODE>
+<DD>
+The Gram-Schmidt procedure is called with insufficient workspace.
+
+SOLUTION: Increase the workspace size.  If you did not
+call <CODE>trl_cgs</CODE> directly, make sure workspace size <CODE>lwrk</CODE>
+matches the actual size of <CODE>wrk</CODE> when calling <CODE>trlan</CODE>.
+
+<DT><CODE>-202</CODE>
+<DD>
+<DT><CODE>-203</CODE>
+<DD>
+The Gram-Schmidt process has failed to orthogonalize the given vector to
+the current basis vectors.  This is unlikely to happen.  If it does, it
+indicates two possibly source of problem, the current basis vectors are
+not orthogonal, or the random vectors generated by TRLAN fall in the
+space spanned by the current Lanczos vectors.
+
+SOLUTION: One possible solution to this problem is to call
+<CODE>FORTRAN 90</CODE> random number generator to set each processor with a
+different seed value.  For example, the following code segment will
+cause <CODE>random_number</CODE> to generate different random numbers on each
+processor the next time it is used and it also produces an random vector
+as initial guess for the Lanczos iterations.
+
+
+<PRE>
+        call random_number(evec(1:nrow,1))
+        do i = 1, info%my_pe
+           call random_number(evec(1:nrow,1))
+        end do
+</PRE>
+
+If reseting the seed of the random number generator does not fix the
+problem, then there might be a more serious problem.
+
+See also solutions to error <CODE>-102</CODE>.
+
+<DT><CODE>-204</CODE>
+<DD>
+The vector norm after orthogonalization is not a valid floating-point
+number.
+
+SOLUTION: See solutions to error <CODE>-102</CODE>.
+
+<DT><CODE>-211</CODE>
+<DD>
+The leading dimension of the arrays are not large enough for storing the
+vectors in a checkpoint file.  This error should have been caught
+earlier as error <CODE>-2</CODE> unless the checkpoint files are not for the
+same problem or not produced with the same number of processors.
+
+SOLUTION: Make sure the checkpoint files are generated on
+the same type of machines and for the same problem using the same
+number of processors.
+
+<DT><CODE>-212</CODE>
+<DD>
+Unable to open checkpoint files to read.
+
+SOLUTION: Make sure the checkpoint files exist, the
+names are correct, and the I/O unit number <CODE>cpio</CODE> is not used for
+something else already.
+
+<DT><CODE>-213</CODE>
+<DD>
+The array size stored in checkpoint file is different from passed in by
+user.  The checkpoint file is probably for a different problem or was
+generated with different number of processors.
+
+SOLUTION: Make sure the checkpoint files are generated
+for the same problem and using the same number of processors.
+
+<DT><CODE>-214</CODE>
+<DD>
+There are more vectors stored in the checkpoint file than
+<CODE>maxlan</CODE>.
+
+SOLUTION: Increase the size of <CODE>maxlan</CODE>.
+
+<DT><CODE>-215</CODE>
+<DD>
+Error was encountered while reading the content of the checkpoint files.
+
+SOLUTION: Make sure the checkpoint files are generated
+for the same problem on the same type of machines.
+
+<DT><CODE>-216</CODE>
+<DD>
+Error was encountered while trying to close the checkpoint file after
+completed reading.
+
+SOLUTION: This error probably can be ignored.  Consult
+you system administrator.
+
+<DT><CODE>-221</CODE>
+<DD>
+Unable to open checkpoint files for writing.
+
+SOLUTION: Make sure the I/O unit number specified to be
+used for writing checkpoint files are not used for other tasks and make
+sure you have permission to write files in the location where the
+program is running.
+
+<DT><CODE>-222</CODE>
+<DD>
+Error was encountered while writing the checkpoint files.
+
+SOLUTION: Make sure there is enough space on the disk
+to store the checkpoint files.  If there is <CODE>k</CODE> Lanczos vectors to
+be written out, the number of bytes is <CODE>8*(2+2*k+nrow*(k+1))</CODE> for
+each processor.  The maximum value for <CODE>k</CODE> is <CODE>maxlan</CODE>.
+
+<DT><CODE>-223</CODE>
+<DD>
+Error was encountered while trying to close the checkpoint files after
+write them.
+
+SOLUTION: This error probably can be ignored.  Consult
+you system administrator.
+
+</DL>
+
+<P>
+This list represents all error code defined in TRLAN version
+1.0.  The function <CODE>trlan</CODE> should never return an
+error code not listed here.  If you encountered one and you are sure
+that all the arguments to TRLAN functions are correct, you have
+uncovered a flaw in TRLAN, contact the authors with a description of
+your problem.  A short example is always welcome.
+
+</P>
+
+
+
+<H1><A NAME="SEC12" HREF="trlan_toc.html#TOC12">Main function interfaces</A></H1>
+
+<P>
+The majority of the arithmetic computations to solve an eigenvalue
+problem are executed in the main function of TRLAN package and the
+user's own matrix-vector multiplication function.  This section gives a
+more detail description of the interfaces of these two functions.
+
+</P>
+
+
+
+<H2><A NAME="SEC13" HREF="trlan_toc.html#TOC13">Interface of <CODE>trlan</CODE></A></H2>
+
+<P>
+The main computation kernel of TRLAN package is named <CODE>trlan</CODE>.  We
+have see a short description of its arguments in section <A HREF="trlan.html#SEC3">A small example</A>.
+To provide a different view of the interface, we show its <CODE>Fortran
+90</CODE> <CODE>interface</CODE> block.
+
+</P>
+<P>
+<A NAME="IDX35"></A>
+
+<PRE>
+Subroutine trlan(op, info, nrow, mev, eval, evec, lde, wrk, lwrk)
+  Use trl_info
+  Implicit None
+  Type(TRL_INFO_T) :: info
+  Integer, Intent(in) :: lde, mev, nrow
+  Integer, Intent(in), Optional :: lwrk
+  Double Precision, Intent(inout) :: eval(mev), evec(lde,mev)
+  Double Precision, Target, Dimension(:), Optional :: wrk
+  Interface
+     Subroutine OP(nrow, ncol, xin, ldx, yout, ldy)
+       Integer, Intent(in) :: nrow, ncol, ldx, ldy
+       Double Precision, Dimension(ldx*ncol), Intent(in) :: xin
+       Double Precision, Dimension(ldy*ncol), Intent(out) :: yout
+     End Subroutine OP
+  End Interface
+End Subroutine trlan
+</PRE>
+
+<P>
+Most of the arguments of this subroutine are explained before
+in section <A HREF="trlan.html#SEC3">A small example</A>.  However for completeness, we will list all
+of them here.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>op</CODE>
+<DD>
+<A NAME="IDX36"></A>
+ 
+The operator routine.  It applies the operator on <CODE>xin</CODE> and stores
+the resulting vectors in <CODE>yout</CODE>.  In linear algebra terms, this is
+a matrix-vector multiplication routine.  The vectors to be multiplied
+are stored in <CODE>xin</CODE> and the resulting vectors are stored in
+<CODE>yout</CODE>.
+
+<DT><CODE>info</CODE>
+<DD>
+A variable of <CODE>Fortran 90</CODE> derived type <CODE>TRL_INFO_T</CODE>.  It
+carries the information to and from TRLAN.  See section <A HREF="trlan.html#SEC4">TRL_INFO module</A>, for
+more details.
+
+<DT><CODE>nrow</CODE>
+<DD>
+The number of rows on this processor if the problem is distributed using
+MPI, else the number of total rows in a Lanczos vector.
+
+<DT><CODE>mev</CODE>
+<DD>
+The number of elements in array <CODE>eval</CODE> and the number of columns in
+array <CODE>evec</CODE>.  It denotes the maximum number of eigenpairs that can
+be stored in <CODE>eval</CODE> and <CODE>evec</CODE>.
+
+NOTE: Since the array <CODE>evec</CODE> will be used internal to store
+<CODE>mev</CODE> Lanczos vectors, even if you do not think TRLAN is able to
+compute <CODE>mev</CODE> eigenvectors at the end, you still declare
+<CODE>evec</CODE> as large as (<CODE>nrow, mev</CODE>).
+
+<DT><CODE>eval</CODE>
+<DD>
+<DT><CODE>evec</CODE>
+<DD>
+The arrays used to store the eigenvalue values (<CODE>eval</CODE>) and the
+eigenvectors (<CODE>evec</CODE>).  On entry to <CODE>trlan</CODE>, if
+<CODE>info%nec</CODE> is greater than zero (0), the first <CODE>info%nec</CODE>
+elements of <CODE>eval</CODE> shall contain the eigenvalues already known and
+the first <CODE>info%nec</CODE> columns of <CODE>evec</CODE> shall contain the
+corresponding eigenvectors.  These eigenpairs are assumed to have zero
+residual norms and will not be modified by TRLAN.  On exit from
+<CODE>trlan</CODE>, the converged solutions are stored in the front of
+<CODE>eval</CODE> and <CODE>evec</CODE>, i.e.  the first <CODE>info%nec</CODE> eigenvalues
+in <CODE>eval</CODE> contains the converged eigenvalues and the first
+<CODE>info%nec</CODE> columns of <CODE>evec</CODE> are the corresponding
+eigenvectors.
+
+<DT><CODE>lde</CODE>
+<DD>
+The leading dimension of array <CODE>evec</CODE>.  It is expected to be no
+less than <CODE>nrow</CODE>, otherwise the eigenvectors can not be stored
+properly and <CODE>trlan</CODE> will abort with error code <CODE>info%stat =
+-2</CODE>.
+
+<A NAME="IDX37"></A>
+<DT><CODE>wrk</CODE>
+<DD>
+<DT><CODE>lwrk</CODE>
+<DD>
+These two are optional arguments.  If both are present, <CODE>wrk</CODE> will
+be used as workspace inside and <CODE>lwrk</CODE> shall be the number of
+elements in array <CODE>wrk</CODE>.  TRLAN will try to use this workspace if
+it is large enough for either <CODE>misc</CODE> (size <CODE>maxlan * (maxlan +
+10)</CODE>) or <CODE>base</CODE> (size <CODE>(maxlan + 1 - mev) * nrow</CODE>).  If
+<CODE>wrk</CODE> is present but not <CODE>lwrk</CODE>, the workspace size is assumed
+to be <CODE>mev</CODE>.  It does not make sense to have only <CODE>lwrk</CODE>
+without argument <CODE>wrk</CODE>.  If it is the case, <CODE>lwrk</CODE> is ignored.
+
+If argument <CODE>wrk</CODE> is present and there is enough space to store the
+residual norms of the solutions, the first <CODE>info%nec</CODE> elements of
+<CODE>wrk</CODE> will contain the residual norms corresponding to the
+<CODE>info%nec</CODE> converged solutions.
+
+</DL>
+
+
+
+<H2><A NAME="SEC14" HREF="trlan_toc.html#TOC14">Operator interface</A></H2>
+
+<P>
+TRLAN program require the user to provide his/her own matrix-vector
+multiplication routine.  The matrix-vector multiplication routine needs
+to have the following interface.
+
+</P>
+<P>
+<A NAME="IDX38"></A>
+<A NAME="IDX39"></A>
+
+<PRE>
+Subroutine OP(nrow, ncol, xin, ldx, yout, ldy)
+  Integer, Intent(in) :: nrow, ncol, ldx, ldy
+  Double Precision, Dimension(ldx*ncol), Intent(in) :: xin
+  Double Precision, Dimension(ldy*ncol), Intent(out) :: yout
+End Subroutine OP
+</PRE>
+
+<DL COMPACT>
+
+<DT><CODE>nrow</CODE>
+<DD>
+The number of rows on this processor if the problem is distributed using
+MPI, otherwise the number of total rows in a Lanczos vector.
+
+<DT><CODE>ncol</CODE>
+<DD>
+The number of vectors (columns in <CODE>xin</CODE> and <CODE>yout</CODE>) to be
+multiplied.
+
+<DT><CODE>xin</CODE>
+<DD>
+The array to store the input vectors to be multiplied.  The following
+two declarations are equivalent on most machines,
+
+<PRE>
+Double Precision, Dimension(1:ldx,1:ncol), Intent(in)::xin
+Real*8 xin(1:ldx, 1:ncol)
+</PRE>
+
+The <CODE>i</CODE>th column of <CODE>xin</CODE> is <CODE>xin((i-1)*ldx+1 :
+(i-1)*ldx+nrow)</CODE> if <CODE>xin</CODE> is declared as one-dimensional array.  If
+the user routine actually declare it as a two-dimensional array, the
+<CODE>i</CODE>th column should be <CODE>xin(1:nrow, i)</CODE>.  TRLAN calls OP using
+Fortran 77 style argument matching, only starting address of <CODE>xin</CODE>
+will be passed.
+
+For those who are familiar with <CODE>C/C++</CODE>: <CODE>xin</CODE> is actually
+passed as <CODE>double *</CODE> that points to the first element of array.
+Elements in a column are ordered consecutively and the <CODE>i</CODE>th column
+starts at <CODE>(i-1)*ldx</CODE>.
+
+<DT><CODE>ldx</CODE>
+<DD>
+The leading dimension of the array <CODE>xin</CODE> when it is declared as
+two-dimensional array.
+
+<DT><CODE>yout</CODE>
+<DD>
+The array to store results of the multiplication.  It can be
+equivalently declared as
+
+<PRE>
+Double Precision,Dimension(1:ldy,1:ncol),Intent(out)::yout
+Real*8 yout(1:ldy, 1:ncol)
+</PRE>
+
+The usage notes on <CODE>xin</CODE> also apply to <CODE>yout</CODE>.
+
+<DT><CODE>ldy</CODE>
+<DD>
+The leading dimension of the array <CODE>yout</CODE> when it is declared as
+two-dimensional array.
+
+</DL>
+
+<P>
+This simple interface only has enough information to describe the input
+and output vectors.  Here are some possible ways of passing the matrix
+information to this subroutine.  In <CODE>Fortran 90</CODE>, we recommend
+using a module to encapsulate information related to the matrix.  If
+<CODE>Fortran 77</CODE> is used, a <CODE>common block</CODE> may be used for the
+same purpose.  Normally, if another language like <CODE>C</CODE> or <CODE>C++</CODE>
+is used, the matrix can be packaged in a <CODE>struct</CODE> or a
+<CODE>class</CODE>, and accessed through a global variable.
+
+</P>
+<P>
+In case the user does not want to write his/her own matrix-vector
+multiplication routine.  There are a number of packages out there that
+can be used.  Useful software depots and information archives include
+<DL COMPACT>
+
+<DT><CODE>ACM TOMS</CODE>
+<DD>
+<KBD>http://www.acm.org/toms/</KBD>
+<DT><CODE>ACTS Toolkit</CODE>
+<DD>
+<KBD>http://acts.nersc.gov/</KBD>
+<DT><CODE>National HPCC Software Exchange</CODE>
+<DD>
+<KBD>http://nhse.cs.utk.edu/</KBD>
+<DT><CODE>NETLIB</CODE>
+<DD>
+<KBD>http://www.netlib.org</KBD>
+<DT><CODE>Scientific Application on Linux</CODE>
+<DD>
+<KBD>http://SAL.KachinaTech.COM/</KBD>
+</DL>
+
+<P>
+Potentially useful packages include
+<DL COMPACT>
+
+<DT><CODE>Aztec</CODE>
+<DD>
+<KBD>http://www.cs.sandia.gov/CRF/aztec1.html</KBD>
+<DT><CODE>BlockSolve</CODE>
+<DD>
+<KBD>http://www.mcs.anl.gov/sumaa3d/BlockSolve/</KBD>
+<DT><CODE>P_SPARSLIB</CODE>
+<DD>
+<KBD>http://www.cs.umn.edu/Research/arpa/p_sparslib/psp-abs.html</KBD>
+<DT><CODE>PETSc</CODE>
+<DD>
+<KBD>http://www.mcs.anl.gov/petsc/</KBD>
+<DT><CODE>SPARSKIT</CODE>
+<DD>
+<KBD>http://www.cs.umn.edu/Research/arpa/SPARSKIT/sparskit.html</KBD>
+</DL>
+
+<P>
+NOTE: All of the packages mentioned above have matrix-vector
+multiplications routines.  However some of them are designed for solving
+linear systems or even larger granularity tasks, some effort may be
+required to directly using their matrix-vector multiplication routines.
+
+</P>
+
+
+
+<H1><A NAME="SEC15" HREF="trlan_toc.html#TOC15">Recommended parameter choices</A></H1>
+
+<P>
+Before calling <CODE>trlan</CODE>, the user needs to decide a few parameters.
+The most important parameters are arguments to function
+<CODE>trl_init_info</CODE>.  The parameters like <CODE>nrow</CODE>, <CODE>lohi</CODE> and
+<CODE>ned</CODE> are determined by the problem to be solved, other parameters
+to control the execution of TRLAN might not be familiar to casual users.
+This part of the manual will give some recommendations on how to
+determine those parameters.
+
+</P>
+
+
+<H2><A NAME="SEC16" HREF="trlan_toc.html#TOC16">Selecting the maximum basis size (<CODE>maxlan</CODE>)</A></H2>
+<P>
+<A NAME="IDX40"></A>
+
+</P>
+<P>
+A few factors come into play when picking the maximum basis size
+<CODE>maxlan</CODE>, for example, the available computer memory size, the
+number of eigenvalues wanted, and the separation of wanted eigenvalues
+from the others.  The first rule of thumb is that <CODE>maxlan</CODE> should
+at least as large as
+
+</P>
+<P>
+<CODE>ned + min(6, ned)</CODE>.
+
+</P>
+<P>
+Generally, the larger it is, the better TRLAN will perform.  The
+limitation on using a very large basis is that there might not be enough
+computer memory to store the basis in memory.  Another concern regarding
+using a large basis is that the Gram-Schmidt orthogonalization process
+will be expensive.  In addition, if the basis size is larger than 1000,
+then the time spent in finding the eigenvectors of the projection matrix
+may be a substantial portion of the overall execution time.
+
+</P>
+<P>
+If the wanted eigenvalues are easier to compute compared to others, then
+it does not matter how large the basis size is, the restarted Lanczos
+method will find the solutions fairly quickly.  If the wanted
+eigenvalues converge slower than the unwanted ones, such as the example
+in section <A HREF="trlan.html#SEC3">A small example</A>, then the above recommended minimum size is too small
+to be effective.  In this case, the user should look at how many
+eigenvalues were locked and compare it with the number of eigenvalues
+converged.  In difficult case, it is not unusually to see a large number
+of unwanted eigenpairs converge before the wanted one are finally
+computed.  In the previous example, the minimum recommended basis size
+is 11.  Since it is relatively small and we know the eigenvalue problem
+is relatively hard, we first tried <CODE>maxlan = 20</CODE>.  After 2,000
+matrix-vector multiplications, there are two wanted eigenvalues
+converged, and six eigenvalues were locked.  After this first test, we
+use the following guidelines to choose the next basis size.
+
+</P>
+
+<OL>
+
+<LI>
+
+Add two to <CODE>maxlan</CODE> for each locked eigenvalue.
+
+<LI>
+
+Increase the basis size by a factor of <CODE>ned / nec</CODE>.
+
+</OL>
+
+<P>
+The first rule suggests the new basis size of about 30 and the
+second suggest the next choice could be 50.  The basis size used in the
+example is 40.  We are able to find the five smallest eigenvalues with
+this choice.  Further tests show that using basis size of 30 can compute
+the same 5 eigenvalues in 1056 matrix-vector multiplications, and using
+a basis size of 50 TRLAN only need 777 matrix-vector multiplications.
+However, in both cases, more time was used.  This demonstrates the
+complexity of the choice.  In this particular case, either 30, 40 or 50
+is a reasonable choice.
+
+</P>
+
+
+<H2><A NAME="SEC17" HREF="trlan_toc.html#TOC17">Selecting the tolerance</A></H2>
+<P>
+<A NAME="IDX41"></A>
+
+</P>
+<P>
+The convergence test used in this program is <CODE>r &#60; tol * || A ||</CODE>.
+Normally, if the matrix is stored, the accuracy of the matrix-vector
+multiplication routine is on the order of <CODE>epsilon * || A ||</CODE>.  The
+unit round-off error (<CODE>epsilon</CODE>) of a 64-bit IEEE floating-point
+number is approximately <CODE>2.2E-16</CODE>.  The default value of <CODE>tol</CODE>
+is about <CODE>1.49E-8</CODE>.  Typically, if 5 digits of accuracy is desired
+for the eigenvectors, <CODE>tol</CODE> should be set to <CODE>1E-5</CODE>.
+
+</P>
+
+
+<H2><A NAME="SEC18" HREF="trlan_toc.html#TOC18">Selecting a restarting scheme</A></H2>
+<P>
+<A NAME="IDX42"></A>
+
+</P>
+<P>
+This is another parameter that can change the execution time
+dramatically.  However, effective restarting schemes are still subject
+of active academic researches.  On the example given before, schemes 1
+and 2 uses about the same amount of matrix-vector multiplications which
+are more than the number of matrix-vector multiplications used with
+schemes 3 and 4.  However, because schemes 3 and 4 perform more restarts
+and they save more basis vectors during restarting, their restarting
+procedures are more expensive.  The actual execution time with schemes 3
+and 4 are longer than those with schemes 1 and 2.  Based on these
+observations, schemes 3 and 4 are better if the matrix-vector
+multiplication is very time-consuming, say, one matrix-vector
+multiplication takes more time than an average restart.  If the
+matrix-vector multiplication is relatively inexpensive, then schemes 1
+and 2 are preferred. Scheme 5 attempts to mimic the restarting strategy
+in ARPACK, in many cases, it has comparable performance as the scheme 1.
+
+</P>
+
+
+<H2><A NAME="SEC19" HREF="trlan_toc.html#TOC19">Selecting the maximum iterations</A></H2>
+<P>
+<A NAME="IDX43"></A>
+
+</P>
+<P>
+TRLAN is stopped usually after it has found all the wanted eigenvalues
+and the corresponding eigenvectors.  The other normal stopping condition
+is to stop after <CODE>maxmv</CODE> number of matrix-vector multiplications.
+Typically, we would allow a fixed number of matrix-vector
+multiplications for each eigenvalue, for example, 100 per eigenvalue.
+When we are trying to find the correct value to use for <CODE>maxlan</CODE>
+and <CODE>restart</CODE> we may limit the number of matrix-vector
+multiplications used to reduce the time consumed.  The default value in
+<CODE>trl_init_info</CODE> is very large especially for large problems.  An
+more acceptable limit might be 1000 matrix-vector multiplications per
+eigenvalue.  This should be sufficient for most problems.  If more than
+1000 matrix-vector multiplications are used to compute one eigenvalue,
+other means of computing eigenvalues should be tried.  For example, the
+shift-and-invert Lanczos method is often able to compute the desired
+eigenvector in a few steps.  The shift-and-invert scheme computes the
+extreme eigenvalues of
+first, then derive the actual eigenvalues of 
+To use this scheme, one need to either invert the matrix or at least
+being able to solve linear systems,
+If neither is feasible, then the Davidson method might be an alternative
+to consider.
+
+</P>
+<P>
+If TRLAN does not return with status 0, consult section <A HREF="trlan.html#SEC6">Setting debug parameters</A>,
+to setup a debugging session, and refer to section <A HREF="trlan.html#SEC11">TRLAN error code</A>, for error
+encountered and possible solutions.
+
+</P>
+
+
+<H1><A NAME="SEC20" HREF="trlan_toc.html#TOC20">Miscellaneous issues</A></H1>
+
+
+
+<H2><A NAME="SEC21" HREF="trlan_toc.html#TOC21">Workspace requirement</A></H2>
+
+<P>
+<A NAME="IDX44"></A>
+Some of the issues related to workspace requirements have been mentioned
+through out this manual.  This section provide a central location to
+collect all the information for ease of reference.
+
+</P>
+<P>
+Inside of <CODE>trlan</CODE>, there are three large chucks of workspace,
+<CODE>evec</CODE>, <CODE>base</CODE> and <CODE>misc</CODE>.  The user always provides the
+array <CODE>evec</CODE>, since it is necessary to carry input and output
+information for TRLAN.  Its size is clearly defined in the calling
+sequence by <CODE>lde</CODE> and <CODE>mev</CODE>.  The array <CODE>base</CODE> is used to
+store the basis vectors if the array <CODE>evec</CODE> can not store
+<CODE>maxlan+1</CODE> vectors.  Given the maximum basis size <CODE>maxlan</CODE>,
+the size of <CODE>base</CODE> is <CODE>(maxlan + 1 - mev) * nrow)</CODE>.  The array
+<CODE>misc</CODE> is used to store the projection matrix, the eigenvalues and
+eigenvectors of the projection matrix, workspace required by all lower
+level routines of TRLAN, library routines from <CODE>LAPACK</CODE> and
+<CODE>BLAS</CODE>.  Its size should be no less than <CODE>maxlan * (maxlan +
+10)</CODE>.  If it is larger in size, some library routines might run faster.
+Thus if there is large amount of computer memory, the user can let TRLAN
+use it by pass in a large array <CODE>wrk</CODE>.
+
+</P>
+<P>
+If the user provides a workspace <CODE>wrk</CODE> to <CODE>trlan</CODE>, then its
+size is checked to see either one of <CODE>misc</CODE> or <CODE>base</CODE> or both
+of them can fit inside the workspace.  If at lease one of them can fit
+into <CODE>wrk</CODE>, it would be used.  If <CODE>wrk</CODE> is large enough for
+both <CODE>base</CODE> and <CODE>misc</CODE>, the array <CODE>base</CODE> will use
+<CODE>(maxlan + 1 - mev) * nrow)</CODE> elements and the rest is given to
+<CODE>misc</CODE>.  If <CODE>trlan</CODE> can not use <CODE>wrk</CODE>, it will allocate
+workspace of appropriate size internally.
+
+</P>
+<P>
+If <CODE>wrk</CODE> is provided, its content is not used on input.  However
+before returning, <CODE>trlan</CODE> will copy the residual norms of the
+converged Ritz pairs in the first <CODE>nec</CODE> elements of <CODE>wrk</CODE>.
+
+</P>
+
+
+<H2><A NAME="SEC22" HREF="trlan_toc.html#TOC22">Variations of TRLAN</A></H2>
+
+<P>
+We have isolated the communication needs of TRLAN in four subroutines,
+<CODE>trl_init_info</CODE>, <CODE>trl_sync_flag</CODE>, <CODE>trl_g_sum</CODE>, and
+<CODE>trl_g_dot</CODE>.  The four subroutines are located in a file called
+<TT>`trl_comm_mpi.f90'</TT> for the MPI version and <TT>`trl_comm_none.f90'</TT>
+for sequential version.  If the the matrix-vector multiplication routine
+and the main program are written for sequential machine, the user can
+simply compile with <TT>`trl_comm_none.f90'</TT> to get the sequential
+version of the program.  This setup makes it easy to adopt TRLAN for
+different types of eigenvalue problems.
+
+</P>
+<P>
+The function <CODE>trl_init_info</CODE> is used to initialize the
+<CODE>TRL_INFO_T</CODE> type variable to be used by <CODE>trlan</CODE>.  The
+function <CODE>trl_sync_flag</CODE> is used to synchronize the status flags
+used inside TRLAN.  In the current implementation, it computes the
+minimum value of <CODE>info%stat</CODE> on each processor and reset all
+<CODE>info%stat</CODE> to the minimum value.  Given that the error flags are
+all less than zero (0), if any processor has detected an error, all of
+them will be set to indicate an error.  <CODE>Trl_g_sum</CODE> computes the
+global sum of an input array and it returns the global sum in the same
+array.  The subroutine <CODE>trl_g_dot</CODE> computes the dot-products among
+the Lanczos vectors.
+
+</P>
+<P>
+If desired, one can change these four routines to suit different
+situations.  For example, if the physical domain of the eigenvalue
+problem has certain symmetry, usually the discretization does not
+contain the whole domain but only a portion of it.  Since not every
+element of a vector is stored, the dot-product routine needs to be
+modified.  In this case, only <CODE>trl_g_dot</CODE> and <CODE>trl_g_sum</CODE> need
+to be modified in order for TRLAN for function properly.
+
+</P>
+
+
+<H2><A NAME="SEC23" HREF="trlan_toc.html#TOC23">Calling from other languages</A></H2>
+
+<P>
+TRLAN program is implemented in <CODE>Fortran 90</CODE>.  Since <CODE>Fortran
+90</CODE> is backward compatible with previous versions of <CODE>Fortran</CODE>.
+There should be no problem to use it in any other <CODE>Fortran</CODE>
+program.  However, at the moment, the authors are not aware of a scheme
+to reliably access <CODE>Fortran 90</CODE> subroutine with optional arguments,
+a subroutine with fixed arguments is created to get around this problem.
+The fixed arguments subroutine has the following interface,
+
+</P>
+<P>
+<A NAME="IDX45"></A>
+
+<PRE>
+      subroutine trlan77(op, ipar, nrow, mev, eval, evec, lde,
+     &#38;                    wrk, lwrk)
+      integer ipar(32), nrow, mev, lde, lwrk
+      double precision eval(mev), evec(lde, mev), wrk(lwrk)
+      external op
+</PRE>
+
+<P>
+The <CODE>Fortran 90</CODE> derived type <CODE>TRL_INFO_T</CODE> variable
+is removed from this user interface since its primary access function
+<CODE>trl_init_info</CODE> contains optional arguments as well.  Here is a
+list showing how the integer array <CODE>ipar</CODE> is mapped to the elements
+of <CODE>TRL_INFO_T</CODE>,
+
+</P>
+
+<UL>
+<LI><CODE>ipar(1)  = stat</CODE>,
+
+<LI><CODE>ipar(2)  = lohi</CODE>,
+
+<LI><CODE>ipar(3)  = ned</CODE>,
+
+<LI><CODE>ipar(4)  = nec</CODE>,
+
+<LI><CODE>ipar(5)  = maxlan</CODE>,
+
+<LI><CODE>ipar(6)  = restart</CODE>,
+
+<LI><CODE>ipar(7)  = maxmv</CODE>,
+
+<LI><CODE>ipar(8)  = mpicom</CODE>,
+
+<LI><CODE>ipar(9)  = verbose</CODE>,
+
+<LI><CODE>ipar(10) = log_io</CODE>,
+
+<LI><CODE>ipar(11) = iguess</CODE>,
+
+<LI><CODE>ipar(12) = cpflag</CODE>,
+
+<LI><CODE>ipar(13) = cpio</CODE>,
+
+<LI><CODE>ipar(14) = mvop</CODE>,
+
+<LI><CODE>ipar(24) = locked</CODE>,
+
+<LI><CODE>ipar(25) = matvec</CODE>,
+
+<LI><CODE>ipar(26) = nloop</CODE>,
+
+<LI><CODE>ipar(27) = north</CODE>,
+
+<LI><CODE>ipar(28) = nrand</CODE>,
+
+<LI><CODE>ipar(29) = total time in milliseconds</CODE>,
+
+<LI><CODE>ipar(30) = MATVEC time in milliseconds</CODE>.
+
+<LI><CODE>ipar(31) = re-orthogonalization time in milliseconds</CODE>.
+
+<LI><CODE>ipar(32) = restarting time in milliseconds</CODE>.
+
+</UL>
+
+<P>
+Among the parameters, <CODE>ipar(2 : 14)</CODE> are input parameters,
+<CODE>ipar(1)</CODE>, <CODE>ipar(4)</CODE> and <CODE>ipar(24 : 32)</CODE> are output
+parameters.
+
+</P>
+<P>
+There are two floating-point number elements in <CODE>TRL_INFO_T</CODE>,
+<CODE>tol</CODE> and <CODE>crat</CODE>.  Before calling <CODE>trlan77</CODE>, the first
+element of <CODE>wrk</CODE> should be set to the residual tolerance
+<CODE>tol</CODE>.  Inside <CODE>trlan77</CODE>, <CODE>wrk(1)</CODE> is transfered to
+<CODE>tol</CODE>.  On return from <CODE>trlan77</CODE>, the first <CODE>ipar(4)</CODE>
+elements of <CODE>wrk</CODE> store the residual norms corresponding to the
+converged eigenvalues and eigenvectors.  Element <CODE>ipar(4)+1</CODE> of
+<CODE>wrk</CODE> will store the last known value of <CODE>crat</CODE>.
+<STRONG>Caution</STRONG>: Fail to set <CODE>wrk(1)</CODE> to a valid floating-point
+number will cause TRLAN to produce floating-point exceptions!
+
+</P>
+<P>
+<A NAME="IDX46"></A>
+The subroutine <CODE>trlan77</CODE> is relative simple to call from
+<CODE>C/C++</CODE>.  The file <TT>`simplec.c'</TT> in the distribution of TRLAN
+version 1.0 has equivalent functionalities as
+<TT>`simple.f90'</TT> and <TT>`simple.f77'</TT>.
+
+</P>
+
+
+<H2><A NAME="SEC24" HREF="trlan_toc.html#TOC24">Debugging</A></H2>
+<P>
+Here are a few suggestions on what to watch out for when using TRLAN.
+Some of suggestions are simply good programming practices.
+
+</P>
+
+<UL>
+<LI>
+
+Use <CODE>implicit none</CODE> in <CODE>Fortran</CODE> programs.  This is very
+effective in catching typos.  It is also a good practice to check the
+programs with automated tools such as <CODE>lint</CODE> and <CODE>ftnchek</CODE>.
+
+<LI>
+
+Make sure the arrays passed to TRLAN have correct dimensions and make
+sure the argument <CODE>lwrk</CODE> is actually the size of array <CODE>wrk</CODE>.
+
+<LI>
+
+Make sure all input variables to TRLAN are initialized correctly and
+arguments to <CODE>trlan</CODE> matches arguments to <CODE>trl_init_info</CODE>.
+
+<LI>
+
+When encountering problems, turn on debugging options in TRLAN by
+calling <CODE>trl_set_debug</CODE> prior to calling <CODE>trlan</CODE>.  Set the
+ninth and tenth element of array <CODE>ipar</CODE> to appropriate values when
+<CODE>trlan77</CODE> is used.  Consult section <A HREF="trlan.html#SEC6">Setting debug parameters</A> to setup a
+debugging session.  Refer to section <A HREF="trlan.html#SEC11">TRLAN error code</A> for error encountered and
+possible solutions.
+
+<LI>
+
+If all above have been done and there is still a problem, contact the
+author at the address given in section <A HREF="trlan.html#SEC25">Contacting the authors</A>.
+</UL>
+
+
+
+<H2><A NAME="SEC25" HREF="trlan_toc.html#TOC25">Contacting the authors</A></H2>
+
+<P>
+<A NAME="IDX47"></A>
+The authors of TRLAN and this document can be contacted at the following
+email addresses: <CODE>kwu@lbl.gov</CODE> (Kesheng Wu),
+<CODE>hdsimon@lbl.gov</CODE> (Horst Simon).  Kesheng Wu can also be reached
+at <CODE>kwu@ieee.org</CODE> and <CODE>kwu@computer.org</CODE>.  The authors also
+maintain their own research pages on the web at
+<KBD>http://www.nersc.gov/~kewu</KBD> and
+<KBD>http://www.nersc.gov/research/SIMON</KBD>.  The updated software package
+can also be found at both web addresses.
+
+</P>
+
+
+<H1><A NAME="SEC26" HREF="trlan_toc.html#TOC26">References</A></H1>
+
+<P>
+This is a list books and research papers on the Lanczos algorithm and
+restarting.  See section <A HREF="trlan.html#SEC14">Operator interface</A>, for a list of software archives.
+
+</P>
+<P>
+<A NAME="IDX48"></A>
+
+<OL>
+<LI>
+
+J. Baglama, D. Calvetti, and L. Reichel.
+Iterative methods for the computation of a few eigenvalues of a large
+symmetric matrix.
+<EM>BIT</EM>, 36:400--421, 1996.
+
+<LI>
+
+F. Chatelin.  <EM>Eigenvalues of Matrices</EM>.  Wiley, 1993.
+
+<LI>
+
+J. Cullum and R. A. Willoughby.  <EM>Lanczos Algorithms for Large
+Symmetric Eigenvalue Computations: Theory</EM>, volume 3 of <EM>Progress
+in Scientific Computing</EM>.  Birkhauser, Boston, 1985.
+
+<LI>
+
+J. Cullum and R. A. Willoughby.  <EM>Lanczos Algorithms for Large
+Symmetric Eigenvalue Computations: Programs</EM>, volume 4 of <EM>Progress
+in Scientific Computing</EM>.  Birkhauser, Boston, 1985.
+
+<LI>
+
+T. Ericsson and A. Ruhe.
+The spectral transformation Lanczos method for numerical solution
+of large sparse generalized symmetric eigenvalue problems.
+<EM>Math. Comp.</EM>, 35:1251--1268, 1980.
+
+<LI>
+
+R. G. Grimes, J. G. Lewis, and H. D. Simon.
+A shifted block Lanczos algorithm for solving sparse symmetric
+  generalized eigenproblems.
+<EM>SIAM J. Matrix Anal. Appl.</EM>, 15(1):228--272, 1994.
+
+<LI>
+
+Beresford N. Parlett.
+<EM>The symmetric eigenvalue problem</EM>.
+SIAM, Philadelphia, PA, 1998.
+
+<LI>
+
+A. Ruhe.
+Rational Krylov sequence methods for eigenvalue computation.
+<EM>Lin. Alg. Appl.</EM>, 58:391--405, 1984.
+
+<LI>
+
+A. Ruhe.
+Rational Krylov algorithm for nonsymmetric eigenvalue problems
+  II: matrix pairs.
+<EM>Lin. Alg. Appl.</EM>, 197/198:283--296, 1994.
+
+<LI>
+
+A. Ruhe.
+The rational Krylov algorithm for nonsymmetric eigenvalue problems
+  III: Complex shifts for real matrices.
+<EM>BIT</EM>, 34:165--176, 1994.
+
+<LI>
+
+Yousef Saad.
+<EM>Numerical Methods for Large Eigenvalue Problems</EM>.
+Manchester University Press, 1993.
+
+<LI>
+
+D. S. Sorensen.
+Implicit application of polynomial filters in a K-step Arnoldi
+  method.
+<EM>SIAM J. Matrix Anal. Appl.</EM>, 13(1):357--385, 1992.
+
+<LI>
+
+A. Stathopoulos, Y. Saad, and K. Wu.
+Dynamic thick restarting of the Davidson and the implicitly
+  restarted Arnoldi methods.
+Technical Report UMSI 96/123, Minnesota Supercomputer Institute,
+  University of Minnesota, 1996.
+
+<LI>
+
+K. Wu and H. Simon.
+Thick-restart Lanczos method for symmetric eigenvalue problems.
+Technical Report 41412, Lawrence Berkeley National Laboratory, 1998.
+
+<LI>
+
+K. Wu and H. Simon.
+Dynamic Retarting Schemes For Thick-Restart Lanczos Method.
+Technical Report xxxxx, Lawrence Berkeley National Laboratory, 1999.
+
+</OL>
+
+
+
+<H1><A NAME="SEC27" HREF="trlan_toc.html#TOC27">Index</A></H1>
+<P>
+<H2>a</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX1">algorithm</A>
+<LI><A HREF="trlan.html#IDX47">authors' email</A>
+</DIR>
+<H2>c</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX4">C/C++</A>, <A HREF="trlan.html#IDX46">C/C++</A>
+<LI><A HREF="trlan.html#IDX15">checkpointing</A>
+<LI><A HREF="trlan.html#IDX28">convergence factor</A>
+</DIR>
+<H2>e</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX10">eigenvalue problem, set up</A>
+<LI><A HREF="trlan.html#IDX30">error code</A>
+<LI><A HREF="trlan.html#IDX7">example</A>
+</DIR>
+<H2>f</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX32">failure due to workspace</A>
+<LI><A HREF="trlan.html#IDX34">failure, Gram-Schmidt</A>
+<LI><A HREF="trlan.html#IDX45">Fortran 77 version</A>
+<LI><A HREF="trlan.html#IDX3">Fortran 90, advantages</A>
+</DIR>
+<H2>g</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX33">Gram-Schmidt, failure</A>
+</DIR>
+<H2>i</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX12">info, initialization</A>
+<LI><A HREF="trlan.html#IDX14">info, modifying</A>, <A HREF="trlan.html#IDX16">info, modifying</A>
+<LI><A HREF="trlan.html#IDX19">info, printing</A>
+<LI><A HREF="trlan.html#IDX5">installation</A>
+</DIR>
+<H2>l</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX2">Lanczos basis</A>
+<LI><A HREF="trlan.html#IDX21">locked</A>, <A HREF="trlan.html#IDX25">locked</A>
+<LI><A HREF="trlan.html#IDX9">long output</A>
+</DIR>
+<H2>m</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX39">matrix-vector multiplication</A>
+<LI><A HREF="trlan.html#IDX20">MATVEC used</A>, <A HREF="trlan.html#IDX24">MATVEC used</A>
+<LI><A HREF="trlan.html#IDX40">maximum basis size</A>
+<LI><A HREF="trlan.html#IDX43">maximum matrix-vector multiplication</A>
+</DIR>
+<H2>o</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX27">op count</A>
+<LI><A HREF="trlan.html#IDX38">operator interface</A>
+<LI><A HREF="trlan.html#IDX36">operator, argument</A>
+</DIR>
+<H2>p</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX8">print, long</A>
+<LI><A HREF="trlan.html#IDX17">print, short</A>
+</DIR>
+<H2>r</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX48">references</A>
+<LI><A HREF="trlan.html#IDX41">residual tolerance</A>
+<LI><A HREF="trlan.html#IDX42">restarting schemes</A>
+</DIR>
+<H2>s</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX13">set debug flags</A>
+<LI><A HREF="trlan.html#IDX11">set up</A>
+<LI><A HREF="trlan.html#IDX18">short output</A>
+<LI><A HREF="trlan.html#IDX6">small example</A>
+</DIR>
+<H2>t</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX22">timing</A>, <A HREF="trlan.html#IDX26">timing</A>
+<LI><A HREF="trlan.html#IDX23">TRL_INFO_T elements</A>
+<LI><A HREF="trlan.html#IDX35">TRLAN interface</A>
+<LI><A HREF="trlan.html#IDX29">troubleshooting</A>
+</DIR>
+<H2>w</H2>
+<DIR>
+<LI><A HREF="trlan.html#IDX44">workspace</A>
+<LI><A HREF="trlan.html#IDX31">workspace size problems</A>
+<LI><A HREF="trlan.html#IDX37">workspace, argument</A>
+</DIR>
+
+</P>
+<P><HR><P>
+This document was generated on 9 March 1999 using the
+<A HREF="http://wwwcn.cern.ch/dci/texi2html/">texi2html</A>
+translator version 1.51a.</P>
+</BODY>
+</HTML>

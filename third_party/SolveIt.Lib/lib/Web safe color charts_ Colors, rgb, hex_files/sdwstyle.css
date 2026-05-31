@@ -1,0 +1,57 @@
+BODY {
+	FONT-SIZE: 10pt; FONT-FAMILY: arial, sans-serif
+}
+A:link {
+	
+}
+A:visited {
+	
+}
+A:active {
+	
+}
+A:hover {
+	
+}
+A.nav:link {
+	FONT-SIZE: 10pt; COLOR: black; TEXT-DECORATION: none
+}
+A.nav:visited {
+	FONT-SIZE: 10pt; COLOR: black; TEXT-DECORATION: none
+}
+A.nav:active {
+	FONT-SIZE: 10pt; COLOR: black; TEXT-DECORATION: none
+}
+A.nav:hover {
+	FONT-SIZE: 10pt; COLOR: black; TEXT-DECORATION: underline
+}
+TABLE {
+	FONT-SIZE: 10pt; FONT-FAMILY: arial, sans-serif
+}
+P {
+	FONT-SIZE: 10pt; FONT-FAMILY: arial, sans-serif
+}
+SPAN {
+	BACKGROUND-COLOR: yellow
+}
+.h2 {
+	FONT-SIZE: 10pt; FONT-FAMILY: arial, sans-serif
+}
+.h3 {
+	FONT-SIZE: 10pt; FONT-FAMILY: times, serif
+}
+.left {
+	BORDER-LEFT: #ff9900 1px solid
+}
+.cage {
+	BORDER-RIGHT: #ff9900 1px solid; BORDER-LEFT: #ff9900 1px solid
+}
+.fullcage {
+	BORDER-RIGHT: black 1px solid; BORDER-TOP: black 1px solid; BORDER-LEFT: black 1px solid; BORDER-BOTTOM: black 1px solid
+}
+.topbottom {
+	BORDER-TOP: black 1px solid; BORDER-BOTTOM: black 1px solid
+}
+.bottom {
+	BORDER-BOTTOM: #000000 1px solid
+}

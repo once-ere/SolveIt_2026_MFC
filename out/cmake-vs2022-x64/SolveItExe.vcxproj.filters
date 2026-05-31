@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\nsh\Developer\Projects\SolveIt_migration_gpt\SolveIt_2026_MFC\out\cmake-vs2022-x64\CMakeFiles\b012e8253ea0b1d661021289b092eb81\SolveItExe.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\nsh\Developer\Projects\SolveIt_migration_gpt\SolveIt_2026_MFC\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\nsh\Developer\Projects\SolveIt_migration_gpt\SolveIt_2026_MFC\out\cmake-vs2022-x64\CMakeFiles\SolveItExe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{A2E27ED4-6BB2-3409-9235-8ADE67588228}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

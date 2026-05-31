@@ -1,0 +1,15 @@
+------ Project Conversion started on 1/30/2020 at 5:20 PM - Project: top ------
+
+Creating configuration context: top - Win32 Release...
+
+Warn:nofileopt option not supported - option ignored
+
+Creating configuration context: top - Win32 Debug...
+
+Warn:argument_checking option not supported - option ignored
+
+Warn:nofileopt option not supported - option ignored
+
+top project conversion succeeded
+
+Project Conversion log was saved at "file://C:\Users\nsh\utsa-work\SolveIt_migration\fortran\top_log.txt"

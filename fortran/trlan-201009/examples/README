@@ -1,0 +1,22 @@
+The directory contains a small number of examples.  The files are
+separated according to the machine type where tests have been
+performed.   There are three examples in most of the directories.
+
+simple  -- a Fortran 90 example
+simplec -- a C example
+simple77-- a Fortran 77 example
+
+The sequential version of the programs are located directory SUN.  The
+makefiles in C90 and RS60 and SGI will make softlinks to the files in
+SUN when needed.
+
+Two sets of parallel examples exist in directory T3E and psp.  The
+examples in T3E are MPI counterparts of those in directory SUN.  The
+example shbpsp in psp directory use PSPARSLIB
+<http://www-users.cs.umn.edu/~saad/software.html> to perform the
+distributed sparse matrix-vector multiplications.  It reads a sparse
+matrix in Harwell-Boeing format and computes some of its eigenvalues as
+specified on the command line.  The matrix must be symmetric and it must
+be stored in RUA format.  A utility program rsarua is provided with the
+example to convert RSA files into RUA.
+

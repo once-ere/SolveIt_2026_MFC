@@ -1,0 +1,44 @@
+This is Info file trlan.info, produced by Makeinfo version 1.68 from
+the input file trlan.texi.
+
+   Copyright (C) 1999 Kesheng Wu and Horst Simon
+
+   Users guide for TRLAN version:  Edition 1.0 1.0
+
+
+Indirect:
+trlan.info-1: 199
+trlan.info-2: 40131
+
+Tag Table:
+(Indirect)
+Node: Top199
+Node: Overview1308
+Node: Installation6519
+Node: Example9312
+Node: TRL_INFO module16279
+Node: initialization17713
+Node: debug parameters22388
+Node: initial guess24436
+Node: checkpointing27327
+Node: printing29727
+Node: elements34726
+Node: error code40131
+Node: TRLAN interface52777
+Node: interface of trlan53257
+Node: operator interface57268
+Node: Parameters61007
+Node: basis size61665
+Node: tolerance64383
+Node: restarting scheme64987
+Node: maximum iterations66188
+Node: Miscellaneous67867
+Node: workspace68103
+Node: other versions70016
+Node: other languages71853
+Node: debugging74612
+Node: contacting authors75881
+Node: About Lanczos76451
+Node: Index79132
+
+End Tag Table

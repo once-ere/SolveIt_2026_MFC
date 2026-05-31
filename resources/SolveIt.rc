@@ -1,0 +1,982 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\SolveIt.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#include ""afxprint.rc""       // printing/print preview resources\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_GLVIEW_TMPL         ICON    DISCARDABLE     "mdi.ico"
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\SolveIt.ico"
+IDR_SOLVEITYPE          ICON    DISCARDABLE     "res\\SolveItDoc.ico"
+IDI_GLTEST              ICON    DISCARDABLE     "res\\glTest.ICO"
+IDI_SMALL               ICON    DISCARDABLE     "res\\glTest_s.ico"
+IDI_ICON1               ICON    DISCARDABLE     "res\\icon1.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "res\\Toolbar.bmp"
+IDB_TREELIST            BITMAP  DISCARDABLE     "res\\TREELIST.BMP"
+IDB_TREELIST2           BITMAP  DISCARDABLE     "res\\LIST.BMP"
+IDB_TRASH               BITMAP  DISCARDABLE     "res\\TRASH.BMP"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// HTML
+//
+
+SOLVEIT.HTM             HTML    DISCARDABLE     "res\\SolveIt.htm"
+BITMAP1.BMP             HTML    DISCARDABLE     "res\\bitmap1.bmp"
+MOVIE.HTM               HTML    DISCARDABLE     "res\\movie.htm"
+VERHULSTDYNAMICS.HTM    HTML    DISCARDABLE     "res\\VerhulstDynamics.htm"
+ELECTROSTATICS.HTM      HTML    DISCARDABLE     "res\\electrostatics.htm"
+INTRO.HTM               HTML    DISCARDABLE     "res\\intro.htm"
+SPLINE.HTM              HTML    DISCARDABLE     "res\\Spline.htm"
+DEL_RD.BMP              HTML    DISCARDABLE     "res\\del_rd.bmp"
+NII_GRN.BMP             HTML    DISCARDABLE     "res\\NII_grn.bmp"
+NII_BLU.BMP             HTML    DISCARDABLE     "res\\NII_blu.bmp"
+NII_RED.BMP             HTML    DISCARDABLE     "res\\NII_red.bmp"
+H_BLK.BMP               HTML    DISCARDABLE     "res\\h_blk.bmp"
+H_GRN.BMP               HTML    DISCARDABLE     "res\\h_grn.bmp"
+SCHR_RED.BMP            HTML    DISCARDABLE     "res\\schr_red.bmp"
+PSI_BLU.BMP             HTML    DISCARDABLE     "res\\psi_blu.bmp"
+PSI_GLD.BMP             HTML    DISCARDABLE     "res\\psi_gld.bmp"
+INF_BLK.BMP             HTML    DISCARDABLE     "res\\inf_blk.bmp"
+TORUS.BMP               HTML    DISCARDABLE     "res\\torus.bmp"
+EIN_VIO.BMP             HTML    DISCARDABLE     "res\\ein_vio.bmp"
+PLB_GRN.BMP             HTML    DISCARDABLE     "res\\plb_grn.bmp"
+VECTORANALYSIS.HTM      HTML    DISCARDABLE     "res\\VectorAnalysis.htm"
+MANDELBROT.HTM          HTML    DISCARDABLE     "res\\Mandelbrot.htm"
+EXAMPLE2_4.HTM          HTML    DISCARDABLE     "res\\Example2_4.htm"
+SCATTERING1DIM.HTM      HTML    DISCARDABLE     "res\\Scattering1Dim.htm"
+
+sledge.htm              HTML    DISCARDABLE     "res\\sledge\\sledge.htm"
+E0.BMP                  HTML    DISCARDABLE     "res\\sledge\\E0.bmp"
+L0.BMP                  HTML    DISCARDABLE     "res\\sledge\\L0.bmp"
+L1.BMP                  HTML    DISCARDABLE     "res\\sledge\\L1.bmp"
+m.BMP                   HTML    DISCARDABLE     "res\\sledge\\m.bmp"
+r.BMP                   HTML    DISCARDABLE     "res\\sledge\\r.bmp"
+srad.BMP                HTML    DISCARDABLE     "res\\sledge\\srad.bmp"
+srect.BMP               HTML    DISCARDABLE     "res\\sledge\\srect.bmp"
+cyclo.BMP               HTML    DISCARDABLE     "res\\sledge\\cyclo.bmp"
+DLogPsi.BMP             HTML    DISCARDABLE     "res\\sledge\\DLogPsi.bmp"
+mappsi.BMP              HTML    DISCARDABLE     "res\\sledge\\mappsi.bmp"
+EnergyRatio.BMP         HTML    DISCARDABLE     "res\\sledge\\EnergyRatio.bmp"
+
+Schrodinger2D.bmp       HTML    DISCARDABLE     "res\\sledge\\Schrodinger2D.bmp"
+Schrodinger2Dpolar.bmp  HTML    DISCARDABLE     "res\\sledge\\Schrodinger2Dpolar.bmp"
+a0.bmp                  HTML    DISCARDABLE     "res\\sledge\\a0.bmp"
+E00.bmp                 HTML    DISCARDABLE     "res\\sledge\\E00.bmp"
+lambda.bmp              HTML    DISCARDABLE     "res\\sledge\\lambda.bmp"
+r_to_xi.bmp             HTML    DISCARDABLE     "res\\sledge\\r_to_xi.bmp"
+Schrodinger2Dxi.bmp     HTML    DISCARDABLE     "res\\sledge\\Schrodinger2Dxi.bmp"
+H2Dgnd.bmp              HTML    DISCARDABLE     "res\\sledge\\H2Dgnd.bmp"
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXT
+//
+
+T.ACT                   TEXT    DISCARDABLE     "res\\t.act"
+T.DAT                   TEXT    DISCARDABLE     "res\\t.dat"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR DISCARDABLE  16, 15
+BEGIN
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_VIEW_1DIM
+    BUTTON      ID_VIEW_2DIM
+    BUTTON      ID_VIEW_3DIM
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "1 dim",                       ID_VIEW_1DIM
+        MENUITEM "2 dim",                       ID_VIEW_2DIM
+        MENUITEM "3 dim",                       ID_VIEW_3DIM
+        MENUITEM SEPARATOR
+        MENUITEM "Fly-by",                      ID_VIEW_FLYBY
+        MENUITEM SEPARATOR
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM "Toggle perspective",          ID_VIEW_TOGGLE
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About SolveIt...",           ID_APP_ABOUT
+    END
+END
+
+IDR_SOLVEITYPE MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Close",                      ID_FILE_CLOSE
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+        MENUITEM "Paste &Special...",           ID_EDIT_PASTE_SPECIAL
+        MENUITEM "Select A&ll\tCtrl+A",         ID_EDIT_SELECT_ALL
+        MENUITEM SEPARATOR
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "1 dim",                       ID_VIEW_1DIM
+        MENUITEM "2 dim",                       ID_VIEW_2DIM
+        MENUITEM "3 dim",                       ID_VIEW_3DIM
+        MENUITEM SEPARATOR
+        MENUITEM "Fly-by",                      ID_VIEW_FLYBY
+        MENUITEM SEPARATOR
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM SEPARATOR
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About SolveIt...",           ID_APP_ABOUT
+    END
+END
+
+IDR_GLVIEW_TMPL MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Close",                      ID_FILE_CLOSE
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM SEPARATOR
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About SolveIt...",           ID_APP_ABOUT
+    END
+END
+
+IDR_EXAMPLES_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "_POPUP_"
+    BEGIN
+        MENUITEM "Copy",                        ID_POPUP_COPY
+        MENUITEM "Cut",                         ID_POPUP_CUT
+        MENUITEM "Paste",                       ID_POPUP_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "Delete",                      ID_POPUP_CLEAR
+        MENUITEM SEPARATOR
+        POPUP "Vector Algebra"
+        BEGIN
+            MENUITEM "Sum",                         ID_POPUP_VECTORALGEBRA_SUM
+
+            MENUITEM "Difference",                  ID_POPUP_VECTORALGEBRA_DIFFERENCE
+
+            MENUITEM "Cross Product",               ID_POPUP_VECTORALGEBRA_CROSSPRODUCT
+
+        END
+        POPUP "Mechanics"
+        BEGIN
+            POPUP "User Defined Forces"
+            BEGIN
+                POPUP "Time Independent"
+                BEGIN
+                    MENUITEM "y-component",                 ID_POPUP_MECHANICS_USERDEFINEDFORCES_TIMEINDEPENDENT_YCOMPONENT
+
+                    MENUITEM "Duffing",                     ID_POPUP_MECHANICS_USERDEFINEDFORCES_TIMEINDEPENDENT_XCOMPONENT
+
+                END
+                POPUP "Time Dependent"
+                BEGIN
+                    MENUITEM "y-component",                 ID_POPUP_MECHANICS_USERDEFINEDFORCES_TIMEDEPENDENT_YCOMPONENT
+
+                    MENUITEM "forced Duffing",              ID_POPUP_MECHANICS_USERDEFINEDFORCES_TIMEDEPENDENT_XCOMPONENT
+
+                END
+            END
+            POPUP "MultiBody"
+            BEGIN
+                MENUITEM "Slider",                      ID_POPUP_MECHANICS_MULTIBODY_SLIDER
+
+            END
+            POPUP "Oscillators"
+            BEGIN
+                MENUITEM "Simple Harmonic",             ID_POPUP_OSCILLATORS_SIMPLEHARMONIC
+
+                MENUITEM "Simple Pendulum",             ID_POPUP_OSCILLATORS_SIMPLEPENDULUM
+
+                MENUITEM "Physical Pendulum",           ID_POPUP_CHAOTIC_PHYSICAL_PENDULUM
+
+                MENUITEM "Pendulum and Fixed Charge",   ID_POPUP_CHAOTIC_PENDULUMANDFIXEDCHARGE
+
+            END
+            POPUP "Gravitation"
+            BEGIN
+                MENUITEM "Sun-Earth-Moon",              ID_POPUP_GRAVITATION_SUNEARTHMOON
+
+                MENUITEM "Earth-Moon",                  ID_POPUP_GRAVITATION_EARTHMOON
+
+                MENUITEM "Orbital Mechanics",           ID_POPUP_GRAVITATION_ORBITALMECHANICS
+
+                MENUITEM "Projectile: 2 Balls",         ID_POPUP_PROJECTILE_CANNONBALL
+
+                MENUITEM "Sphere and Blocks",           ID_POPUP_MECHANICS_SPHEREANDBLOCK
+
+                MENUITEM "Two Body",                    ID_POPUP_PROJECTILE_TWOBODY
+
+                MENUITEM "Three Body",                  ID_POPUP_PROJECTILE_THREEBODY
+
+            END
+            POPUP "ElectroMagnetic"
+            BEGIN
+                MENUITEM "Electrostatics",              ID_POPUP_ELECTROMAGNETIC_ELECTROSTATICFIELD
+
+                MENUITEM "Current Loop",                ID_POPUP_ELECTROMAGNETIC_CURRENTLOOP
+
+            END
+            MENUITEM "Lnnrd-Jns Ptntl Heated/Cooled", 
+                                                    ID_POPUP_MECHANICS_LNNRDJNSPTNTLHEATEDCOOLED
+
+            MENUITEM "Two Blocks and Pulley",       ID_POPUP_MECHANICS_PULLEYANDTWOBLOCKS
+
+            MENUITEM "Free Pulley and Block",       ID_POPUP_MECHANICS_BLOCK_AND_PULLEY
+
+            MENUITEM "Fixed Pulley and Block",      ID_POPUP_MECHANICS_PULLEY
+
+            MENUITEM "Ramp",                        ID_POPUP_MECHANICS_RAMP
+            MENUITEM "Ball On Shpere",              ID_POPUP_MECHANICS_BALLONSHPERE
+
+            MENUITEM "Compound Pendulum",           ID_POPUP_CHAOTIC_COMPOUNDPENDULUM
+
+            MENUITEM "Two Body Scattering",         ID_POPUP_MECHANICS_TWOBODY
+
+            MENUITEM "Three Body Collision",        ID_POPUP_MECHANICS_THREEBODY
+            , GRAYED
+        END
+        POPUP "Chaotic"
+        BEGIN
+            MENUITEM "Logistic Map",                ID_POPUP_CHAOTIC_VERHULSTDYNAMICS
+
+            MENUITEM "Mandelbrot",                  ID_POPUP_CHAOTIC_CHAIN
+            MENUITEM "Random Chain",                ID_POPUP_CHAOTIC_RANDOMCHAIN
+
+            MENUITEM "Pendulum and Planar Charge",  ID_POPUP_CHAOTIC_PENDULUMANDPLANARCHARGE
+
+            MENUITEM "Two Body",                    ID_POPUP_CHAOTIC_TWOBODY
+            , GRAYED
+            MENUITEM "Trapping",                    ID_POPUP_CHAOTIC_TRAPPING
+            , GRAYED
+            MENUITEM "Six Bodies in Box",           ID_POPUP_CHAOTIC_6BODY
+            , GRAYED, HELP
+        END
+        POPUP "Quantum Mechanics"
+        BEGIN
+            MENUITEM "Superposition",               ID_POPUP_QUANTUMMECHANICS_SUPERPOSITION
+
+            MENUITEM "Radial l=0 Energy Eigenstates A in 2-Dimensions", 
+                                                    ID_POPUP_QUANTUMMECHANICS_STATIONARY_IN_1_SPATIALDIMENSION
+
+            MENUITEM "Radial l=0 Energy Eigenstates B in 2-Dimensions", 
+                                                    ID_POPUP_QUANTUMMECHANICS_STATIONARY_IN_1_SPATIALDIMENSIONB
+
+            MENUITEM "2-Dim Hydrogen Energy Eigenstates", 
+                                                    ID_POPUP_QUANTUMMECHANICS_Ground_State__IN_1_SPATIALDIMENSION
+
+
+
+            MENUITEM "2-Dim BEC L=0 Energy Eigenstate", 
+                                                    ID_POPUP_QUANTUMMECHANICS_Ground_State__BEC
+
+            MENUITEM "Scattering in 1 Spatial Dimension", 
+                                                    ID_POPUP_QUANTUMMECHANICS_SCATTERINGIN1SPATIALDIMENSION
+
+            MENUITEM "Energy Eigenstate in 2 Spatial Dimensions", 
+                                                    ID_POPUP_QUANTUMMECHANICS_STATIONARY_IN_2_SPATIALDIMENSION
+
+        END
+        POPUP "Homework"
+        BEGIN
+            POPUP "College Physics (Serway/Faughn)"
+            BEGIN
+                POPUP "Chapter"
+                BEGIN
+                    POPUP "2"
+                    BEGIN
+                        MENUITEM "Example 2.4",                 ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_EXAMPLE24
+
+                        MENUITEM "Problem 2.14",                ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_PROBLEM214
+
+                        MENUITEM "Problem 2.37",                ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_PROBLEM237
+
+                    END
+                    POPUP "3"
+                    BEGIN
+                        MENUITEM "Problem 3.46",                ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_PROBLEM346
+
+                        MENUITEM "Problem 3.51",                ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_PROBLEM351
+
+                        MENUITEM "Problem 3.60",                ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_PROBLEM360
+
+                    END
+                    MENUITEM "4",                           ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_CHAPTER_4
+
+                    MENUITEM "5",                           ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_CHAPTER_5
+
+                    MENUITEM "6",                           ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_CHAPTER_6
+
+                    POPUP "7"
+                    BEGIN
+                        MENUITEM "Example 7.8",                 ID_POPUP_HOMEWORK_COLLEGEPHYSICSSERWAYFAUGHN_CHAPTER_7_EXAMPLE78
+
+                    END
+                END
+            END
+        END
+        POPUP "Graph"
+        BEGIN
+            MENUITEM "Spline",                      ID_POPUP_Spline
+            MENUITEM "Plot",                      ID_POPUP_Test_Plot
+        END
+        POPUP "Test"
+        BEGIN
+            MENUITEM "Recursion",                      ID_POPUP_Test_Recursion
+        END
+    END
+END
+
+IDR_MENU_FieldDisplay MENU DISCARDABLE 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "background",                  ID__BACKGROUND
+        POPUP "equipotentials"
+        BEGIN
+            MENUITEM "show",                        ID__EQUIPOTENTIALS
+            MENUITEM "clear",                       ID__clear_EQUIPOTENTIALS
+        END
+        POPUP "vector fields"
+        BEGIN
+            MENUITEM "show",                        ID__VECTORFIELDS
+            MENUITEM "clear",                       ID__clear_VECTORFIELDS
+        END
+        POPUP "fieldlines"
+        BEGIN
+            POPUP "electric"
+            BEGIN
+                MENUITEM "show",                        ID_electric
+                MENUITEM "clear",                       ID_clear_electric
+            END
+            MENUITEM "magnetic",                    ID_magnetic
+            MENUITEM "gravitational",               ID_gravitational
+        END
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+END
+
+IDC_GLTEST ACCELERATORS MOVEABLE PURE 
+BEGIN
+    "Q",            IDM_EXIT,               VIRTKEY, ALT, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About SolveIt"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "SolveIt Version 1.0\nPhysics Simulator\nProf. P. Nash, UTSA Physics Dept.\nCopyright (C) 2002",
+                    IDC_STATIC,40,10,119,38,SS_NOPREFIX
+    DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
+END
+
+IDR_MAINFRAME DIALOG DISCARDABLE  0, 0, 851, 16
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Run",IDC_RUN,0,1,30,15
+    PUSHBUTTON      "Stop",IDC_STOP,33,1,30,15
+    PUSHBUTTON      "Clear",IDC_CLEAR,239,0,30,15
+    PUSHBUTTON      "PNG",IDC_PNG,139,1,30,15
+    PUSHBUTTON      "EPS",IDC_EPS,171,1,30,15
+    PUSHBUTTON      "Code",IDC_PRINT_CODE,205,1,30,15
+    PUSHBUTTON      "View",ID_VIEW_TOGGLE,271,1,16,15,BS_ICON
+    PUSHBUTTON      "Reset View",ID_VIEW_RESET,339,0,40,15
+    PUSHBUTTON      "Fly-by",ID_VIEW_FLYBY,289,1,30,15
+    PUSHBUTTON      "Reset",IDC_BUTTON_Reset,99,1,30,15
+    PUSHBUTTON      "Step",IDC_SINGLE_STEP,67,1,30,15
+    RTEXT           "Scan \nstepsize: ",IDC_STATIC,413,2,32,16
+    EDITTEXT        IDC_EDIT_ScanStepsize,445,1,28,14,ES_AUTOHSCROLL | NOT 
+                    WS_TABSTOP
+    EDITTEXT        IDC_EDIT_BEGIN_x,514,3,28,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_BEGIN_y,559,3,28,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_END_x,633,3,28,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_END_y,674,3,28,12,ES_AUTOHSCROLL
+    RTEXT           "y=",IDC_STATIC,546,8,11,8
+    RTEXT           "x=",IDC_STATIC,619,7,13,8
+    RTEXT           "y=",IDC_STATIC,661,8,12,8
+    RTEXT           "x=",IDC_STATIC,499,8,13,8
+    GROUPBOX        "From:",IDC_STATIC,475,0,115,18
+    GROUPBOX        "To:",IDC_STATIC,603,0,103,18
+    RTEXT           "Milliseconds \nbetween scan steps: ",IDC_STATIC,709,1,
+                    70,17
+    EDITTEXT        IDC_EDIT_ScanTime,783,1,28,14,ES_AUTOHSCROLL | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "Scan",IDC_BUTTON_Scan,816,1,28,14,BS_NOTIFY
+END
+
+IDD_GL_VIEW DIALOG DISCARDABLE  0, 0, 186, 94
+STYLE WS_CHILD | WS_BORDER
+FONT 8, "MS Sans Serif"
+BEGIN
+END
+
+IDD_SolveItVIEW DIALOG DISCARDABLE  0, 0, 185, 93
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+END
+
+IDD_CURRENTLOOP DIALOG DISCARDABLE  0, 0, 224, 202
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Drag the circuit nodes to desired geometrical configuration"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Reset",IDC_BUTTON_Reset,173,2,50,14
+END
+
+IDD_EXAMINEPAIR DIALOG DISCARDABLE  0, 0, 259, 242
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "EXAMINEPAIR"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_EDIT_normal,39,0,143,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_pointContact1,39,17,143,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_pointContact2,39,36,143,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    RTEXT           "Normal",IDC_STATIC,1,1,36,12,SS_CENTERIMAGE
+    RTEXT           "PT 1",IDC_STATIC,1,18,36,12,SS_CENTERIMAGE
+    RTEXT           "PT 2",IDC_STATIC,0,37,36,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_ContactType,39,122,143,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    RTEXT           "Type",IDC_STATIC,0,124,36,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_RelativeNormalMotion,39,140,143,14,
+                    ES_AUTOHSCROLL | ES_READONLY
+    RTEXT           "Rel.Motion",IDC_STATIC,0,140,36,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_separation,39,100,143,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    RTEXT           "separation",IDC_STATIC,0,100,36,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_VelPointContact1,39,52,143,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_VelPointContact2,39,71,143,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    RTEXT           "Vel PT 1",IDC_STATIC,1,53,36,12,SS_CENTERIMAGE
+    RTEXT           "Vel PT 2",IDC_STATIC,0,72,36,12,SS_CENTERIMAGE
+END
+
+IDD_CHANGECHARGE DIALOG DISCARDABLE  0, 0, 153, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Change Charge"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,101,2,50,14
+    PUSHBUTTON      "Cancel",2,101,19,50,14
+    EDITTEXT        IDC_EDIT_CHARGE,51,40,100,12,ES_AUTOHSCROLL
+    RTEXT           "New Charge:",IDC_STATIC,1,42,45,10
+END
+
+IDD_HELPBOX DIALOG DISCARDABLE  0, 0, 280, 270
+STYLE WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU | 
+    WS_THICKFRAME
+CAPTION "help?"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Static",IDC_HTMLVIEW,7,7,266,256,SS_SUNKEN
+END
+
+IDD_EXAMINECOLLISIONTIMES DIALOG DISCARDABLE  0, 0, 208, 183
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Collision Times"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_EDIT1,7,7,185,155,ES_AUTOHSCROLL
+END
+
+IDD_WAVENUMBERS DIALOG DISCARDABLE  0, 0, 254, 149
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Superposition of  Waves"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,0,135,50,14
+    PUSHBUTTON      "Cancel",2,204,135,50,14
+    EDITTEXT        IDC_EDIT_NUMBERWAVENUMBERS,89,27,50,14,ES_AUTOHSCROLL
+    LTEXT           "Number of wave numbers:",IDC_STATIC,1,31,84,13
+    EDITTEXT        IDC_EDIT_RATIO,89,61,50,14,ES_AUTOHSCROLL
+    LTEXT           "Ratio of successive wave numbers:",IDC_STATIC,1,64,77,
+                    18
+    EDITTEXT        IDC_EDIT_WAVELENGTH,89,44,50,14,ES_AUTOHSCROLL
+    LTEXT           "Wavelength of first wave number:",IDC_STATIC,1,43,76,17
+    EDITTEXT        IDC_EDIT_DT,89,78,50,14,ES_AUTOHSCROLL
+    LTEXT           "Time step:",IDC_STATIC,0,83,52,11
+    PUSHBUTTON      "Apply",IDC_APPLY,204,0,50,14
+    GROUPBOX        "Examples",IDC_STATIC,148,17,103,73
+    CONTROL         "Momentum eigenstate",IDC_RADIO1,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP,157,27,88,12
+    CONTROL         "Pair",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,157,39,70,
+                    12
+    CONTROL         "Triple",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,157,51,
+                    70,12
+    CONTROL         "Localized",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,157,
+                    63,70,12
+    CONTROL         "Dispersion",IDC_RADIO5,"Button",BS_AUTORADIOBUTTON,157,
+                    75,70,12
+    LTEXT           "The red horizontal axis is the x-axis.\r\nThe blue axis normal to the screen is the time axis.\r\nThe green vertical axis is the quantum mechanical relative probability density.",
+                    IDC_STATIC,0,106,248,29
+    CONTROL         278,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE,0,4,
+                    113,22
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "Nash Consulting\0"
+            VALUE "FileDescription", "SolveIt Physics Simulator\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "SolveIt\0"
+            VALUE "LegalCopyright", "Prof. P.L.Nash Copyright (C) 2002-03\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "SolveIt.EXE\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "SolveIt Application\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_GL_VIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_SolveItVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 178
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 86
+    END
+
+    IDD_CURRENTLOOP, DIALOG
+    BEGIN
+        RIGHTMARGIN, 223
+        BOTTOMMARGIN, 201
+    END
+
+    IDD_EXAMINEPAIR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 252
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 235
+    END
+
+    IDD_EXAMINECOLLISIONTIMES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 201
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 176
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_CURSOR_HAND         CURSOR  DISCARDABLE     "res\\HAND.CUR"
+IDC_CURSOR_SEL          CURSOR  DISCARDABLE     "res\\CURSOR_S.CUR"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME           "SolveIt"
+    IDR_SOLVEITYPE          "\nSolveIt\nSolveIt\nSolveIt Files (*.slv)\n.slv\nSolveIt.Document\nSolveIt Document"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_GLVIEW_TMPL         "\n\n\nSolveIt Files (*.slv)\n.slv\nSolveIt.Document\nSolveIt Document"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "SolveIt"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
+    ID_FILE_PRINT           "Print the active document\nPrint"
+    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "Open this document"
+    ID_FILE_MRU_FILE2       "Open this document"
+    ID_FILE_MRU_FILE3       "Open this document"
+    ID_FILE_MRU_FILE4       "Open this document"
+    ID_FILE_MRU_FILE5       "Open this document"
+    ID_FILE_MRU_FILE6       "Open this document"
+    ID_FILE_MRU_FILE7       "Open this document"
+    ID_FILE_MRU_FILE8       "Open this document"
+    ID_FILE_MRU_FILE9       "Open this document"
+    ID_FILE_MRU_FILE10      "Open this document"
+    ID_FILE_MRU_FILE11      "Open this document"
+    ID_FILE_MRU_FILE12      "Open this document"
+    ID_FILE_MRU_FILE13      "Open this document"
+    ID_FILE_MRU_FILE14      "Open this document"
+    ID_FILE_MRU_FILE15      "Open this document"
+    ID_FILE_MRU_FILE16      "Open this document"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+    AFX_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_PREVIEW_CLOSE   "Close print preview mode\nCancel Preview"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_1DIM            "1 dim\n1"
+    ID_VIEW_2DIM            "2 dim\n2"
+    ID_VIEW_3DIM            "3 dim\n3"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_FLYBY           "Fly-By\nfly"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_TOGGLE          "Toggle perspective\ntoggle perspective"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\SolveIt.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#include "afxprint.rc"       // printing/print preview resources
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

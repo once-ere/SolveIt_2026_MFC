@@ -1,0 +1,162 @@
+search-ms:displayname=Search%20Results%20in%20%5C%5C10.10.10.9%5CEVO8701TB.TRIPLE_dataset&crumb=location:%5C%5C10.10.10.9%5CEVO8701TB.TRIPLE_dataset\SolveIt_migration_Compiles
+
+
+You must plan a modern  build of this deprecated project using c++23.
+If necessary you may download and build modern versions of gmp, mpfr, opencv, and or
+any other safe and tested libs that you require.
+use oneAPI's fortran compiler and libs to resolve fortran issues.
+Basically you must translate 'SolveIt.dsw' and  'SolveIt.dsp' to
+modern 'SolveIt.sln' and 'SolveIt.vcxproj' project makefiles, and then build.
+ALL of the functionality of this deprecated project 
+must be preserved (DO NOT BREAK ANYTHING) by your refactored code.
+DO NOT use c++14!
+In 2002 this project compiled and linked WITHOUT ERROR.
+Remember, Your task is to refactor this code to bring it up to modern
+c++23 standards, using unicode.
+DO NOT use c++14!
+You may invoke %comspec% /k "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+to create the correct c++23 project environment,
+or simply inspect "C:\Program Files\Microsoft Visual Studio\2022\Enterprise' and its sub-folders to find
+the correct compiler, linker, and libraries.
+DO NOT use c++14!
+
+Read and understand all the files in this folder, and in sub-folders,
+and correctly identify which files comprise the source code and auxiliary
+files of the SolveIt project, and which may be ignored; to assist you the project files
+are also listed in  ./'SolveIt.dsp'.
+You MUST perform a detailed, line-by-line, low level scan of each file
+in order to refactor its code and bring it up to modern
+c++23 standards, using unicode.
+We emphasize, Refactor this code to ensure safety ; refactor this code to bring it up to modern
+c++23 standards, using unicode.
+This project seems to have 'missing' files and libraries,
+which are not missing, but are mis-located.
+Find all 'missing' files and libraries 
+by Searching the folder named 'missing' and all of its sub-folders for the missing files, 
+and then copy them to ./src if they are found.
+
+Make backups of all the files before you modify them.
+You MUST be able to undo any and all errors that you introduce.
+DO NOT create missing files!
+NEVER create missing files!
+Search the folder named 'missing' and all sub-folders for all missing files, 
+and copy them to ./src if they are found.
+If you cannot find a file then add its name to a file named
+./'this_file_is_missing.txt', then ask me to find it.
+
+
+After translating 'SolveIt.dsw' and  'SolveIt.dsp' to
+modern 'SolveIt.sln' and 'SolveIt.vcxproj' project makefiles,
+verify and test your plan.
+You may keep or destroy the existing 
+'SolveIt.sln' and 'SolveIt.vcxproj' files,
+because they were created by Claude 4.6 (who badly bungled this task), and may be full of errors.
+
+
+Next execute your plan , and build 'SolveIt.exe'.
+Also, Build a 'Release' target , with 'Debug' if possible.
+Please Try to build a Release target of this project
+that include 'Debug' information, if possible.
+
+Test your code for correctness and efficiency.
+
+Document your solution so that an ignorant USER,
+who is a gifted high school student, can clearly understand your logic,
+and explain it to other students.
+Be precise and explicit; explain your steps, and explain to the ignorant user
+how to use your solution to get work done correctly.
+Create both a markdown documention file named 'README.md'
+and a latex documention file  named 'README.tex' that
+you compile to 'README.pdf'.
+Verify and test your solution.
+Create interesting examples, which you document
+Document your work and tests so that an ignorant USER,
+who is a gifted high school student, can clearly understand your logic,
+and explain it to other students.
+Create both a markdown documention file and a latex documention file that
+you compile to pdf.
+
+/////////////////////////////////////////////
+You must COPY, NOT move,
+into the folder ./SolveIt_2026_MFC ,
+all SolveIt.exe project files 
+including header files, c++ files, c files, fortran files,
+all libraries required for build, binaries required for build,
+Solvelt.aps, Solvelt.clw, Solvelt.lex, Solvelt.rc, Solvelt.reg, Solvelt.sln, Solvelt.vcxproj, Solvelt.vcxproj.user, Solvelt.y, and ALL other files 
+required for sucessful builds of SolveIt.exe such as all required vcpkg source
+files and libraries.
+Remember to COPY, NOT move, these files.
+Also you must COPY, NOT move, all of ./Examples and its contents into ./SolveIt_2026_MFC.
+Also you must COPY, NOT move, all documentation files that you
+have created into ./SolveIt_2026_MFC.
+
+Next organize all of these copied files,
+which are now located in the folder ./SolveIt_2026_MFC ,
+by creating nice logical categories for these different files.
+Next create new sub-folders of  ./SolveIt_2026_MFC coresponding to each of these logical categories,
+and move each and every file into its correct folder.
+
+Next you must refactor the copies of
+Solvelt.sln, Solvelt.vcxproj, and Solvelt.vcxproj.user
+so that all of these organized files correctly specify the new builds of SolveIt.exe,
+which will ultimately be located indside the new  SolveIt_2026_MFC tree.
+Also create a new ./SolveIt_2026_MFC/CMakeLists.txt file, because
+we will offer users a new cmake build option.
+
+Next build all versions of SolveIt.exe that will be located under the SolveIt_2026_MFC tree.
+Fix any errors.
+Verify and test the correctness of your solution.
+
+
+After a correct solution ,
+we plan to 'copy'  any and all files that are under the SolveIt_2026_MFC tree
+and required for a new github SolveIt_2026_MFC repository at
+'https://github.com/once-ere/SolveIt_2026_MFC.git' , 
+I have opened 'https://github.com/once-ere/SolveIt_2026_MFC.git' 
+but not populated it.
+We plan to employ:
+git init -b main
+git add .
+git commit -m "initial commit for SolveIt_2026_MFC"
+git remote add origin https://github.com/once-ere/SolveIt_2026_MFC
+git config  --global  user.email "Patrick299Nash@gmail.com"
+git config  --global  user.name "once-ere"
+git push origin main --progress
+
+
+
+@$e%G4rP5NZDn7@u3CfzydV89ysA
+
+
+
+
+
+
+
+
+after you have re-located each file.
+Solvelt.cpp, Solvelt.dsp
+
+Solvelt.dsw
+
+
+Remember to
+make backups of all the files before you modify them.
+You MUST be able to undo any and all errors that you introduce.
+ Document your solution!
+
+In 2002 this project compiled and linked WITHOUT ERROR.
+Remember, Your task is to refactor its code to bring it up to modern
+standards, using unicode.
+Remember to build the Release target of this project.
+Do not remove files from this project because of 'errors'.
+Fix the errors. Remember, in 2002 this project compiled and linked WITHOUT ERROR.
+
+
+DO NOT create missing files! why would you do this??? Search the folder named 'missing' and all sub-folders for missing files, and copy to ./src if found, AS YOU WERE ALREADY INSTRUCTED TO DO! If you cannot find a file then ask me to find it. DESTROY all files that you mindlessly created! Are you  trying to break this build? 
+
+
+
+
+Read and understand all of the project files in this folder, and in sub-folders.
+You must understand precisely and correctly all of the content of what you are reading.

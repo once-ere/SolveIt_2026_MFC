@@ -1,0 +1,41 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: PNG - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\ADMINI~1.CRA\LOCALS~1\Temp\RSP2AB9.tmp" with contents
+[
+/nologo /out:"..\lib\PNG.lib" 
+.\Release\PNG.OBJ
+.\Release\PNGERROR.OBJ
+.\Release\PNGGET.OBJ
+.\Release\PNGMEM.OBJ
+.\Release\PNGPREAD.OBJ
+.\Release\PNGREAD.OBJ
+.\Release\PNGRIO.OBJ
+.\Release\PNGRTRAN.OBJ
+.\Release\PNGRUTIL.OBJ
+.\Release\PNGSET.OBJ
+.\Release\PNGTRANS.OBJ
+.\Release\PNGVCRD.OBJ
+.\Release\PNGWIO.OBJ
+.\Release\PNGWRITE.OBJ
+.\Release\PNGWTRAN.OBJ
+.\Release\PNGWUTIL.OBJ
+.\Release\READPNG.OBJ
+.\Release\READPNG2.OBJ
+]
+Creating command line "link.exe -lib @C:\DOCUME~1\ADMINI~1.CRA\LOCALS~1\Temp\RSP2AB9.tmp"
+<h3>Output Window</h3>
+Creating library...
+
+
+
+<h3>Results</h3>
+PNG.lib - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

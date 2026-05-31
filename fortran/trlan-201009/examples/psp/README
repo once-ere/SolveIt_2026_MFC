@@ -1,0 +1,28 @@
+This directory contain an example using P_SPARSLIB to perform
+matrix-vector multiplication.  The program SHBPSP reads a Harwell/Boeing
+matrix in RUA format and distribute the matrix by rows.  Since symmetric
+matrix are usually stored in RSA formation, the user needs to convert them
+to RUA format before using this routine.  For this purpose an utility
+program RSARUA is provided to perform the conversion.
+
+Both SHBPSP and RSARUS need package SPARSKIT.
+
+To compile the programs, use "make shbpsp" or "make rsarua".
+
+To run shbpsp, type
+
+shbpsp hb-filename
+
+To run rsarua, type
+
+rsarus < RSA-input  > RUA-output
+
+
+SHBPSP performs dynamic memory allocation throught Cray Fortran Pointer
+externsion of Fortran 77.
+
+NOTE: RSARUA only runs on one single processor.
+
+Both P_SPARSLIB and SPARSKIT can be found at
+http://www.cs.umn.edu/~saad/
+

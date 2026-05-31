@@ -1,0 +1,52 @@
+You need a Fortran 90 compiler to compile the TRLan library.  To use
+TRLAN, you also need LAPACK and BLAS.
+
+The bulk of source code is located in directory SRC.  The options for
+makefile are in file Make.inc.  Check the file to make sure that the
+options are appropriate for your particular machine.  You may use the
+Makefile in this directory or the SRC direct to generate library in .a
+form.
+
+make lib
+will build a sequential version of the library (libtrlan.a),
+
+make plib
+will build a MPI version of the library (libtrlan_mpi.a).
+
+The examples directory contains a small set of examples.  To test on a
+particular machine, go to the appropriate subdirectory and type make to
+generate one of the three examples: 'simple', 'simple77' and 'simplec'.
+
+'simple'   -- illustrates how to call TRLAN from Fortran 90 code
+'simple77' -- illustrates how to call TRLAN from Fortran 77 code
+'simplec'  -- illustrates how to call TRLAN from C code
+
+NOTE: both Fortran 77 version and C version of TRLAN are named "trlan77"
+rather than "trlan".
+
+More information about the package can be found on the web at
+<http://www.lbl.gov/~kwu/trlan/>
+In particular, the user's guide is available at
+<http://www.lbl.gov/~kwu/ps/trlan-ug.html>.
+
+Further problems/questions, contact Kesheng John Wu (John.Wu@ACM.org) or
+Horst D Simon (hdsimon@lbl.gob).
+
+
+NOTE on F90 compilers:
+
+The authors of this code have compiled successfully in the following
+compilers.
+
+Sun
+  f90: WorkShop Compilers 4.2 01 Dec 1997 FORTRAN 90 1.2 patch 104366-04
+
+Cray CF90 Version 3.2.1.0 07/07/99 14:50:22
+
+(IRIX64) MIPSpro Compilers: Version 7.2.1
+
+Linux(intel) with Portland Group's pgf90 3.0-4 and 3.1 with MPICH 1.1.2
+
+Compiler notes:
+With vastf90, there is a problem with the pointer qa not be
+assigned a correct value inside trlcore.f(trlanczos)

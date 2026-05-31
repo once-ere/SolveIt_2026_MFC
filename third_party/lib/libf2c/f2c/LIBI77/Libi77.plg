@@ -1,0 +1,143 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: LIBI77 - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP416.tmp" with contents
+[
+/nologo /MT /W3 /GX /Ox /Ot /Ob2 /I ".." /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "NON_UNIX_STDIO" /D "_MBCS" /Fp".\WinRel/Libi77.pch" /YX /Fo".\WinRel/" /Fd".\WinRel/" /FD /c 
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\BACKSPAC.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\CLOSE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\DFE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\DOLIO.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\DUE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\ENDFILE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\ERR.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\FMT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\FMTLIB.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\IIO.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\ILNW.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\INQUIRE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\LREAD.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\LWRITE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\OPEN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\RDFMT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\REWIND.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\RSFE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\RSLI.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\RSNE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\SFE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\SUE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\TYPESIZE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\UIO.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\UTIL.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\VERSION.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\WREF.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\WRTFMT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\WSFE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\WSLE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\WSNE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\XWSNE.C"
+]
+Creating command line "cl.exe @C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP416.tmp" 
+Creating temporary file "C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP417.tmp" with contents
+[
+/nologo /out:".\WinRel\Libi77.lib" 
+.\WinRel\BACKSPAC.OBJ
+.\WinRel\CLOSE.OBJ
+.\WinRel\DFE.OBJ
+.\WinRel\DOLIO.OBJ
+.\WinRel\DUE.OBJ
+.\WinRel\ENDFILE.OBJ
+.\WinRel\ERR.OBJ
+.\WinRel\FMT.OBJ
+.\WinRel\FMTLIB.OBJ
+.\WinRel\IIO.OBJ
+.\WinRel\ILNW.OBJ
+.\WinRel\INQUIRE.OBJ
+.\WinRel\LREAD.OBJ
+.\WinRel\LWRITE.OBJ
+.\WinRel\OPEN.OBJ
+.\WinRel\RDFMT.OBJ
+.\WinRel\REWIND.OBJ
+.\WinRel\RSFE.OBJ
+.\WinRel\RSLI.OBJ
+.\WinRel\RSNE.OBJ
+.\WinRel\SFE.OBJ
+.\WinRel\SUE.OBJ
+.\WinRel\TYPESIZE.OBJ
+.\WinRel\UIO.OBJ
+.\WinRel\UTIL.OBJ
+.\WinRel\VERSION.OBJ
+.\WinRel\WREF.OBJ
+.\WinRel\WRTFMT.OBJ
+.\WinRel\WSFE.OBJ
+.\WinRel\WSLE.OBJ
+.\WinRel\WSNE.OBJ
+.\WinRel\XWSNE.OBJ
+]
+Creating command line "link.exe -lib @C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP417.tmp"
+<h3>Output Window</h3>
+Compiling...
+BACKSPAC.C
+CLOSE.C
+DFE.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\CLOSE.C(97) : warning C4716: 'flush_' : must return a value
+DOLIO.C
+DUE.C
+ENDFILE.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\ENDFILE.C(64) : warning C4101: 'k' : unreferenced local variable
+ERR.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\ERR.C(225) : warning C4101: 'k' : unreferenced local variable
+FMT.C
+FMTLIB.C
+IIO.C
+ILNW.C
+INQUIRE.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\INQUIRE.C(24) : warning C4013: 'access' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\INQUIRE.C(16) : warning C4101: 'n' : unreferenced local variable
+LREAD.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\LREAD.C(546) : warning C4244: '=' : conversion from 'double ' to 'long ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\LREAD.C(554) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\LREAD.C(561) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\LREAD.C(562) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+LWRITE.C
+OPEN.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\OPEN.C(44) : warning C4013: 'open' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\OPEN.C(101) : warning C4018: '==' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\OPEN.C(139) : warning C4013: 'access' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\OPEN.C(79) : warning C4101: 'n' : unreferenced local variable
+RDFMT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\RDFMT.C(64) : warning C4554: '>>' : check operator precedence for possible error; use parentheses to clarify precedence
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\RDFMT.C(86) : warning C4554: '<<' : check operator precedence for possible error; use parentheses to clarify precedence
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\RDFMT.C(319) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+REWIND.C
+RSFE.C
+RSLI.C
+RSNE.C
+SFE.C
+SUE.C
+TYPESIZE.C
+UIO.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\UIO.C(16) : warning C4018: '!=' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBI77\UIO.C(38) : warning C4018: '!=' : signed/unsigned mismatch
+UTIL.C
+VERSION.C
+WREF.C
+WRTFMT.C
+WSFE.C
+WSLE.C
+WSNE.C
+XWSNE.C
+Creating library...
+
+
+
+<h3>Results</h3>
+Libi77.lib - 0 error(s), 18 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,25 @@
+# Visual Studio cache and settings
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+Debug/
+Release/
+x64/
+ARM/
+Build/
+
+# Specific compiler files
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.gch
+*.pch
+
+
+
+task_gpt-git.txt

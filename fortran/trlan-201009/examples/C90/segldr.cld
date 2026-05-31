@@ -1,0 +1,14 @@
+equiv=SDOT(DDOT);
+equiv=SSYTRD(DSYTRD);
+equiv=SORGTR(DORGTR);
+equiv=SLAMCH(DLAMCH);
+equiv=SLARTG(DLARTG);
+equiv=SLASR(DLASR);
+equiv=SSWAP(DSWAP);
+equiv=SSTEIN(DSTEIN);
+equiv=SGEMM(DGEMM);
+equiv=SGEMV(DGEMV);
+equiv=SSYEV(DSYEV);
+equiv=SPOTRF(DPOTRF);
+equiv=SSTEV(DSTEV);
+equiv=STRTRS(DTRTRS)

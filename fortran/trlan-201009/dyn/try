@@ -1,0 +1,23 @@
+#!/bin/ksh
+# a shell script to run a number of test cases of hbt
+#
+nev=5
+ml=20
+echo 'Matrix:' NASASRB ' NE:' ${nev} ' Restart:' m-3 ' ML:' $ml
+mpprun -n 2 ./hbt /usr/tmp/kewu/NASASRB ${nev} 5 $ml
+echo 'Matrix:' NASASRB ' NE:' ${nev} ' Restart:' 3 ' ML:' $ml
+mpprun -n 2 ./hbt /usr/tmp/kewu/NASASRB ${nev} 3 $ml
+echo 'Matrix:' NASASRB ' NE:' ${nev} ' Restart:' 4 ' ML:' $ml
+mpprun -n 2 ./hbt /usr/tmp/kewu/NASASRB ${nev} 4 $ml
+echo 'Matrix:' S3DKT3M2 ' NE:' ${nev} ' Restart:' m-3 ' ML:' $ml
+mpprun -n 2 ./hbt /usr/tmp/kewu/s3dkt3m2 ${nev} 5 $ml
+echo 'Matrix:' S3DKT3M2 ' NE:' ${nev} ' Restart:' 3 ' ML:' $ml
+mpprun -n 2 ./hbt /usr/tmp/kewu/s3dkt3m2 ${nev} 3 $ml
+echo 'Matrix:' S3DKT3M2 ' NE:' ${nev} ' Restart:' 4 ' ML:' $ml
+mpprun -n 2 ./hbt /usr/tmp/kewu/s3dkt3m2 ${nev} 4 $ml
+echo 'Matrix:' S3DKQ4M2 ' NE:' ${nev} ' Restart:' m-3 ' ML:' $ml
+mpprun -n 2 ./hbt /usr/tmp/kewu/s3dkq4m2 ${nev} 5 $ml
+echo 'Matrix:' S3DKQ4M2 ' NE:' ${nev} ' Restart:' 3 ' ML:' $ml
+mpprun -n 2 ./hbt /usr/tmp/kewu/s3dkq4m2 ${nev} 3 $ml
+echo 'Matrix:' S3DKQ4M2 ' NE:' ${nev} ' Restart:' 4 ' ML:' $ml
+mpprun -n 2 ./hbt /usr/tmp/kewu/s3dkq4m2 ${nev} 4 $ml

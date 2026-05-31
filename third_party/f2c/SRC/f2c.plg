@@ -1,0 +1,561 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: F2C - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP354.tmp" with contents
+[
+/nologo /MTd /W3 /GX /O1 /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "ANSI_Libraries" /D "ANSI_Prototypes" /D "__NT_VC__" /FR".\WinRel/" /Fp".\WinRel/f2c.pch" /YX /Fo".\WinRel/" /Fd".\WinRel/" /FD " " /c 
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\CDS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\ERROR.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INIT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MEM.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NICEPRIN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\P1OUTPUT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PARSE_AR.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PREAD.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\SYSDEP.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\VAX.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\VERSION.C"
+]
+Creating command line "cl.exe @C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP354.tmp" 
+Creating temporary file "C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP355.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /stack:0x8192 /subsystem:console /incremental:no /pdb:".\WinRel/f2c.pdb" /machine:IX86 /out:".\WinRel/f2c.exe" 
+.\WinRel\CDS.OBJ
+.\WinRel\DATA.OBJ
+.\WinRel\EQUIV.OBJ
+.\WinRel\ERROR.OBJ
+.\WinRel\EXEC.OBJ
+.\WinRel\EXPR.OBJ
+.\WinRel\FORMAT.OBJ
+.\WinRel\FORMATDA.OBJ
+.\WinRel\gram.obj
+.\WinRel\INIT.OBJ
+.\WinRel\INTR.OBJ
+.\WinRel\IO.OBJ
+.\WinRel\LEX.OBJ
+.\WinRel\MAIN.OBJ
+.\WinRel\MEM.OBJ
+.\WinRel\MISC.OBJ
+.\WinRel\NAMES.OBJ
+.\WinRel\NICEPRIN.OBJ
+.\WinRel\OUTPUT.OBJ
+.\WinRel\P1OUTPUT.OBJ
+.\WinRel\PARSE_AR.OBJ
+.\WinRel\PREAD.OBJ
+.\WinRel\PROC.OBJ
+.\WinRel\PUT.OBJ
+.\WinRel\PUTPCC.OBJ
+.\WinRel\SYSDEP.OBJ
+.\WinRel\VAX.OBJ
+.\WinRel\VERSION.OBJ
+]
+Creating command line "link.exe @C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP355.tmp"
+<h3>Output Window</h3>
+Compiling...
+CDS.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\CDS.C(122) : warning C4013: 'Fatal' undefined; assuming extern returning int
+DATA.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(41) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(50) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(72) : warning C4013: 'setdata' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(101) : warning C4013: 'fatali' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(153) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(247) : warning C4013: 'warn1' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(252) : warning C4033: 'setdata' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(275) : warning C4013: 'cktype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(278) : warning C4033: 'setdata' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(286) : warning C4013: 'consconv' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(304) : warning C4013: 'dataline' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(305) : warning C4013: 'prconi' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(310) : warning C4013: 'prcona' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(319) : warning C4013: 'prconr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(339) : warning C4013: 'badtype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(388) : warning C4033: 'frdata' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(397) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(418) : warning C4013: 'impldcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(424) : warning C4013: 'errstr' undefined; assuming extern returning int
+EQUIV.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(342) : warning C4716: 'setdata' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\DATA.C(408) : warning C4716: 'dataline' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(69) : warning C4013: 'vardcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(81) : warning C4013: 'warni' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(95) : warning C4013: 'dclerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(99) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(117) : warning C4013: 'in_vector' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(230) : warning C4013: 'freqchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(252) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(255) : warning C4033: 'eqvcommon' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(303) : warning C4013: 'badstg' undefined; assuming extern returning int
+ERROR.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EQUIV.C(360) : warning C4716: 'freqchain' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\ERROR.C(32) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\ERROR.C(48) : warning C4033: 'warn' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\ERROR.C(64) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\ERROR.C(149) : warning C4013: 'done' undefined; assuming extern returning int
+EXEC.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\ERROR.C(56) : warning C4716: 'warn' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\ERROR.C(103) : warning C4716: 'err' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(38) : warning C4013: 'putif' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(49) : warning C4013: 'execerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(94) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(107) : warning C4013: 'many' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(120) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(136) : warning C4018: '>' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(139) : warning C4018: '>' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(170) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(177) : warning C4013: 'mkstfunct' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(184) : warning C4013: 'enddcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(212) : warning C4013: 'dclerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(213) : warning C4033: 'mkstfunct' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(220) : warning C4013: 'impldcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(241) : warning C4013: 'vardcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(254) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(275) : warning C4013: 'settype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(286) : warning C4013: 'putcmgo' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(288) : warning C4013: 'putexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(408) : warning C4013: 'errext' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(410) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(411) : warning C4033: 'exdo' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(415) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(417) : warning C4033: 'exdo' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(426) : warning C4033: 'exdo' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(446) : warning C4033: 'exdo' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(456) : warning C4033: 'exdo' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(460) : warning C4033: 'exdo' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(501) : warning C4013: 'conssgn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(534) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(571) : warning C4033: 'exenddo' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(584) : warning C4013: 'enddo' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(613) : warning C4013: 'deregister' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(617) : warning C4013: 'frtemp' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(658) : warning C4033: 'exassign' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(694) : warning C4013: 'putout' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(753) : warning C4013: 'addressable' undefined; assuming extern returning int
+EXPR.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(245) : warning C4716: 'mkstfunct' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXEC.C(642) : warning C4716: 'enddo' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(206) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(210) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(248) : warning C4013: 'badtype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(266) : warning C4013: 'consconv' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(273) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(394) : warning C4013: 'badtag' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(408) : warning C4033: 'frexpr' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(434) : warning C4033: 'frexpr' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(451) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(466) : warning C4013: 'warn1' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(541) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(632) : warning C4013: 'cktype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(748) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(838) : warning C4013: 'vardcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(904) : warning C4013: 'intrfunct' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(943) : warning C4013: 'fatalstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(946) : warning C4013: 'fatali' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(956) : warning C4013: 'impldcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(966) : warning C4013: 'dclerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1072) : warning C4013: 'putexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1162) : warning C4013: 'inregister' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1194) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1351) : warning C4013: 'errext' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1393) : warning C4013: 'putout' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1536) : warning C4013: 'badstg' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1649) : warning C4033: 'vardcl' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1651) : warning C4033: 'vardcl' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1658) : warning C4033: 'vardcl' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1666) : warning C4033: 'vardcl' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1708) : warning C4033: 'impldcl' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1717) : warning C4033: 'impldcl' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1722) : warning C4013: 'settype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1865) : warning C4013: 'is_negatable' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1868) : warning C4013: 'consnegop' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(2037) : warning C4013: 'badop' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(2099) : warning C4013: 'maxtype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(2395) : warning C4013: 'cmpstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(2436) : warning C4033: 'consconv' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(2447) : warning C4244: '=' : conversion from 'long ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(2461) : warning C4244: '=' : conversion from 'double ' to 'long ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(2502) : warning C4033: 'consnegop' must return a value
+FORMAT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(459) : warning C4716: 'frexpr' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1693) : warning C4716: 'vardcl' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(1725) : warning C4716: 'impldcl' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(2482) : warning C4716: 'consconv' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\EXPR.C(2526) : warning C4716: 'consnegop' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(79) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(115) : warning C4013: 'wr_abbrevs' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(132) : warning C4013: 'ffilecopy' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(142) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(264) : warning C4013: 'procode' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(307) : warning C4013: 'margin_printf' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(326) : warning C4013: 'errl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(345) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(405) : warning C4244: '=' : conversion from 'short ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(651) : warning C4244: '=' : conversion from 'long ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(685) : warning C4244: '=' : conversion from 'long ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(693) : warning C4244: '=' : conversion from 'long ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(722) : warning C4244: '=' : conversion from 'long ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(730) : warning C4244: '=' : conversion from 'long ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(811) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(814) : warning C4013: 'list_decls' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(856) : warning C4244: '=' : conversion from 'long ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(857) : warning C4244: '=' : conversion from 'long ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(1238) : warning C4013: 'oneof_stg' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(1308) : warning C4013: 'ind_printf' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(1303) : warning C4101: 'L' : unreferenced local variable
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(1423) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(1490) : warning C4013: 'wr_nv_ident_help' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(1502) : warning C4013: 'do_uninit_equivs' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(1592) : warning C4013: 'warn1' undefined; assuming extern returning int
+FORMATDA.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(1842) : warning C4716: 'list_decls' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMAT.C(1871) : warning C4716: 'do_uninit_equivs' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(47) : warning C4013: 'dsort' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(48) : warning C4013: 'fatali' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(53) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(65) : warning C4013: 'backup' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(87) : warning C4013: 'rdname' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(87) : warning C4013: 'rdlong' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(101) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(107) : warning C4013: 'warn1' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(184) : warning C4013: 'many' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(203) : warning C4013: 'wr_equiv_init' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(206) : warning C4013: 'ind_printf' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(264) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(275) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(338) : warning C4013: 'wr_nv_ident_help' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(368) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(471) : warning C4013: 'wr_array_init' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(1015) : warning C4013: 'errl' undefined; assuming extern returning int
+gram.c
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(599) : warning C4716: 'wr_array_init' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\FORMATDA.C(1054) : warning C4716: 'wr_equiv_init' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(149) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(680) : warning C4013: 'yyerror' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(690) : warning C4013: 'yylex' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(830) : warning C4013: 'enddo' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(832) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(838) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(847) : warning C4013: 'doinclude' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(850) : warning C4013: 'done' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(857) : warning C4013: 'endproc' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(866) : warning C4013: 'flline' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(880) : warning C4013: 'puthead' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(883) : warning C4013: 'execerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(887) : warning C4018: '<' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(888) : warning C4013: 'warn1' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(900) : warning C4013: 'startproc' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(908) : warning C4013: 'err66' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(912) : warning C4013: 'entrypt' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(928) : warning C4013: 'newproc' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(957) : warning C4013: 'dclerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(990) : warning C4013: 'fmtstmt' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(990) : warning C4013: 'setfmt' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(996) : warning C4013: 'settype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(997) : warning C4013: 'setbound' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1036) : warning C4013: 'errext' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1090) : warning C4013: 'incomm' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1108) : warning C4013: 'setext' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1114) : warning C4013: 'setintr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1123) : warning C4013: 'many' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1150) : warning C4013: 'enddcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1160) : warning C4013: 'frdata' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1161) : warning C4013: 'frrpl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1174) : warning C4013: 'dataval' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1181) : warning C4013: 'consnegop' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1205) : warning C4013: 'vardcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1286) : warning C4013: 'setimpl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1335) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1518) : warning C4013: 'exdo' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1528) : warning C4013: 'exenddo' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1531) : warning C4013: 'exendif' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1534) : warning C4013: 'exelif' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1537) : warning C4013: 'exelse' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1543) : warning C4013: 'exif' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1552) : warning C4013: 'exequals' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1555) : warning C4013: 'exassign' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1561) : warning C4013: 'exarif' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1564) : warning C4013: 'excall' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1577) : warning C4013: 'exreturn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1580) : warning C4013: 'exstop' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1594) : warning C4013: 'exgoto' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1597) : warning C4013: 'exasgoto' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1604) : warning C4013: 'putcmgo' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1652) : warning C4013: 'endio' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1655) : warning C4013: 'ioclause' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1655) : warning C4013: 'endioctl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1664) : warning C4013: 'doio' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1750) : warning C4013: 'iocname' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(1826) : warning C4013: 'startioctl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\gram.c(753) : warning C4102: 'yyerrlab' : unreferenced label
+INIT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INIT.C(354) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INIT.C(368) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INIT.C(459) : warning C4013: 'setimpl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INIT.C(466) : warning C4013: 'setlog' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INIT.C(481) : warning C4033: 'setimpl' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INIT.C(485) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INIT.C(494) : warning C4013: 'lengtype' undefined; assuming extern returning int
+INTR.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INIT.C(509) : warning C4716: 'setimpl' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(443) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(507) : warning C4013: 'maxtype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(529) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(631) : warning C4013: 'err66' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(638) : warning C4013: 'warn1' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(665) : warning C4013: 'fixargs' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(708) : warning C4013: 'fatali' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(711) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(756) : warning C4013: 'fatalstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(824) : warning C4013: 'addressable' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\INTR.C(835) : warning C4013: 'frexpr' undefined; assuming extern returning int
+IO.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(286) : warning C4013: 'execerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(292) : warning C4013: 'newlabel' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(318) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(320) : warning C4013: 'warni' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(327) : warning C4013: 'warn1' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(364) : warning C4013: 'flline' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(406) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(418) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(495) : warning C4013: 'startrw' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(499) : warning C4013: 'fatali' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(525) : warning C4013: 'errext' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(529) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(545) : warning C4033: 'ioclause' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(561) : warning C4033: 'ioclause' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(574) : warning C4033: 'ioclause' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(594) : warning C4013: 'vardcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(646) : warning C4013: 'exdo' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(649) : warning C4013: 'enddo' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(713) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(788) : warning C4013: 'exif' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(789) : warning C4013: 'exgoto' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(790) : warning C4013: 'exendif' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(821) : warning C4013: 'putexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(861) : warning C4013: 'badtag' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(931) : warning C4013: 'isstatic' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(1049) : warning C4033: 'startrw' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(1239) : warning C4013: 'badtype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(1365) : warning C4013: 'badthing' undefined; assuming extern returning int
+LEX.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\IO.C(1119) : warning C4716: 'startrw' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(252) : warning C4013: 'doinclude' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(297) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(314) : warning C4013: 'done' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(328) : warning C4013: 'clf' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(455) : warning C4013: 'fatali' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(469) : warning C4013: 'many' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(531) : warning C4013: 'errext' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(738) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(902) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(918) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(1304) : warning C4013: 'eqn' undefined; assuming extern returning int
+MAIN.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\LEX.C(316) : warning C4716: 'doinclude' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(239) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(272) : warning C4013: 'warni' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(283) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(317) : warning C4013: 'nice_printf' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(391) : warning C4013: 'done' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(440) : warning C4013: 'fileinit' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(444) : warning C4013: 'dofork' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(453) : warning C4013: 'initkey' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(466) : warning C4013: 'fatalstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(485) : warning C4013: 'inilex' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(492) : warning C4013: 'procinit' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(493) : warning C4013: 'yyparse' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(537) : warning C4013: 'wr_common_decls' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(540) : warning C4013: 'wr_globals' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(542) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(543) : warning C4013: 'ffilecopy' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(565) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MAIN.C(566) : warning C4013: 'endproc' undefined; assuming extern returning int
+MEM.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MEM.C(216) : warning C4013: 'nice_printf' undefined; assuming extern returning int
+MISC.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(60) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(79) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(328) : warning C4013: 'in_vector' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(343) : warning C4013: 'many' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(351) : warning C4013: 'errext' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(384) : warning C4013: 'newlabel' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(412) : warning C4013: 'warn1' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(417) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(422) : warning C4013: 'execerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(470) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(490) : warning C4013: 'add_extern_to_list' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(505) : warning C4033: 'add_extern_to_list' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(515) : warning C4033: 'add_extern_to_list' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(532) : warning C4033: 'frchain' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(549) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(860) : warning C4033: 'negate_const' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(998) : warning C4033: 'backup' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(1002) : warning C4033: 'backup' must return a value
+NAMES.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\MISC.C(523) : warning C4716: 'add_extern_to_list' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(162) : warning C4033: 'wr_nv_ident_help' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(165) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(297) : warning C4033: 'wr_globals' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(306) : warning C4013: 'margin_printf' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(309) : warning C4244: '=' : conversion from 'short ' to 'char ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(485) : warning C4013: 'wr_struct' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(546) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(548) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(671) : warning C4013: 'fatalstr' undefined; assuming extern returning int
+NICEPRIN.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NAMES.C(590) : warning C4716: 'wr_struct' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NICEPRIN.C(56) : warning C4033: 'write_indent' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NICEPRIN.C(86) : warning C4013: 'ind_printf' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NICEPRIN.C(248) : warning C4013: 'fatalstr' undefined; assuming extern returning int
+OUTPUT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NICEPRIN.C(87) : warning C4716: 'margin_printf' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NICEPRIN.C(96) : warning C4716: 'nice_printf' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\NICEPRIN.C(77) : warning C4716: 'write_indent' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(149) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(154) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(157) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(162) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(181) : warning C4013: 'same_ident' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(184) : warning C4013: 'op_assign' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(275) : warning C4013: 'same_expr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(471) : warning C4013: 'badtag' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(541) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(580) : warning C4013: 'oneof_stg' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(860) : warning C4013: 'isnegative_const' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(861) : warning C4013: 'is_negatable' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(864) : warning C4013: 'negate_const' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(932) : warning C4013: 'out_call' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(995) : warning C4033: 'out_call' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(1199) : warning C4013: 'frchain' undefined; assuming extern returning int
+P1OUTPUT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\OUTPUT.C(1203) : warning C4716: 'out_call' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\P1OUTPUT.C(113) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\P1OUTPUT.C(117) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\P1OUTPUT.C(122) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\P1OUTPUT.C(241) : warning C4013: 'oneof_stg' undefined; assuming extern returning int
+PARSE_AR.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PARSE_AR.C(126) : warning C4013: 'match_table' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PARSE_AR.C(151) : warning C4013: 'strlen' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PARSE_AR.C(353) : warning C4013: 'strncmp' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PARSE_AR.C(396) : warning C4013: 'put_one_arg' undefined; assuming extern returning int
+PREAD.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PREAD.C(207) : warning C4018: '!=' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PREAD.C(247) : warning C4018: '!=' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PREAD.C(697) : warning C4018: '!=' : signed/unsigned mismatch
+PROC.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(77) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(185) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(259) : warning C4013: 'execerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(260) : warning C4013: 'endproc' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(293) : warning C4013: 'enddcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(295) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(298) : warning C4013: 'errstr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(309) : warning C4013: 'copy_data' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(311) : warning C4013: 'wr_abbrevs' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(322) : warning C4013: 'donmlist' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(324) : warning C4013: 'start_formatting' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(329) : warning C4013: 'procinit' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(353) : warning C4013: 'doequiv' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(392) : warning C4013: 'puthead' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(431) : warning C4013: 'dclerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(469) : warning C4013: 'lengtype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(495) : warning C4013: 'settype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(565) : warning C4013: 'badtype' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(575) : warning C4013: 'prolog' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(643) : warning C4033: 'doentry' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(648) : warning C4013: 'impldcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(650) : warning C4018: '!=' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(674) : warning C4013: 'newlabel' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(772) : warning C4018: '!=' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(825) : warning C4013: 'warn1' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(838) : warning C4018: '!=' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(858) : warning C4013: 'namelist' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(891) : warning C4033: 'namelist' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(896) : warning C4013: 'vardcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(972) : warning C4013: 'struct_eq' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1000) : warning C4013: 'cpn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1065) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1092) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1146) : warning C4013: 'erri' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1156) : warning C4018: '==' : signed/unsigned mismatch
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1250) : warning C4033: 'incomm' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1278) : warning C4033: 'settype' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1438) : warning C4013: 'intrfunct' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1492) : warning C4033: 'setbound' must return a value
+PUT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(330) : warning C4716: 'endproc' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(378) : warning C4716: 'enddcl' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(859) : warning C4716: 'donmlist' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(907) : warning C4716: 'namelist' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1021) : warning C4716: 'copy_data' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1334) : warning C4716: 'settype' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PROC.C(1600) : warning C4716: 'wr_abbrevs' : must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUT.C(212) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUT.C(239) : warning C4013: 'badtag' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUT.C(253) : warning C4013: 'newlabel' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUT.C(328) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUT.C(361) : warning C4244: '=' : conversion from 'long ' to 'short ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUT.C(386) : warning C4013: 'many' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUT.C(392) : warning C4013: 'badtype' undefined; assuming extern returning int
+PUTPCC.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(81) : warning C4013: 'err' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(100) : warning C4013: 'new_endif' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(131) : warning C4013: 'execerr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(132) : warning C4033: 'putcmgo' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(262) : warning C4013: 'log_2' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(265) : warning C4013: 'frexpr' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(333) : warning C4013: 'badop' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(343) : warning C4013: 'badtag' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(474) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(600) : warning C4013: 'addressable' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(904) : warning C4013: 'badchleng' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(975) : warning C4013: 'ncat' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(978) : warning C4013: 'frtemp' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(1031) : warning C4033: 'putct1' must return a value
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(1210) : warning C4013: 'warn' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(1212) : warning C4013: 'frchain' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(1344) : warning C4013: 'impldcl' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\PUTPCC.C(1505) : warning C4013: 'erri' undefined; assuming extern returning int
+SYSDEP.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\SYSDEP.C(149) : warning C4013: 'getpid' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\SYSDEP.C(185) : warning C4013: 'Fatal' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\SYSDEP.C(212) : warning C4113: 'void (__cdecl *)()' differs in parameter lists from 'void (__cdecl *)(int )'
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\SYSDEP.C(223) : warning C4113: 'void (__cdecl *)()' differs in parameter lists from 'void (__cdecl *)(int )'
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\SYSDEP.C(237) : warning C4113: 'void (__cdecl *)()' differs in parameter lists from 'void (__cdecl *)(int )'
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\SYSDEP.C(468) : warning C4013: 'clf' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\SYSDEP.C(489) : warning C4113: 'int (__cdecl *)()' differs in parameter lists from 'int (__cdecl *)(const void *,const void *)'
+VAX.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\VAX.C(105) : warning C4013: 'badstg' undefined; assuming extern returning int
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\SRC\VAX.C(197) : warning C4033: 'prolog' must return a value
+VERSION.C
+Linking...
+
+
+
+<h3>Results</h3>
+f2c.exe - 0 error(s), 448 warning(s)
+</pre>
+</body>
+</html>

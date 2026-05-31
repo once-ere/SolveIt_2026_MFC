@@ -1,0 +1,303 @@
+# Microsoft Developer Studio Generated NMAKE File, Based on CVOde.dsp
+!IF "$(CFG)" == ""
+CFG=CVOde - Win32 Debug
+!MESSAGE No configuration specified. Defaulting to CVOde - Win32 Debug.
+!ENDIF 
+
+!IF "$(CFG)" != "CVOde - Win32 Release" && "$(CFG)" != "CVOde - Win32 Debug"
+!MESSAGE Invalid configuration "$(CFG)" specified.
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE 
+!MESSAGE NMAKE /f "CVOde.mak" CFG="CVOde - Win32 Debug"
+!MESSAGE 
+!MESSAGE Possible choices for configuration are:
+!MESSAGE 
+!MESSAGE "CVOde - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "CVOde - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE 
+!ERROR An invalid configuration is specified.
+!ENDIF 
+
+!IF "$(OS)" == "Windows_NT"
+NULL=
+!ELSE 
+NULL=nul
+!ENDIF 
+
+!IF  "$(CFG)" == "CVOde - Win32 Release"
+
+OUTDIR=.\Release
+INTDIR=.\Release
+
+ALL : "..\CVOde.lib"
+
+
+CLEAN :
+	-@erase "$(INTDIR)\BAND.OBJ"
+	-@erase "$(INTDIR)\CVBAND.OBJ"
+	-@erase "$(INTDIR)\CVDENSE.OBJ"
+	-@erase "$(INTDIR)\CVDIAG.OBJ"
+	-@erase "$(INTDIR)\CVODE.OBJ"
+	-@erase "$(INTDIR)\CVSPGMR.OBJ"
+	-@erase "$(INTDIR)\DENSE.OBJ"
+	-@erase "$(INTDIR)\ITERATIV.OBJ"
+	-@erase "$(INTDIR)\LLNLMATH.OBJ"
+	-@erase "$(INTDIR)\SPGMR.OBJ"
+	-@erase "$(INTDIR)\vc60.idb"
+	-@erase "$(INTDIR)\VECTOR.OBJ"
+	-@erase "..\CVOde.lib"
+
+"$(OUTDIR)" :
+    if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+
+F90=df.exe
+F90_PROJ=/compile_only /nologo /warn:nofileopt /module:"Release/" /object:"Release/" 
+F90_OBJS=.\Release/
+
+.SUFFIXES: .fpp
+
+.for{$(F90_OBJS)}.obj:
+   $(F90) $(F90_PROJ) $<  
+
+.f{$(F90_OBJS)}.obj:
+   $(F90) $(F90_PROJ) $<  
+
+.f90{$(F90_OBJS)}.obj:
+   $(F90) $(F90_PROJ) $<  
+
+.fpp{$(F90_OBJS)}.obj:
+   $(F90) $(F90_PROJ) $<  
+
+CPP=cl.exe
+CPP_PROJ=/nologo /MT /W3 /GR /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /Fp"$(INTDIR)\CVOde.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+RSC=rc.exe
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\CVOde.bsc" 
+BSC32_SBRS= \
+	
+LIB32=link.exe -lib
+LIB32_FLAGS=/nologo /out:"..\CVOde.lib" 
+LIB32_OBJS= \
+	"$(INTDIR)\BAND.OBJ" \
+	"$(INTDIR)\CVBAND.OBJ" \
+	"$(INTDIR)\CVDENSE.OBJ" \
+	"$(INTDIR)\CVDIAG.OBJ" \
+	"$(INTDIR)\CVODE.OBJ" \
+	"$(INTDIR)\CVSPGMR.OBJ" \
+	"$(INTDIR)\DENSE.OBJ" \
+	"$(INTDIR)\ITERATIV.OBJ" \
+	"$(INTDIR)\LLNLMATH.OBJ" \
+	"$(INTDIR)\SPGMR.OBJ" \
+	"$(INTDIR)\VECTOR.OBJ"
+
+"..\CVOde.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
+    $(LIB32) @<<
+  $(LIB32_FLAGS) $(DEF_FLAGS) $(LIB32_OBJS)
+<<
+
+!ELSEIF  "$(CFG)" == "CVOde - Win32 Debug"
+
+OUTDIR=.\Debug
+INTDIR=.\Debug
+
+ALL : "..\CVOdeD.lib"
+
+
+CLEAN :
+	-@erase "$(INTDIR)\BAND.OBJ"
+	-@erase "$(INTDIR)\CVBAND.OBJ"
+	-@erase "$(INTDIR)\CVDENSE.OBJ"
+	-@erase "$(INTDIR)\CVDIAG.OBJ"
+	-@erase "$(INTDIR)\CVODE.OBJ"
+	-@erase "$(INTDIR)\CVSPGMR.OBJ"
+	-@erase "$(INTDIR)\DENSE.OBJ"
+	-@erase "$(INTDIR)\ITERATIV.OBJ"
+	-@erase "$(INTDIR)\LLNLMATH.OBJ"
+	-@erase "$(INTDIR)\SPGMR.OBJ"
+	-@erase "$(INTDIR)\vc60.idb"
+	-@erase "$(INTDIR)\vc60.pdb"
+	-@erase "$(INTDIR)\VECTOR.OBJ"
+	-@erase "..\CVOdeD.lib"
+
+"$(OUTDIR)" :
+    if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+
+F90=df.exe
+F90_PROJ=/check:bounds /compile_only /debug:full /nologo /traceback /warn:argument_checking /warn:nofileopt /module:"Debug/" /object:"Debug/" /pdbfile:"Debug/DF60.PDB" 
+F90_OBJS=.\Debug/
+
+.SUFFIXES: .fpp
+
+.for{$(F90_OBJS)}.obj:
+   $(F90) $(F90_PROJ) $<  
+
+.f{$(F90_OBJS)}.obj:
+   $(F90) $(F90_PROJ) $<  
+
+.f90{$(F90_OBJS)}.obj:
+   $(F90) $(F90_PROJ) $<  
+
+.fpp{$(F90_OBJS)}.obj:
+   $(F90) $(F90_PROJ) $<  
+
+CPP=cl.exe
+CPP_PROJ=/nologo /MTd /W3 /Gm /GR /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Fp"$(INTDIR)\CVOde.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+RSC=rc.exe
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\CVOde.bsc" 
+BSC32_SBRS= \
+	
+LIB32=link.exe -lib
+LIB32_FLAGS=/nologo /out:"..\CVOdeD.lib" 
+LIB32_OBJS= \
+	"$(INTDIR)\BAND.OBJ" \
+	"$(INTDIR)\CVBAND.OBJ" \
+	"$(INTDIR)\CVDENSE.OBJ" \
+	"$(INTDIR)\CVDIAG.OBJ" \
+	"$(INTDIR)\CVODE.OBJ" \
+	"$(INTDIR)\CVSPGMR.OBJ" \
+	"$(INTDIR)\DENSE.OBJ" \
+	"$(INTDIR)\ITERATIV.OBJ" \
+	"$(INTDIR)\LLNLMATH.OBJ" \
+	"$(INTDIR)\SPGMR.OBJ" \
+	"$(INTDIR)\VECTOR.OBJ"
+
+"..\CVOdeD.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
+    $(LIB32) @<<
+  $(LIB32_FLAGS) $(DEF_FLAGS) $(LIB32_OBJS)
+<<
+
+!ENDIF 
+
+
+!IF "$(NO_EXTERNAL_DEPS)" != "1"
+!IF EXISTS("CVOde.dep")
+!INCLUDE "CVOde.dep"
+!ELSE 
+!MESSAGE Warning: cannot find "CVOde.dep"
+!ENDIF 
+!ENDIF 
+
+
+!IF "$(CFG)" == "CVOde - Win32 Release" || "$(CFG)" == "CVOde - Win32 Debug"
+SOURCE=.\BAND.CPP
+
+"$(INTDIR)\BAND.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\CVBAND.CPP
+
+"$(INTDIR)\CVBAND.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\CVDENSE.CPP
+
+"$(INTDIR)\CVDENSE.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\CVDIAG.CPP
+
+"$(INTDIR)\CVDIAG.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\CVODE.CPP
+
+"$(INTDIR)\CVODE.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\CVSPGMR.CPP
+
+"$(INTDIR)\CVSPGMR.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\DENSE.CPP
+
+"$(INTDIR)\DENSE.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\ITERATIV.CPP
+
+"$(INTDIR)\ITERATIV.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\LLNLMATH.CPP
+
+"$(INTDIR)\LLNLMATH.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\SPGMR.CPP
+
+"$(INTDIR)\SPGMR.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\VECTOR.CPP
+
+"$(INTDIR)\VECTOR.OBJ" : $(SOURCE) "$(INTDIR)"
+
+
+
+!ENDIF 
+

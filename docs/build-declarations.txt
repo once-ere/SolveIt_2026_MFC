@@ -1,0 +1,204 @@
+#if false
+PROBLEM:
+#include <stdlib.h>
+void abort(void);
+
+std::abort
+  C++  Utilities library  Program support utilities 
+Defined in header <cstdlib>
+             void abort();(until C++11)
+[[noreturn]] void abort() noexcept;(since C++11)
+
+
+_abort -> std::unique_ptr<QPushButton> _pb_abort;
+abort -> QPushButton* pb_abort;
+
+awk '{
+if ($3 >=35 && $4 >= 35 && $5 >= 35)
+	print $0,"=>","Pass";
+else
+	print $0,"=>","Fail";
+}' student-marks
+
+awk '{
+if ($3 =="" || $4 == "" || $5 == "")
+	print "Some score for the student",$1,"is missing";'
+}' student-marks
+awk '{print "std::unique_ptr<"$4"> _"$1";"}' new-2.txt >> declarations.h
+awk '{print $4 "*"$1" = nullptr;"}' new-2.txt >> declarations.h
+
+#endif
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////// 
+
+
+/usr/lib64/qt5/bin/uic -o logisticMap.ui.h logisticMap.ui
+
+
+grep -wn -e'new' logisticMap.ui.h >> new.txt
+
+cut -c13- new.txt >> new-1.txt
+
+// create delimiters for awk, gawk
+sed -e 's/(/ /' new-1.txt | sed -e 's/)/ /'  | sed -e 's/;//' > new-2.txt
+
+echo "
+// \"declarations.h\"
+
+#if !defined(declarations_H_741bc550b53c48ab80a4232466ea81af)
+#define	  declarations_H_741bc550b53c48ab80a4232466ea81af
+
+#include <memory>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+
+#include <QApplication>
+#include <QVBoxLayout>
+
+#include <QLineEdit>
+
+#include <QThread>
+#include <QWidget>
+#include <QtWidgets>
+//#include "src/glwidget.h"
+#include <QLabel>
+#include <QPushButton>
+
+
+#include <QtCore/QVariant>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QWidget>
+
+
+#include <QOpenGLWidget>
+#include <QPainter>
+#include <QPaintEvent>
+
+#include <QBrush>
+#include <QFont>
+#include <QPen>
+#include <QWidget>
+
+
+/*
+#include <rxqt.hpp>
+#include <rxcpp/operators/rx-subscribe_on.hpp>
+#include <rxcpp/operators/rx-observe_on.hpp>
+
+namespace Rx {
+    using namespace rxcpp;
+    using namespace rxcpp::sources;
+    using namespace rxcpp::operators;
+    using namespace rxcpp::util;
+}
+*/
+
+
+using GLWidget = QOpenGLWidget;
+//using GLWidget = QWidget;
+using Rate_Label = QLabel;
+
+
+#include \"lmap.h\"
+
+//#include "declarations.h"
+//#include "definitions.h"
+
+
+" > declarations.h
+
+awk '{print "std::unique_ptr<"$4"> _"$1";"}' new-2.txt >> declarations.h
+awk '{print $4 "*"$1" = nullptr;"}' new-2.txt >> declarations.h
+
+
+
+echo "
+
+void retranslateUi(QMainWindow *LogisticMap);
+void setupUi(QMainWindow *LogisticMap);
+
+#endif //	  declarations_H_741bc550b53c48ab80a4232466ea81af
+" >> declarations.h
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+echo "
+// \"definitions.inc\"
+
+#if !defined(definitions_inc_741bc550b53c48ab80a4232466ea81af)
+#define	  definitions_inc_741bc550b53c48ab80a4232466ea81af
+
+" > definitions.inc
+
+awk '{print " _"$1" =  std::make_unique<"$4">("$5");\n"$1 " = _"$1".get();\n\n"}'  new-2.txt  >> definitions.inc
+
+echo "
+
+#endif //	  definitions_inc_741bc550b53c48ab80a4232466ea81af
+" >> definitions.inc
+
+
+
+
+
+
+
+
+
+//awk '{print $1 " = _"$1".get();"}' new-2.txt  >>definitions.inc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

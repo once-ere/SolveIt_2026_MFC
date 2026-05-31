@@ -1,0 +1,522 @@
+c      SUBROUTINE DVJ1 (M, X, F, WORK, IWORK, INFO)
+      SUBROUTINE DVJ1 (M, X, F, INFO)
+C***BEGIN PROLOGUE  DVJ1
+C***PURPOSE  Computes the Bessel function of the first kind
+C            of order one (J1) for a vector of real arguments
+C***LIBRARY   VFNLIB
+C***CATEGORY  C10B1
+C***TYPE      DOUBLE PRECISION (VJ1-S, DVJ1-D)
+C***KEYWORDS  BESSEL FUNCTION, FIRST KIND, SPECIAL FUNCTION,
+C             ORDER ONE, VECTORIZED
+C***AUTHOR  SAUNDERS, B. V., (NIST)
+C             COMPUTING AND APPLIED MATHEMATICS LABORATORY
+C             NATIONAL INSTITUTE OF STANDARDS AND TECHNOLOGY
+C             GAITHERSBURG, MD 20899
+C           BOISVERT, R. F., (NIST)
+C             COMPUTING AND APPLIED MATHEMATICS LABORATORY
+C             NATIONAL INSTITUTE OF STANDARDS AND TECHNOLOGY
+C             GAITHERSBURG, MD 20899
+C***DESCRIPTION
+C
+C   DVJ1 computes the  Bessel function of the first kind of order
+C   one (J1) for real arguments using uniform approximation by
+C   Chebyshev polynomials.
+C
+C
+C   P A R A M E T E R S
+C
+C   M      (Input) Integer (M .GT. 0) 
+C          The number of arguments at which the function is to be
+C          evaluated.
+C
+C   X      (Input) Double precision array of length M
+C          The arguments at which the function is to be evaluated are
+C          stored in X(1) to X(M) in any order.
+C
+C   F      (Output) Double precision array of length M
+C          F(i) contains the value of the function at X(i), i=1,..,M.
+C
+C   WORK   (Work) Double precision vector of length 7*M 
+C
+C   IWORK  (Work) Integer vector of length M 
+C
+C
+C   INFO   (Output) Integer
+C          Indicates status of computed result. The following table
+C          lists possible values and their meanings.  If OK=Yes then
+C          all F(i) have been set, otherwise none have been set.
+C
+C          INFO  OK            Description
+C          ------------------------------------------------------------
+C           -1   Yes  Warning: Some abs(X(i)) so small J1 underflows. 
+C                     The corresponding F(i) are set to zero.
+C            0   Yes  Successfull execution.
+C            1   No   Error: M .LE. 0
+C            2   No   Error: Some abs(X(i)) so big that no precision
+C                     possible in computing J1.  The index of the
+C                     first offending argument is returned in IWORK(1).
+C
+C *********************************************************************
+C   This routine is a modification of the function DBESJ1 developed by
+C   W. Fullerton of LANL.
+C *********************************************************************
+C
+C***REFERENCES  Ronald F. Boisvert and Bonita V. Saunders, Portable
+C               Vectorized Software for Bessel Function Evaluation,
+C               ACM Transactions on Mathematical Software 18 (1992),
+C               pp 456-469.
+C***ROUTINES CALLED  DWJ1
+C***REVISION HISTORY  (YYMMDD)
+C   910226  DATE WRITTEN
+C   930203  Minor modifications to prologue.
+C***END PROLOGUE  DVJ1
+C
+C     ----------
+C     PARAMETERS
+C     ----------
+C
+      INTEGER INFO, IWORK, M
+      DOUBLE PRECISION F, X, WORK
+C
+      DIMENSION X(M), F(M), WORK(7*M), IWORK(M)
+C
+C     ---------------
+C     LOCAL VARIABLES
+C     ---------------
+C
+      INTEGER IWB0, IWB1, IWB2, IWY, IWTC, IWYC, IWZC, JIN
+C
+C***FIRST EXECUTABLE STATEMENT  DVJ1
+C
+C     ... PARTITION WORK ARRAYS
+C
+      IWY   = 1
+      IWTC  = IWY  + M
+      IWYC  = IWTC + M
+      IWZC  = IWYC + M
+      IWB0  = IWZC + M
+      IWB1  = IWB0 + M
+      IWB2  = IWB1 + M
+C     Total = IWB2 + M
+C
+      JIN   = 1
+C     Total = JIN  + M
+C
+C     ... DWJ1 DOES ALL THE WORK
+C
+      CALL DWJ1(M,X,F,WORK(IWY),WORK(IWTC),WORK(IWYC),WORK(IWZC),
+     +         IWORK(JIN),WORK(IWB0),WORK(IWB1),WORK(IWB2),INFO)
+C
+      RETURN
+      END
+      SUBROUTINE DWJ1(M, X, F, Y, TCMP, YCMP, ZCMP, INDX, B0, B1, B2, 
+     +   INFO)
+C***BEGIN PROLOGUE  DWJ1
+C***SUBSIDIARY
+C***PURPOSE  Computes the Bessel function of the first kind
+C            of order one (J1) for a vector of arguments
+C***LIBRARY   VFNLIB
+C***AUTHOR  SAUNDERS, B. V., (NIST)
+C             COMPUTING AND APPLIED MATHEMATICS LABORATORY
+C             NATIONAL INSTITUTE OF STANDARDS AND TECHNOLOGY
+C             GAITHERSBURG, MD 20899
+C           BOISVERT, R. F., (NIST)
+C             COMPUTING AND APPLIED MATHEMATICS LABORATORY
+C             NATIONAL INSTITUTE OF STANDARDS AND TECHNOLOGY
+C             GAITHERSBURG, MD 20899
+C***ROUTINES CALLED  IDWCS, D1MACH, DWNGT, DWGTHR, DWGTLE, DWGT,
+C                    DWLE, DWSCTR, DWCS
+C***REVISION HISTORY  (YYMMDD)
+C   910226  DATE WRITTEN 
+C***END PROLOGUE  DWJ1
+C
+C  ----------
+C  PARAMETERS
+C  ----------
+C
+      INTEGER INFO, INDX, M
+      DOUBLE PRECISION B0, B1, B2, F, X, Y, TCMP, YCMP, ZCMP
+C
+      DIMENSION B0(M), B1(M), B2(M), F(M), INDX(M), X(M), Y(M),
+     +          TCMP(M), YCMP(M), ZCMP(M)
+C
+C  ---------------
+C  LOCAL VARIABLES
+C  ---------------
+C
+      INTEGER LBJ1, LBM1, LBM12, LBTH1, LBT12
+      PARAMETER (LBJ1=19, LBM1=37, LBM12=40, LBTH1=44, LBT12=39)
+C
+      INTEGER I, IDWCS, J, JH, K, KEY, N, NA, NB, NTJ1, NTM1, NTM12, 
+     +        NTTH1, NTT12, NTOT
+      DOUBLE PRECISION BJ1CS, BM1CS, BM12CS, BTH1CS, BT12CS, C1, C2,  
+     +        EPMACH, EPS, PI4, D1MACH, TPI4, XMAX, XMIN, XSML
+C
+      DIMENSION BJ1CS(LBJ1), BM1CS(LBM1), BM12CS(LBM12), BTH1CS(LBTH1), 
+     +          BT12CS(LBT12)
+C
+      SAVE BJ1CS, BM1CS, BM12CS, BTH1CS, BT12CS, NTJ1, NTM1, NTM12, 
+     +      NTTH1, NTT12, PI4, TPI4, XMIN, XSML, XMAX
+C
+C----------------------------------------------------------------------
+C
+C Series for BJ1        on the interval  0.          to  1.60000D+01
+C                                        with weighted error   1.16E-33
+C                                         log weighted error  32.93
+C                               significant figures required  32.36
+C                                    decimal places required  33.57
+C
+      DATA BJ1 CS(  1) / -.1172614151 3332786560 6240574524 003 D+0    /
+      DATA BJ1 CS(  2) / -.2536152183 0790639562 3030884554 698 D+0    /
+      DATA BJ1 CS(  3) / +.5012708098 4469568505 3656363203 743 D-1    /
+      DATA BJ1 CS(  4) / -.4631514809 6250819184 2619728789 772 D-2    /
+      DATA BJ1 CS(  5) / +.2479962294 1591402453 9124064592 364 D-3    /
+      DATA BJ1 CS(  6) / -.8678948686 2788258452 1246435176 416 D-5    /
+      DATA BJ1 CS(  7) / +.2142939171 4379369150 2766250991 292 D-6    /
+      DATA BJ1 CS(  8) / -.3936093079 1831797922 9322764073 061 D-8    /
+      DATA BJ1 CS(  9) / +.5591182317 9468800401 8248059864 032 D-10   /
+      DATA BJ1 CS( 10) / -.6327616404 6613930247 7695274014 880 D-12   /
+      DATA BJ1 CS( 11) / +.5840991610 8572470032 6945563268 266 D-14   /
+      DATA BJ1 CS( 12) / -.4482533818 7012581903 9135059199 999 D-16   /
+      DATA BJ1 CS( 13) / +.2905384492 6250246630 6018688000 000 D-18   /
+      DATA BJ1 CS( 14) / -.1611732197 8414416541 2118186666 666 D-20   /
+      DATA BJ1 CS( 15) / +.7739478819 3927463729 8346666666 666 D-23   /
+      DATA BJ1 CS( 16) / -.3248693782 1119984114 3466666666 666 D-25   /
+      DATA BJ1 CS( 17) / +.1202237677 2274102272 0000000000 000 D-27   /
+      DATA BJ1 CS( 18) / -.3952012212 6513493333 3333333333 333 D-30   /
+      DATA BJ1 CS( 19) / +.1161678082 2664533333 3333333333 333 D-32   /
+C
+C-------------------------------------------------------------------
+C
+C Series for BM1        on the interval  0.          to  6.25000D-02
+C                                        with weighted error   4.91E-32
+C                                         log weighted error  31.31
+C                               significant figures required  30.04
+C                                    decimal places required  32.09
+C
+      DATA BM1 CS(  1) / +.1069845452 6180630149 6998530853 8 D+0      /
+      DATA BM1 CS(  2) / +.3274915039 7159649007 2905514344 5 D-2      /
+      DATA BM1 CS(  3) / -.2987783266 8316985920 3044577793 8 D-4      /
+      DATA BM1 CS(  4) / +.8331237177 9919745313 9322266902 3 D-6      /
+      DATA BM1 CS(  5) / -.4112665690 3020073048 9638172549 8 D-7      /
+      DATA BM1 CS(  6) / +.2855344228 7892152207 1975766316 1 D-8      /
+      DATA BM1 CS(  7) / -.2485408305 4156238780 6002659605 5 D-9      /
+      DATA BM1 CS(  8) / +.2543393338 0725824427 4248439717 4 D-10     /
+      DATA BM1 CS(  9) / -.2941045772 8229675234 8975082790 9 D-11     /
+      DATA BM1 CS( 10) / +.3743392025 4939033092 6505615362 6 D-12     /
+      DATA BM1 CS( 11) / -.5149118293 8211672187 2054824352 7 D-13     /
+      DATA BM1 CS( 12) / +.7552535949 8651439080 3404076419 9 D-14     /
+      DATA BM1 CS( 13) / -.1169409706 8288464441 6629062246 4 D-14     /
+      DATA BM1 CS( 14) / +.1896562449 4347915717 2182460506 0 D-15     /
+      DATA BM1 CS( 15) / -.3201955368 6932864206 6477531639 4 D-16     /
+      DATA BM1 CS( 16) / +.5599548399 3162041144 8416990549 3 D-17     /
+      DATA BM1 CS( 17) / -.1010215894 7304324431 1939044454 4 D-17     /
+      DATA BM1 CS( 18) / +.1873844985 7275629833 0204271957 3 D-18     /
+      DATA BM1 CS( 19) / -.3563537470 3285802192 7430143999 9 D-19     /
+      DATA BM1 CS( 20) / +.6931283819 9712383304 2276351999 9 D-20     /
+      DATA BM1 CS( 21) / -.1376059453 4065001522 5140893013 3 D-20     /
+      DATA BM1 CS( 22) / +.2783430784 1070802205 9977932799 9 D-21     /
+      DATA BM1 CS( 23) / -.5727595364 3205616893 4866943999 9 D-22     /
+      DATA BM1 CS( 24) / +.1197361445 9188926725 3575679999 9 D-22     /
+      DATA BM1 CS( 25) / -.2539928509 8918719766 4144042666 6 D-23     /
+      DATA BM1 CS( 26) / +.5461378289 6572959730 6961919999 9 D-24     /
+      DATA BM1 CS( 27) / -.1189211341 7733202889 8628949333 3 D-24     /
+      DATA BM1 CS( 28) / +.2620150977 3400815949 5782400000 0 D-25     /
+      DATA BM1 CS( 29) / -.5836810774 2556859019 2093866666 6 D-26     /
+      DATA BM1 CS( 30) / +.1313743500 0805957734 2361599999 9 D-26     /
+      DATA BM1 CS( 31) / -.2985814622 5103803553 3277866666 6 D-27     /
+      DATA BM1 CS( 32) / +.6848390471 3346049376 2559999999 9 D-28     /
+      DATA BM1 CS( 33) / -.1584401568 2224767211 9296000000 0 D-28     /
+      DATA BM1 CS( 34) / +.3695641006 5709380543 0101333333 3 D-29     /
+      DATA BM1 CS( 35) / -.8687115921 1446682430 1226666666 6 D-30     /
+      DATA BM1 CS( 36) / +.2057080846 1587634629 2906666666 6 D-30     /
+      DATA BM1 CS( 37) / -.4905225761 1162255185 2373333333 3 D-31     /
+C
+C-------------------------------------------------------------------
+C
+C Series for BM12       Used in double precision version only
+C                                        with weighted error   5.01E-32
+C                                         log weighted error  31.30
+C                               significant figures required  29.99
+C                                    decimal places required  32.10
+C
+      DATA BM12CS(  1) / +.9807979156 2330500272 7209354693 7 D-1      /
+      DATA BM12CS(  2) / +.1150961189 5046853061 7548348460 2 D-2      /
+      DATA BM12CS(  3) / -.4312482164 3382054098 8935809773 2 D-5      /
+      DATA BM12CS(  4) / +.5951839610 0888163078 1302980183 2 D-7      /
+      DATA BM12CS(  5) / -.1704844019 8269098574 0070158647 8 D-8      /
+      DATA BM12CS(  6) / +.7798265413 6111095086 5817382740 1 D-10     /
+      DATA BM12CS(  7) / -.4958986126 7664158094 9175495186 5 D-11     /
+      DATA BM12CS(  8) / +.4038432416 4211415168 3820226514 4 D-12     /
+      DATA BM12CS(  9) / -.3993046163 7251754457 6548384664 5 D-13     /
+      DATA BM12CS( 10) / +.4619886183 1189664943 1334243277 5 D-14     /
+      DATA BM12CS( 11) / -.6089208019 0953833013 4547261933 3 D-15     /
+      DATA BM12CS( 12) / +.8960930916 4338764821 5704804124 9 D-16     /
+      DATA BM12CS( 13) / -.1449629423 9420231229 1651891892 5 D-16     /
+      DATA BM12CS( 14) / +.2546463158 5377760561 6514964806 8 D-17     /
+      DATA BM12CS( 15) / -.4809472874 6478364442 5926371862 0 D-18     /
+      DATA BM12CS( 16) / +.9687684668 2925990490 8727583912 4 D-19     /
+      DATA BM12CS( 17) / -.2067213372 2779660232 4503811755 1 D-19     /
+      DATA BM12CS( 18) / +.4646651559 1503847318 0276780959 0 D-20     /
+      DATA BM12CS( 19) / -.1094966128 8483341382 4135132833 9 D-20     /
+      DATA BM12CS( 20) / +.2693892797 2886828609 0570761278 5 D-21     /
+      DATA BM12CS( 21) / -.6894992910 9303744778 1897002685 7 D-22     /
+      DATA BM12CS( 22) / +.1830268262 7520629098 9066855474 0 D-22     /
+      DATA BM12CS( 23) / -.5025064246 3519164281 5611355322 4 D-23     /
+      DATA BM12CS( 24) / +.1423545194 4548060396 3169363419 4 D-23     /
+      DATA BM12CS( 25) / -.4152191203 6164503880 6888676980 1 D-24     /
+      DATA BM12CS( 26) / +.1244609201 5039793258 8233007654 7 D-24     /
+      DATA BM12CS( 27) / -.3827336370 5693042994 3191866128 6 D-25     /
+      DATA BM12CS( 28) / +.1205591357 8156175353 7472398183 5 D-25     /
+      DATA BM12CS( 29) / -.3884536246 3764880764 3185936112 4 D-26     /
+      DATA BM12CS( 30) / +.1278689528 7204097219 0489528346 1 D-26     /
+      DATA BM12CS( 31) / -.4295146689 4479462720 6193691591 2 D-27     /
+      DATA BM12CS( 32) / +.1470689117 8290708864 5680270798 3 D-27     /
+      DATA BM12CS( 33) / -.5128315665 1060731281 8037401779 6 D-28     /
+      DATA BM12CS( 34) / +.1819509585 4711693854 8143737328 6 D-28     /
+      DATA BM12CS( 35) / -.6563031314 8419808676 1863505037 3 D-29     /
+      DATA BM12CS( 36) / +.2404898976 9199606531 9891487583 4 D-29     /
+      DATA BM12CS( 37) / -.8945966744 6906124732 3495824297 9 D-30     /
+      DATA BM12CS( 38) / +.3376085160 6572310266 3714897824 0 D-30     /
+      DATA BM12CS( 39) / -.1291791454 6206563609 1309991696 6 D-30     /
+      DATA BM12CS( 40) / +.5008634462 9588105206 8495150125 4 D-31     /
+C
+C-------------------------------------------------------------------
+C
+C Series for BTH1       on the interval  0.          to  6.25000D-02
+C                                        with weighted error   2.82E-32
+C                                         log weighted error  31.55
+C                               significant figures required  31.12
+C
+      DATA BTH1CS(  1) / +.7474995720 3587276055 4434839696 95 D+0     /
+      DATA BTH1CS(  2) / -.1240077714 4651711252 5457775413 84 D-2     /
+      DATA BTH1CS(  3) / +.9925244240 4424527376 6414976895 92 D-5     /
+      DATA BTH1CS(  4) / -.2030369073 7159711052 4193753756 08 D-6     /
+      DATA BTH1CS(  5) / +.7535961770 5690885712 1840175836 29 D-8     /
+      DATA BTH1CS(  6) / -.4166161271 5343550107 6300238562 28 D-9     /
+      DATA BTH1CS(  7) / +.3070161807 0834890481 2451020912 16 D-10    /
+      DATA BTH1CS(  8) / -.2817849963 7605213992 3240088839 24 D-11    /
+      DATA BTH1CS(  9) / +.3079069673 9040295476 0281468216 47 D-12    /
+      DATA BTH1CS( 10) / -.3880330026 2803434112 7873475547 81 D-13    /
+      DATA BTH1CS( 11) / +.5509603960 8630904934 5617262085 62 D-14    /
+      DATA BTH1CS( 12) / -.8659006076 8383779940 1033989539 94 D-15    /
+      DATA BTH1CS( 13) / +.1485604914 1536749003 4236890606 83 D-15    /
+      DATA BTH1CS( 14) / -.2751952981 5904085805 3712121250 09 D-16    /
+      DATA BTH1CS( 15) / +.5455079609 0481089625 0362236409 23 D-17    /
+      DATA BTH1CS( 16) / -.1148653450 1983642749 5436310271 77 D-17    /
+      DATA BTH1CS( 17) / +.2553521337 7973900223 1990525335 22 D-18    /
+      DATA BTH1CS( 18) / -.5962149019 7413450395 7682879078 49 D-19    /
+      DATA BTH1CS( 19) / +.1455662290 2372718620 2883020058 33 D-19    /
+      DATA BTH1CS( 20) / -.3702218542 2450538201 5797760195 93 D-20    /
+      DATA BTH1CS( 21) / +.9776307412 5345357664 1684345179 24 D-21    /
+      DATA BTH1CS( 22) / -.2672682163 9668488468 7237753930 52 D-21    /
+      DATA BTH1CS( 23) / +.7545330038 4983271794 0381906557 64 D-22    /
+      DATA BTH1CS( 24) / -.2194789991 9802744897 8923833716 47 D-22    /
+      DATA BTH1CS( 25) / +.6564839462 3955262178 9069998174 93 D-23    /
+      DATA BTH1CS( 26) / -.2015560429 8370207570 7840768695 19 D-23    /
+      DATA BTH1CS( 27) / +.6341776855 6776143492 1446671856 70 D-24    /
+      DATA BTH1CS( 28) / -.2041927788 5337895634 8137699555 91 D-24    /
+      DATA BTH1CS( 29) / +.6719146422 0720567486 6589800185 51 D-25    /
+      DATA BTH1CS( 30) / -.2256907911 0207573595 7090036873 36 D-25    /
+      DATA BTH1CS( 31) / +.7729771989 2989706370 9269598719 29 D-26    /
+      DATA BTH1CS( 32) / -.2696744451 2294640913 2114240809 20 D-26    /
+      DATA BTH1CS( 33) / +.9574934451 8502698072 2955219336 27 D-27    /
+      DATA BTH1CS( 34) / -.3456916844 8890113000 1756808276 27 D-27    /
+      DATA BTH1CS( 35) / +.1268123481 7398436504 2119862383 74 D-27    /
+      DATA BTH1CS( 36) / -.4723253663 0722639860 4649937134 45 D-28    /
+      DATA BTH1CS( 37) / +.1785000847 8186376177 8586197964 17 D-28    /
+      DATA BTH1CS( 38) / -.6840436100 4510395406 2152235667 46 D-29    /
+      DATA BTH1CS( 39) / +.2656602867 1720419358 2934226722 12 D-29    /
+      DATA BTH1CS( 40) / -.1045040252 7914452917 7141614846 70 D-29    /
+      DATA BTH1CS( 41) / +.4161829082 5377144306 8619171970 64 D-30    /
+      DATA BTH1CS( 42) / -.1677163920 3643714856 5013478828 87 D-30    /
+      DATA BTH1CS( 43) / +.6836199777 6664389173 5359280285 28 D-31    /
+      DATA BTH1CS( 44) / -.2817224786 1233641166 7395746228 10 D-31    /
+C
+C-------------------------------------------------------------------
+C
+C Series for BT12       Used in double precision version only
+C                                        with weighted error   3.33E-32
+C                                         log weighted error  31.48
+C                               significant figures required  31.05
+C                                    decimal places required  32.27
+C
+      DATA BT12CS(  1) / +.7382386012 8742974662 6208397927 64 D+0     /
+      DATA BT12CS(  2) / -.3336111317 4483906384 4701476811 89 D-2     /
+      DATA BT12CS(  3) / +.6146345488 8046964698 5148994201 86 D-4     /
+      DATA BT12CS(  4) / -.2402458516 1602374264 9776354695 68 D-5     /
+      DATA BT12CS(  5) / +.1466355557 7509746153 2105919972 04 D-6     /
+      DATA BT12CS(  6) / -.1184191730 5589180567 0051475049 83 D-7     /
+      DATA BT12CS(  7) / +.1157419896 3919197052 1254663030 55 D-8     /
+      DATA BT12CS(  8) / -.1300116112 9439187449 3660077945 71 D-9     /
+      DATA BT12CS(  9) / +.1624539114 1361731937 7421662736 67 D-10    /
+      DATA BT12CS( 10) / -.2208963682 1403188752 1554417701 28 D-11    /
+      DATA BT12CS( 11) / +.3218030425 8553177090 4743586537 78 D-12    /
+      DATA BT12CS( 12) / -.4965314793 2768480785 5520211353 81 D-13    /
+      DATA BT12CS( 13) / +.8043890043 2847825985 5588826393 17 D-14    /
+      DATA BT12CS( 14) / -.1358912131 0161291384 6947126822 82 D-14    /
+      DATA BT12CS( 15) / +.2381050439 7147214869 6765296059 73 D-15    /
+      DATA BT12CS( 16) / -.4308146636 3849106724 4712414207 99 D-16    /
+      DATA BT12CS( 17) / +.8020254403 2771002434 9935125504 00 D-17    /
+      DATA BT12CS( 18) / -.1531631064 2462311864 2300274687 99 D-17    /
+      DATA BT12CS( 19) / +.2992860635 2715568924 0730405546 66 D-18    /
+      DATA BT12CS( 20) / -.5970996465 8085443393 8156366506 66 D-19    /
+      DATA BT12CS( 21) / +.1214028966 9415185024 1608526506 66 D-19    /
+      DATA BT12CS( 22) / -.2511511469 6612948901 0069777066 66 D-20    /
+      DATA BT12CS( 23) / +.5279056717 0328744850 7383807999 99 D-21    /
+      DATA BT12CS( 24) / -.1126050922 7550498324 3611613866 66 D-21    /
+      DATA BT12CS( 25) / +.2434827735 9576326659 6634624000 00 D-22    /
+      DATA BT12CS( 26) / -.5331726123 6931800130 0384426666 66 D-23    /
+      DATA BT12CS( 27) / +.1181361505 9707121039 2059903999 99 D-23    /
+      DATA BT12CS( 28) / -.2646536828 3353523514 8567893333 33 D-24    /
+      DATA BT12CS( 29) / +.5990339404 1361503945 5778133333 33 D-25    /
+      DATA BT12CS( 30) / -.1369085463 0829503109 1363839999 99 D-25    /
+      DATA BT12CS( 31) / +.3157679015 4380228326 4136533333 33 D-26    /
+      DATA BT12CS( 32) / -.7345791508 2084356491 4005333333 33 D-27    /
+      DATA BT12CS( 33) / +.1722808148 0722747930 7059200000 00 D-27    /
+      DATA BT12CS( 34) / -.4071690796 1286507941 0688000000 00 D-28    /
+      DATA BT12CS( 35) / +.9693474513 6779622700 3733333333 33 D-29    /
+      DATA BT12CS( 36) / -.2323763633 7765716765 3546666666 66 D-29    /
+      DATA BT12CS( 37) / +.5607451067 3522029406 8906666666 66 D-30    /
+      DATA BT12CS( 38) / -.1361646539 1539005860 5226666666 66 D-30    /
+      DATA BT12CS( 39) / +.3326310923 3894654388 9066666666 66 D-31    /
+C
+C-------------------------------------------------------------------
+C
+      DATA NTJ1 / 0 /
+C
+C***FIRST EXECUTABLE STATEMENT  DWJ1
+C
+      IF (M .LE. 0) GO TO 910 
+C
+      IF (NTJ1.EQ.0) THEN
+         EPMACH = D1MACH(3)
+         EPS = 0.10D0*EPMACH
+         NTJ1  = IDWCS(BJ1CS, LBJ1, EPS)
+         NTM1  = IDWCS(BM1CS, LBM1, EPS)
+         NTM12 = IDWCS(BM12CS, LBM12, EPS)
+         NTTH1 = IDWCS(BTH1CS, LBTH1, EPS)
+         NTT12 = IDWCS(BT12CS, LBT12, EPS)
+         XMIN = 2.0D0*D1MACH(1) 
+         XSML = SQRT(8.0D0*EPMACH)
+         XMAX = 1.0D0/D1MACH(4)
+         PI4 = ATAN(1.0D0)
+         TPI4 = 3.0D0*PI4
+      ENDIF
+C
+      NTOT = 0
+C
+      DO 10 I=1,M
+         Y(I) = ABS(X(I))
+  10  CONTINUE
+C
+      CALL DWNGT(M,Y,XMAX,KEY)
+      IF (KEY .NE. 0) GO TO 920
+C
+C  ---------------------------
+C  CASE   Y=0  OR  Y TOO SMALL
+C  ---------------------------
+C
+C     NOTE --- J1 UNDERFLOWS FOR  0 .LT. Y .LE. XMIN
+C
+      DO 15 I=1,M
+         F(I) = 0.0D0
+  15  CONTINUE
+C
+C  ----------------------------
+C  CASE   XMIN .LT. Y .LE. XSML
+C  ----------------------------
+C
+      CALL DWGTLE(M,Y,XMIN,XSML,N,INDX)
+      IF (N .GT. 0) THEN
+         NTOT = NTOT + N
+         CALL DWGTHR(N,Y,INDX,YCMP)
+         DO 20 J=1,N
+            ZCMP(J) = 0.50D0*YCMP(J)
+  20     CONTINUE
+         CALL DWSCTR(N,ZCMP,INDX,F)
+      ENDIF
+C
+C  ---------------------------
+C  CASE   XSML .LT. Y .LE. 4.0
+C  ---------------------------
+C
+      CALL DWGTLE(M,Y,XSML,4.0D0,N,INDX)
+      IF (N .GT. 0) THEN
+         NTOT = NTOT + N
+         CALL DWGTHR(N,Y,INDX,YCMP)
+         DO 30 J=1,N
+            TCMP(J) = 0.1250D0*YCMP(J)**2 - 1.0D0
+  30     CONTINUE
+         CALL DWCS(N,TCMP,BJ1CS,NTJ1,ZCMP,B0,B1,B2)
+         DO 40 K=1,N
+            ZCMP(K) = YCMP(K)*(0.250D0 + ZCMP(K))
+  40     CONTINUE
+         CALL DWSCTR(N,ZCMP,INDX,F)
+      ENDIF
+C
+C  ----------------
+C  CASE  Y .GT. 4.0
+C  ----------------
+C
+      CALL DWGTLE(M,Y,4.0D0,8.0D0,NA,INDX)
+      JH = NA + 1
+      CALL DWGT(M,Y,8.0D0,NB,INDX(JH))
+      N = NA + NB
+      IF (N .GT. 0) THEN
+         NTOT = NTOT + N
+         CALL DWGTHR(N,Y,INDX,YCMP)
+         C1 = 128.0D0/3.0D0
+         C2 = 5.0D0/3.0D0
+         DO 50 J=1,NA
+            ZCMP(J) = C1/YCMP(J)**2 - C2
+  50     CONTINUE
+         CALL DWCS(NA,ZCMP,BM1CS,NTM1,Y,B0,B1,B2)
+         CALL DWCS(NA,ZCMP,BT12CS,NTT12,ZCMP,B0,B1,B2)
+         DO 60 J=JH,N
+            ZCMP(J) = 128.0D0/YCMP(J)**2 - 1.0D0
+  60     CONTINUE
+         CALL DWCS(NB,ZCMP(JH),BM12CS,NTM12,Y(JH),B0,B1,B2)
+         CALL DWCS(NB,ZCMP(JH),BTH1CS,NTTH1,ZCMP(JH),B0,B1,B2)
+         DO 70 J=1,N
+            Y(J) = (0.750D0 + Y(J)) / SQRT(YCMP(J))
+            ZCMP(J) = (YCMP(J) - TPI4) + ZCMP(J) / YCMP(J)
+            ZCMP(J) = Y(J) * COS(ZCMP(J))
+  70     CONTINUE
+         CALL DWSCTR(N,ZCMP,INDX,F)
+      ENDIF
+C
+C  -------------------------------------------
+C  REVERSE SIGN FOR NEGATIVE X (RESULT IS ODD)
+C  -------------------------------------------
+C
+      DO 200 I=1,M
+         IF (X(I) .LT. 0.0D0)  F(I) = -F(I)
+  200 CONTINUE
+C
+C  -----
+C  EXITS
+C  -----
+C
+C     ... NORMAL
+C
+      INFO = 0
+      IF (NTOT .NE. M)  INFO = -1
+      GO TO 999
+C
+C     ... M .LE. 0
+C
+  910 CONTINUE
+      INFO = 1
+      GO TO 999
+C
+C     ... NO PRECISION BECAUSE X BIG  
+C
+  920 CONTINUE
+      INFO = 2
+      INDX(1) = KEY
+      GO TO 999
+C
+  999 CONTINUE
+      RETURN
+      END 

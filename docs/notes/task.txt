@@ -1,0 +1,64 @@
+search-ms:displayname=Search%20Results%20in%20%5C%5C10.10.10.9%5CEVO8701TB.TRIPLE_dataset&crumb=location:%5C%5C10.10.10.9%5CEVO8701TB.TRIPLE_dataset\SolveIt_migration_Compiles
+
+
+You must plan a modern  build of this project.
+Use %comspec% /k "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+to create the correct project environment.
+Also, Build a 'Release' target , with 'Debug' if possible.
+Read and understand all the files in this folder, and in sub-folders,
+and correctly identify which files comprise the source code and auxiliary
+files of the SolveIt project, and which may be ignored.
+
+This project seems to have 'missing' files and libraries,
+which are not missing, but are mis-located.
+Find all 'missing' files and libraries and copy them to
+appropriate target locations, that you create (or modify).
+
+
+You MUST perform a detailed, line-by-line, low level scan of each file.
+Read and understand all of the files in this folder, and in sub-folders.
+You must understand precisely and correctly all of the content of what you are reading.
+Refactor code to ensure safety ; refactor code to bring it up to modern
+standards, using unicode.
+Remember to build the Release target of this project,
+and include 'Debug' information, if possible.
+Make backups of all the files that you modify and/or create.
+You MUST be able to undo any and all errors that you introduce.
+ALL of its functionality is preserved (DO NOT BREAK ANYTHING), and extended,
+by your refactored code.
+
+Test your code for correctness and efficiency.
+
+Document your solution so that an ignorant USER,
+who is a gifted high school student, can clearly understand your logic,
+and explain it to other students.
+Be precise and explicit; explain your steps, and explain to the ignorant user
+how to use your solution to get work done correctly.
+Create both a markdown documention file named 'README.md'
+and a latex documention file  named 'README.tex' that
+you compile to 'README.pdf'.
+Verify and test your solution.
+Create interesting examples, which you document
+Document your work and tests so that an ignorant USER,
+who is a gifted high school student, can clearly understand your logic,
+and explain it to other students.
+Create both a markdown documention file and a latex documention file that
+you compile to pdf.
+
+If necessary you may download and build modern versions of gmp, mpfr, opencv, and or
+any other safe and tested libs that you require.
+Remember to
+make backups of all the files that you modify and/or create.
+You MUST be able to undo any and all errors that you introduce.
+ Document your solution!
+
+In 2006 this project compiled and linked WITHOUT ERROR.
+Remember, Your task is to refactor its code to bring it up to modern
+standards, using unicode.
+Remember to build the Release target of this project.
+Do not remove files from this project because of 'errors'.
+Fix the errors. Remember, in 2006 this project compiled and linked WITHOUT ERROR.
+
+
+DO NOT create missing files! why would you do this??? Search the folder named 'missing' and all sub-folders for missing files, and copy to ./src if found, AS YOU WERE ALREADY INSTRUCTED TO DO! If you cannot find a file then ask me to find it. DESTROY all files that you mindlessly created! Are you  trying to break this build? 
+

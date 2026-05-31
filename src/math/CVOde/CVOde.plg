@@ -1,0 +1,49 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: CVOde - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP289.tmp" with contents
+[
+/nologo /MTd /W3 /Gm /GR /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Fp"Debug/CVOde.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\Projects\MFC\SolveIt\lib\CVOde\BAND.CPP"
+"D:\Projects\MFC\SolveIt\lib\CVOde\CVBAND.CPP"
+"D:\Projects\MFC\SolveIt\lib\CVOde\CVDENSE.CPP"
+"D:\Projects\MFC\SolveIt\lib\CVOde\CVDIAG.CPP"
+"D:\Projects\MFC\SolveIt\lib\CVOde\CVODE.CPP"
+"D:\Projects\MFC\SolveIt\lib\CVOde\CVSPGMR.CPP"
+"D:\Projects\MFC\SolveIt\lib\CVOde\DENSE.CPP"
+"D:\Projects\MFC\SolveIt\lib\CVOde\ITERATIV.CPP"
+"D:\Projects\MFC\SolveIt\lib\CVOde\LLNLMATH.CPP"
+"D:\Projects\MFC\SolveIt\lib\CVOde\SPGMR.CPP"
+]
+Creating command line "cl.exe @C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP289.tmp" 
+Creating command line "link.exe -lib /nologo /out:"..\CVOdeD.lib"  .\Debug\BAND.OBJ .\Debug\CVBAND.OBJ .\Debug\CVDENSE.OBJ .\Debug\CVDIAG.OBJ .\Debug\CVODE.OBJ .\Debug\CVSPGMR.OBJ .\Debug\DENSE.OBJ .\Debug\ITERATIV.OBJ .\Debug\LLNLMATH.OBJ .\Debug\SPGMR.OBJ "
+<h3>Output Window</h3>
+Compiling...
+BAND.CPP
+CVBAND.CPP
+CVDENSE.CPP
+CVDIAG.CPP
+CVODE.CPP
+d:\projects\mfc\solveit\lib\cvode\cvode.cpp(721) : warning C4101: 'allocOK' : unreferenced local variable
+CVSPGMR.CPP
+d:\projects\mfc\solveit\lib\cvode\cvode.cpp(1376) : warning C4715: 'CVEwtSet' : not all control paths return a value
+d:\projects\mfc\solveit\lib\cvode\cvode.cpp(2057) : warning C4715: 'CVnls' : not all control paths return a value
+d:\projects\mfc\solveit\lib\cvode\cvode.cpp(2623) : warning C4715: 'CVHandleFailure' : not all control paths return a value
+DENSE.CPP
+ITERATIV.CPP
+LLNLMATH.CPP
+SPGMR.CPP
+Creating library...
+
+
+
+<h3>Results</h3>
+CVOdeD.lib - 0 error(s), 4 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: ZLib - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\NSH~1.NSH\LOCALS~1\Temp\RSP663.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Fp"Debug/ZLib.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\ZUTIL.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\ADLER32.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\COMPRESS.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\CRC32.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\DEFLATE.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\GZIO.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\INFBLOCK.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\INFCODES.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\INFFAST.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\INFLATE.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\INFTREES.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\INFUTIL.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\TREES.C"
+"C:\Projects\MFC\SolveIt.Lib\lib\zlib\UNCOMPR.C"
+]
+Creating command line "cl.exe @C:\DOCUME~1\NSH~1.NSH\LOCALS~1\Temp\RSP663.tmp" 
+Creating temporary file "C:\DOCUME~1\NSH~1.NSH\LOCALS~1\Temp\RSP664.tmp" with contents
+[
+/nologo /out:"Debug\ZLib.lib" 
+.\Debug\ZUTIL.OBJ
+.\Debug\ADLER32.OBJ
+.\Debug\COMPRESS.OBJ
+.\Debug\CRC32.OBJ
+.\Debug\DEFLATE.OBJ
+.\Debug\GZIO.OBJ
+.\Debug\INFBLOCK.OBJ
+.\Debug\INFCODES.OBJ
+.\Debug\INFFAST.OBJ
+.\Debug\INFLATE.OBJ
+.\Debug\INFTREES.OBJ
+.\Debug\INFUTIL.OBJ
+.\Debug\TREES.OBJ
+.\Debug\UNCOMPR.OBJ
+]
+Creating command line "xilink6.exe -lib @C:\DOCUME~1\NSH~1.NSH\LOCALS~1\Temp\RSP664.tmp"
+<h3>Output Window</h3>
+Compiling...
+ZUTIL.C
+ADLER32.C
+COMPRESS.C
+CRC32.C
+DEFLATE.C
+GZIO.C
+INFBLOCK.C
+INFCODES.C
+INFFAST.C
+INFLATE.C
+INFTREES.C
+INFUTIL.C
+TREES.C
+UNCOMPR.C
+Creating library...
+xilib: executing 'C:\PROGRA~1\MICROS~3\VC98\Bin\lib.exe'
+
+
+
+<h3>Results</h3>
+ZLib.lib - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

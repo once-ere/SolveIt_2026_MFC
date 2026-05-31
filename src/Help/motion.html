@@ -1,0 +1,240 @@
+<HTML>
+<HEAD>
+    <SCRIPT LANGUAGE="VBScript">
+<!--
+dim nPauseResume 
+
+Sub window_onLoad()
+	nPauseResume  = 0
+REM	Layout1_alx.NxText .Text  = CStr(0.0)
+REM	Layout1_alx.NyText .Text  = CStr(9.0)
+REM	Layout1_alx.NzText .Text  = CStr(1.0)
+end sub
+-->
+    </SCRIPT>
+<TITLE>Motion, Displacement and Velocity</TITLE>
+</HEAD>
+<BODY>
+				<hr>
+For a newer version of this example and other physics simulations, plus a calculator that supports
+vector operations [cross product, scalar product, ...], try
+<a HREF="../Electricy&Magnetism/Simulations/Simulations.html">
+<H3>
+<center>
+SolveIt Simulator
+</center>
+</H3>
+</a>
+				<hr>or<br>
+<h3><strong>Under Construction</strong>: In the future, this site will teach basic physics at the high school level to anyone interested in
+basic science.</h3>
+<A HREF="#Displacement">[Displacement Vector]</A><br>
+<A HREF="#Velocity">[Velocity Vector]</A><br>
+<A HREF="#Figure1">[Figure 1]</A>
+
+<h2>Motion, Displacement and Velocity</h2>
+<P>
+We are going to learn how physicists describe the motion of an object, such as a thrown ball.
+Imagine standing on top of a flat level cliff near the edge and throwing a ball toward the edge 
+so that it hits the ground several feet before the edge.  
+Mark the spot where you are standing. We'll call this spot the <a href="">origin</a>. 
+Also mark the spot where the ball hits. Draw a straight line through these two spots. 
+This line will be called our <a href="">x-axis</a>. 
+We'll assume that you have drawn a <b>very</b> long line that passes through the two points, and keeps
+going forever in both directions!
+<P>
+Before we really start describing the motion of the ball let's come up with a few more reference points. 
+<P>
+Suppose you mentally draw a line straight up through the point where you are standing (the origin). 
+This line will be called our <a href="">y-axis</a>.  
+We'll assume that you have a lot of energy and have drawn  the line so that it passes down through the cliff
+all the way to the center of the Earth, and back out the other side of the Earth into outer space. 
+
+<P>
+The world has three spatial dimensions. This means that through any chosen point, it is possible to draw
+three lines that are perpendicular to one another. For example, place a
+child's toy block on your desk, and pick a point on your desk where one of the corners of the block is.
+The three edges of the block that intersect at this corner point determine the three lines. 
+You could define the spatial dimension of the world as the number of edges leading away from
+a cubical block vertex (corner).
+<!  If the world was five-dimensional, then your cube would have five edges intersecting at each cube vertex.>
+Since the world has three spatial dimensions we need three axes to locate points in our environment.
+The third axis is called the <a href="">z-axis</a>.  We won't need this axis yet, but if you
+look carefully you can find it in Figure 1.
+<P>
+Back to the ball. The motion of the ball is first upward then downward toward the cliff edge.  
+Toward the cliff edge means along the first line you drew.  It means  along the
+x-axis. 
+<!You have caused the ball to move along the x-axis (don't get a swelled head!).>
+<P>
+The  upward and downward motion has taken place along the y-axis. 
+Now, the two lines that determine our x and y-axes lie in a flat two-dimensional
+space the we call a <a href="">plane</a>. We call this plane your  <b>x-y plane</b> (what else? the y-x plane??).
+<P>
+Next, wind up and throw the ball over the cliff, but in the same direction as before (along the x-axis).
+The motion of the ball takes place in the x-y plane. This motion is the ball's <a href="">trajectory</a>.
+The trajectory is illustrated in Figure 1.  Click the check box labeled "trajectory" to 
+see a graph of this motion in the x-y plane.  With the trajectory check box selected,
+press the button labeled "animate" to see a slow-motion depiction (simulation) of the
+ball's motion over the cliff.
+<hr>
+<A NAME="Figure1"></A>
+<h2>Figure 1: Trajectory of ball thrown over cliff</h2><br>
+    <OBJECT ID="Displacment1" WIDTH=400 HEIGHT=400
+     CLASSID="CLSID:60B88F06-DC0B-11D0-AC76-885F06903B75"
+    CODEBASE="http://129.115.14.23/physics/motion.cab">
+
+        <PARAM NAME="_Version" VALUE="65536">
+        <PARAM NAME="_ExtentX" VALUE="10583">
+        <PARAM NAME="_ExtentY" VALUE="10583">
+        <PARAM NAME="_StockProps" VALUE="0">
+    </OBJECT>
+<hr>
+
+<!    CODEBASE="motion.cab#Version=1,0,0,1">
+<!    CODEBASE="http://129.115.14.23/physics/motion.cab#Version=1,0,0,1">
+
+<OBJECT CLASSID="CLSID:812AE312-8B8E-11CF-93C8-00AA00C08FDF"
+ID="Layout1_alx" STYLE="LEFT:0;TOP:0">
+<PARAM NAME="ALXPATH" REF VALUE="Layout1.alx">
+ </OBJECT>
+<hr>
+Now let's bring time into the picture. Suppose you throw the ball over the cliff at time zero.
+Let's write "time zero" as t = 0 s, where the "s" is the abbreviation for "seconds". 
+You throw the ball at t = 0 s and it goes over the cliff.
+<p>
+ The ball moves upward for a while,
+then falls back down.  
+Let's assume that it takes three tenths (0.3) of a second for the ball to reach its highest point.
+The ball reachs its highest point at t = 0.3 s.  Then the ball begins to fall
+back down, toward the center of the earth. Of course, it speeds up as it falls because
+of gravity.  We will discuss this speeding up and the direction of the fall in a later chapter.
+The point we will focus on here is that at different times the ball is at different places.
+At different times the ball is at different points of its trajectory. 
+If you click the check box labeled "displacement vector" [with the trajectory check box checked (selected)] you can 
+see a magenta arrow that starts from the point from which you threw the ball,
+and locates the ball at a later time.
+This arrow starts from the origin and ends at the position of the ball at a later time.
+
+<hr>
+<A NAME="Displacement"></A>
+This magenta arrow is called the <A href="">displacement vector</a>.  The length of the arrow
+is the distance from you (really your feet) to the ball. It is the distance from the
+origin to the ball.
+This length is also called the <A href="">magnitude</a> of the vector.
+This magnitude or distance is often measured in feet or meters.  We will use meters.
+The abbreviation for "meters" is "m". For example, if the distance from your feet
+to the ball is six meters, the we say that  the magnitude of the displacement vector = 6 m.
+<P>The arrow points toward the ball. If it pointed in a different direction, then it would not
+end at the ball! The direction of the displacement vector is just as important as its magnitude.
+Change its magnitude (length) and the arrow is either too short or too long, and does not touch the ball.
+Change its direction, and the arrow points in the wrong direction, and does not touch the ball.
+<P>
+It is important to realize that the ball moves along its trajectory,
+not along the displacement vector!  If you wanted to shoot the ball with a laser
+beam, then the laser beam would move along the displacement vector.
+In this example, the ball does not follow the displacement vector!
+<hr>
+<A NAME="Velocity"></A>
+Let's describe how fast and in what direction the ball is moving.
+We're talking velocity, the velocity vector.  What we ultimately seek is a velocity vector with two special properties:
+<ul>
+<li>The direction of the velocity vector is the direction that the ball is moving. 
+<li>The magnitude of the velocity vector is just the speed of the ball. 
+</ul>
+<P>
+Unfortunately, we cannot just jump right in and define the velocity vector. We first must discuss a "helper" quantity 
+(<em>velocity helper</em>) called the <a href="">average velocity vector</a>.
+The average velocity vector is defined to be the displacement vector locating
+the ball at time t, divided by t.  Suppose t = 0.5s .
+When you divide the arrow representing the displacement vector by 0.5s
+you get another arrow that points in the same direction, but which has a different length.  
+When you divide a vector (an arrow) by a positive number like time, you get another vector (arrow)
+pointing in the same direction, but with a different magnitude (length).
+<P>
+Because of its definition, the average velocity vector has
+to be parallel to the displacement vector. 
+This is because the two arrows point in exactly the same direction; they just have different lengths.
+The average velocity vector simply has a different magnitude and different units than
+the displacement vector .
+The magnitude of the average velocity vector is measured in meters per second, m/s, and may or may not
+have any meaningful physical interpretation; this depends on the details of the motion.
+The magnitude of the displacement vector is measured in meters , m, and is the distance
+of the ball from the origin.
+<P>
+It is important to notice that the displacement vector can be pointing in one direction
+and the ball can be moving in a completely different direction. Only just after you
+have thrown the ball are the two pointing in the roughly same direction. 
+The same is true for the average velocity vector.  It too can point in a direction different
+from the direction that the ball is moving.  Only just after t = 0s is the 
+average velocity vector pointing in the roughly same direction as the ball is moving.
+<P>
+Your common sense is probably complaining right now.  Intuitively you would like the 
+velocity vector of an object to be pointing in the direction in which the object is moving.
+<!Congratulations! On your own you have just discovered calculus.>
+The key observation is that near t = 0s the displacement vector is roughly pointed in the
+direction that the ball is moving.  
+Maybe we could move to a position along the trajectory of the ball corresponding to, say,
+t = 0.5s and watch as the ball passes through this point. The 
+displacement vector defined relative to this position points in the direction that the ball
+is moving while t is just a little more than 0.5s .
+<P>
+This idea prompts us to define the
+<a href="">relative displacement vector</a> that locates the ball at say, t=0.6s,
+relative to the position of the ball at t=0.5s .  
+If you click the check box labeled "relative displacement vector" (with the displacement vector check box checked) 
+then you will see a cyan arrow that represents the relative displacement vector.
+It connects the displacement vector at an earlier time to the
+displacement vector at a later time (the two magenta arrows).
+Try this with the trajectory check box checked  (selected) and then unchecked (not selected).
+<p>
+In order to extend this idea a little further, let us call t = 0.5 s the initial time 
+<!IMG SRC="ti.gif" WIDTH=13 HEIGHT=30>
+t<SUB>i</SUB>, and
+call the time t = 0.6s the final time t<SUB>f</SUB>
+<!IMG SRC="tf.gif" WIDTH=17 HEIGHT=25>.
+ The time difference 
+<!IMG SRC="dt.gif" WIDTH=20 HEIGHT=18> is 
+(the final time ) - (the initial time ) = 0.6s - 0.5s = 0.1s = t<SUB>f</SUB> - t<SUB>i</SUB>.
+The relative displacement vector is constructed by locating the ball at time 0.5s
+and drawing an arrow to where the ball is at time 0.6s. 
+The relative displacement vector  is found by subtracting the
+displacement vector at the initial time0.5s from the
+displacement vector at the final time 0.6s.
+The <a href="">velocity vector</A> is equal to this relative displacement vector divided by
+the time difference  0.1s.
+<p>
+The relative displacement vector is constructed by locating the ball at time t<SUB>i</SUB>
+and drawing an arrow to where the ball is at time t<SUB>f</SUB>. 
+The relative displacement vector  is found by subtracting the
+displacement vector at the initial time t<sub>i</sub> from the
+displacement vector at the final time t<sub>f</sub>.
+The <a href="">velocity vector</A> is equal to this relative displacement vector divided by
+the time difference  t<SUB>f</SUB> - t<SUB>i</SUB>.
+<p>
+The velocity is the relative displacement of the ball per unit time.
+<P>
+Actually this is only a good approximation to the velocity vector. The exact velocity is obtained
+by allowing the final time t<sub>f</sub> to slip back toward the  initial time t<sub>i</sub> until
+it just barely exceeds it. Try to visualize this.  The two displacement 
+vectors get very close together, of course.  Use your
+mental powers to zoom in on these two vectors and get a magnified view 
+of their appearance.  In the future we'll assume that you mentally
+slid t<sub>f</sub> back toward  t<sub>i</sub> without being prompted.
+<P>
+The direction of the velocity vector is the direction of the dark cyan arrow.
+The direction of the velocity vector is the direction that the ball is moving. 
+Since velocity is a vector, it has a magnitude as well as a direction. The magnitude of the velocity
+vector is just the speed of the ball. The velocity vector changes
+whenever the direction in which the ball is moving changes, and/or whenever the speed of the ball changes.
+If you tie the ball to one end of a string and grab the other end
+of the string and swing the ball in a circle above your head at a constant rate (speed),
+then the velocity is constantly changing since the direction that the ball is moving in is
+continually changing.
+
+<hr>
+<p align="center"><a href="http://www.microsoft.com/ie/"><img
+        src="../IE_ANIMATED.GIF" width="88" height="31"></a>&nbsp;</p>
+
+</BODY>
+</HTML>

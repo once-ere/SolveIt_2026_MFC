@@ -1,0 +1,159 @@
+<HTML>
+<HEAD>
+    <SCRIPT LANGUAGE="VBScript">
+<!--
+REM dim g_fNx as double
+Sub Rotn1_RotationAxisChanged()
+    dim L, n, sz, result, pos
+    result= Rotn1.RotationAxis
+    L = Len(result)
+    pos = InStr(result, ",")
+    n=1
+    Do
+        pos = InStr(result, ",")
+        If pos <> 0 Then
+            sz = CStr(Left(result, pos - 1))
+            If Len(sz) > 0 Then
+                Select Case n
+                    case 1
+                        rotation1_alx.TextBox1.text=sz
+                    case 2
+                        rotation1_alx.TextBox2.text=sz 
+                    case 3
+                        rotation1_alx.TextBox3.text=sz 
+                End Select
+                n = n + 1
+                L = Len(result)
+                result = Right(result, L - pos)
+            End If
+        End If
+        Loop While pos > 1
+
+
+end sub
+
+dim g_fNx 
+dim g_fNy 
+dim g_fNz 
+
+Sub window_onLoad()
+REM R.STOP.Enabled = 0, not supported
+rotation1_alx.CommandButton1.Enabled = -1
+rotation1_alx.CommandButton2.Enabled =  0
+rotation1_alx.CommandButton3.Enabled =  0
+IAngle.VALUE=Rotn1.IncludedAngleText
+end sub
+
+REM Sub CommandButton1_Click()
+REM call Rotn1.AnimateT(R.Nx.Value,R.Ny.Value,R.Nz.Value)
+REM Layout1_alx.CommandButton1.Enabled =0
+REM Layout1_alx.CommandButton2.Enabled =-1
+REM end sub
+
+Sub Rotn1_IncludedAngleChanged()
+IAngle.VALUE=Rotn1.IncludedAngleText
+end sub
+
+REM Sub Procedure1()
+REM call Rotn1.AnimateT(R.Nx.Value,R.Ny.Value,R.Nz.Value)
+REM IAngle.VALUE=Rotn1.IncludedAngleText
+REM REM R.STOP.Enabled =-1
+REM REM R.START.Enabled =0
+REM REM g_fNx = Val(Nx.Value)
+REM REM g_fNy = Val(Ny.Value)
+REM REM g_fNz = Val(Nz.Value)
+REM REM call Rotn1.Animate(g_fNx,g_fNy,g_fNz)
+REM end sub
+
+-->
+    </SCRIPT>
+<TITLE>VECTOR CROSS PRODUCT</TITLE>
+</HEAD>
+<BODY>
+<h2>VECTOR CROSS PRODUCT</h2>
+For  newer versions (including bug fixes) of this example and other physics simulations, plus a calculator that supports
+vector operations [cross product, scalar product, ...], try
+<BR>
+				<hr>
+<a HREF="../Electricy&Magnetism/Simulations/Simulations.html">
+<H3>
+<center>
+SolveIt Simulator
+</center>
+</H3>
+</a>
+				<hr>or<br>
+<a HREF="../Default.htm">
+a physics simulator that models systems that include contact, time dependent, 
+electromagnetic and gravitational forces; 
+and simple time dependent quantum mechanical systems in one and two dimensions
+</a>
+<br>
+<BR>
+<h5>
+To use a current version of the simulator presently installed on your computer, without having to either
+download an update, or even be connected to the Internet:
+</h5>
+<ol>
+<li> download (or copy) <a HREF="../Act/MySimulations.txt">MySimulations.txt</a> to any directory 
+of your computer
+<li> rename 'MySimulations.txt' to 'MySimulations.htm' (without the quotes)
+<li> double-click on 'MySimulations.htm' from Windows Explorer
+</ol>
+<BR>
+
+<BR>
+<h4>Right click in the window with the coordinate axes to bring up a menu of examples 
+(including a newer version of this one).</h4>
+<HR>
+<HR>
+Let <B>C</B>  = <B>A</B> <B>&#215;</B> <B>B</B> denote
+the vector product (cross product) of <B>A</B> with <B>B</B>.
+The vector product is pictured below. Click on the head of vector  <B>A</B> or <B>B</B>  and drag
+to a new location. Notice how the cross product <B>C</B>
+remains perpendicular to both <B>A</B> and <B>B</B>  and
+is zero if <B>A</B> and <B>B</B>  are either parallel (included angle = 0 degrees )
+or antiparallel (included angle = 180 degrees )
+<p>
+By clicking and dragging elsewhere in the box you
+can rotate the frame to a new orientation. The rotation is
+with respect to a coordinate system whose x-y plane
+is the plane of your monitor, with the x-axis horizontal
+and positive to the right, and the y-axis vertical and positive up.  
+The z-axis given by the right-hand-rule (positive z-axis toward you,
+asuming a standard viewing position).
+
+<hr>
+    <OBJECT ID="Rotn1" WIDTH=267 HEIGHT=267
+     CLASSID="CLSID:00BE9254-C8BB-11D0-AC44-EF620C1C6074"
+    CODEBASE="http://129.115.14.23/CrossProduct/SUPPORT/rotn.CAB#version=1,0,0,1">
+        <PARAM NAME="_Version" VALUE="65536">
+        <PARAM NAME="_ExtentX" VALUE="7056">
+        <PARAM NAME="_ExtentY" VALUE="7056">
+        <PARAM NAME="_StockProps" VALUE="0">
+        <PARAM NAME="IncludedAngle" VALUE="1.5707963267949">
+        <PARAM NAME="IncludedAngleText" VALUE="90">
+    </OBJECT>
+<hr>
+    Included angle between <B>A</B> and <B>B</B> =
+    <INPUT TYPE=TEXT VALUE="Included Angle" NAME="IAngle">
+<!INPUT LANGUAGE="VBScript" TYPE=BUTTON VALUE="Proc 1" ONCLICK="call Procedure1()"  NAME="Proc1">
+    <!INPUT LANGUAGE="VBScript" TYPE=BUTTON VALUE="call Rotn1.AnimateT" ONCLICK="call Rotn1.AnimateT(R.Nx.Value,R.Ny.Value,R.Nz.Value)"
+     NAME="CallAnim">
+<HR>
+    <OBJECT ID="rotation1_alx"
+     CLASSID="CLSID:812AE312-8B8E-11CF-93C8-00AA00C08FDF"
+    CODEBASE="http://129.115.14.23/CrossProduct/rotn.cab">
+
+        <PARAM NAME="ALXPATH" REF VALUE="rotation1.alx">
+    </OBJECT>
+<br>
+Select the desired axis of rotation by typing in its components.
+<br>
+
+<hr>
+<p align="center"><a href="http://www.microsoft.com/ie/"><img
+        src="../IE_ANIMATED.GIF" width="88" height="31"></a>&nbsp;</p>
+
+</BODY>
+</HTML>

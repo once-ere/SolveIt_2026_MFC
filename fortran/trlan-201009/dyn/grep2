@@ -1,0 +1,58 @@
+#!/usr/local/bin/perl
+
+# Usage: grep2 [-l] pattern1 pattern2 [files]
+
+$ENV{'PATH'} = '/usr/afsws/bin:/usr/sbin:/usr/ucb:/bin:/usr/bin:/usr/local/bin:/u/ccc/kewu/bin';
+$ENV{'SHELL'} = '/bin/sh' if $ENV{'SHELL'} ne '';
+$ENV{'IFS'} = '' if $ENV{'IFS'} ne '';
+# Handle
+if ($ARGV[0] eq '-l') {
+    shift;
+    $action = <<'EOF';
+	    print $file,":\t", $line1;
+	    print $file,":\t", $_,"\n";
+EOF
+}
+else {
+    $action = <<'EOF';
+	    print $file,":\t", $line1;
+EOF
+}
+
+# Get pattern
+$pat1 = shift;
+$pat2 = shift;
+
+# Generate the program.
+$prog = <<EOF;
+FILE: foreach \$file (\@ARGV) {
+    open(FILE,\$file) || do {
+	print STDERR "Can't open \$file: \$!\\n";
+	next;
+    };
+    \$line1='';
+    while (<FILE>) {
+	if (\$line1 eq '') {
+	    if (m/$pat1/) {\$line1 = \$_;}
+	}
+	elsif (m/$pat2/) {
+	    $action
+	    if (m/$pat1/) {\$line1 = \$_;}
+	    else {\$line1 = '';}
+	}
+	elsif ("$pat1" eq "$pat2") {
+	    \$line1 = '';
+	}
+    }
+}
+EOF
+
+# We often put in lines like this while developing scripts, so we
+# can see what program the program is writing.
+#    $debugging = 1;
+print $prog if $debugging;
+
+# And finally, do it.
+
+eval $prog;
+die $@ if $@;

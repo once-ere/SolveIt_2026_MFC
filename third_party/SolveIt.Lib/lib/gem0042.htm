@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0046)http://www.df.lth.se/~john_e/gems/gem0042.html -->
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2800.1106" name=GENERATOR></HEAD>
+<BODY text=#000000 vLink=#a400a4 aLink=#dd2200 link=#8080ff bgColor=#ffffff>
+<P>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=top align=left><B><FONT color=#408080><FONT size=+1>Fast Float 
+      to Int</FONT></FONT></B></TD>
+    <TD vAlign=top align=right><B><FONT color=#408080><FONT 
+      size=+1>Assembler/Pentium+FPU</FONT></FONT></B></TD></TR></TBODY></TABLE></P>Converting 
+a floating point number to integer is normally done like this:<B><PRE><FONT color=#408080>        fistp   [dword ptr temp]
+        mov     eax,[temp]</FONT></PRE></B>An alternative method is:<B><PRE><FONT color=#408080>DATASEG
+ALIGN 8
+
+temp    dq      ?
+magic   dd      59c00000h       ; f.p. representation of 2^51 + 2^52
+
+CODESEG
+
+        fadd    [magic]
+        fstp    [qword ptr temp]
+        mov     eax,[dword ptr temp]</FONT></PRE></B>Adding the 'magic number' 
+of <CODE>2^51 + 2^52</CODE> has the effect that any integer between 
+<CODE>-2^31</CODE> and <CODE>+2^31</CODE> will be aligned in the lower 32 bits 
+when storing as a double precision floating point number. The result is the same 
+as you get with <CODE><FONT color=#408080>FISTP</FONT></CODE> for all rounding 
+methods except truncation towards zero. The result is different from <CODE><FONT 
+color=#408080>FISTP</FONT></CODE> if the control word specifies truncation or in 
+case of overflow. You may need a <CODE><FONT color=#408080>WAIT</FONT></CODE> 
+instruction for compatibility with other processors.<BR>This method is not 
+faster than using <CODE><FONT color=#408080>FISTP</FONT></CODE>, but it gives 
+better scheduling opportunities because there is a 3 clock void between 
+<CODE><FONT color=#408080>FADD</FONT></CODE> and <CODE><FONT 
+color=#408080>FSTP</FONT></CODE> which may be filled with other instrucions. You 
+may multiply or divide the number by a power of 2 in the same operation by doing 
+the opposite to the magic number. You may also add a constant by adding it to 
+the magic number, which then has to be double precision.
+<P>The second thing is the inability of the FP unit to convert float to int 
+internally at any reasonable speed (<CODE><FONT 
+color=#408080>FRNDINT</FONT></CODE> takes 19 cycles apparently). In some 
+situations you could use:<B><PRE><FONT color=#408080>
+        fistp   [qword mem]     ; 6 (estimated clock cycle count)
+        fild    [qword mem]     ; 7-9</FONT></PRE></B>However accuracy will be 
+sacrificed since a 64-bit integer can not represent as high values as floating 
+point numbers can. You can also use the "magic" trick here, but you would get 
+even less accuracy.<BR>If you want to use the "magic" trick here just add a 
+similar "magic" number and then subtract it away. Because of insufficient 
+precisions the floating point value will change. This method has two drawbacks:
+<UL>
+  <LI>you must know the exact precision/accuracy of the FPU and if you don't 
+  know it, the method will fail. 
+  <LI>depending on the rouding mode, you might get different results than with 
+  <CODE><FONT color=#408080>FRNDINT</FONT></CODE>.</LI></UL>Another FRNDINT 
+replacement:<B><PRE><FONT color=#408080>magic   dd      59c00000h       ; f.p. representation of 2^51 + 2^52
+
+        fadd    [magic]         ; 1-3
+        fsub    [magic]         ; 4-6</FONT></PRE></B>The through-put of the 
+above code is only 2 clocks. Unfortunately there are situations where the 
+results will not be the same than with FRNDINT. The lowest bit of the result may 
+be wasted.<BR>
+<DIV align=right>Gem writers: <A href="mailto:vkarvone@raita.oulu.fi">Vesa 
+Karvonen</A><BR><A href="mailto:agner@login.dknet.dk">Agner Fog</A><BR><FONT 
+size=-2>last updated: 1998-03-16</FONT></DIV></BODY></HTML>

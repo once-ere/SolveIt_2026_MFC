@@ -1,0 +1,19 @@
+delta	= 0.0802;
+Coulomb	= -0.013;
+B0		= 20;
+B1		= -0.05;
+a		= 2;
+d		= 0.2;
+OmegaB0	= 0.0575567;
+q		= 4*a*R/((a+R)^2+d^2);
+p		= sqrt(q);
+Ec		= EllipticEc(q);
+K		= EllipticK(q);
+
+F1		= (4*(a + R)*a/((a + R)^2 + d^2))* sqrt(a/(R*q)) * ( -Ec + (1 - q/2)*K );
+
+DeE		= (Ec-K)/(2*x);
+DeK		= (Ec-(1-x)*K)/(2*(1-x)*x);
+F2		= ((a^2 - R^2 + d^2)*a*p^3/(R^2*sqrt(R*a))) *( -DeE - 0.5*K + (1 - 0.5*q)*DeK);
+
+V = (B1/B0)*( OmegaB0 *( 0.5 + delta ) + Coulomb )*( F1 + F2 )*1000;

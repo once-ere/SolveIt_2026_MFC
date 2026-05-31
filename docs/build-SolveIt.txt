@@ -1,0 +1,358 @@
+GetSystem.cpp
+SetSystem.cpp
+Tree.cpp
+
+/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+Tree.cpp
+#define CONCAT2(s1,s2) s1 ## s2
+#define new_ID(s1,s2) CONCAT2(s1,s2)
+///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+GetSystem.cpp
+SetSystem.cpp
+
+
+#define CONCAT2(s1,s2) s1 ## s2
+#define new_case2(s1,s2) \
+	case CONCAT2(s1,s2):
+
+#define CONCAT3(s1,s2,s3) s1 ## s2 ## s3
+#define new_case3(s1,s2,s3) \
+	case CONCAT3(s1,s2,s3):
+
+	new_case3(T_STATE , T_POTENTIAL, T_SCALE)
+		data__QM_Scatt1D->put_ScalePotential(val);
+		break;
+	new_case2(T_STATE , T_Stationary)
+///////////////////////////////////////////////////////////////////////////////		
+
+
+
+grep -wn -e'new_ID' Tree.cpp >> newT.txt
+grep -wn -e'new_case2' GetSystem.cpp >> newGS.txt
+grep -wn -e'new_case3' GetSystem.cpp >> newGS.txt
+grep -wn -e'new_case2' SetSystem.cpp >> newGS.txt
+grep -wn -e'new_case3' SetSystem.cpp >> newGS.txt
+
+
+C:\msys64\usr\bin\cut.exe -c18- newGS-1.txt >> newGS-2.txt
+
+(for /f "tokens=1,* delims=(" %a in (newGS-1.txt) do @echo %b) > newGS-2.txt
+
+by hand:
+cp logisticMap.ui.h logisticMap.ui.inc
+in logisticMap.ui.inc
+comment out 'new' 
+insert std::unique_ptr declarations
+cp definitions.h definitions.inc
+
+    void setupUi(LMap *ptr_LMap)
+    {
+#include "definitions.inc"
+
+#if 0
+
+/usr/lib64/qt5/bin/uic -o logisticMap.ui.h logisticMap.ui
+
+
+grep -wn -e'new' logisticMap.ui.h >> new.txt
+
+cut -c13- new.txt >> new-1.txt
+
+// create delimiters for awk, gawk
+sed -e 's/(/ /' new-1.txt | sed -e 's/)/ /'  | sed -e 's/;//' > new-2.txt
+
+echo "
+// \"declarations.h\"
+
+#if !defined(declarations_H_741bc550b53c48ab80a4232466ea81af)
+#define	  declarations_H_741bc550b53c48ab80a4232466ea81af
+
+#include <memory>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+
+#include <QApplication>
+#include <QVBoxLayout>
+
+#include <QLineEdit>
+
+#include <QThread>
+#include <QWidget>
+#include <QtWidgets>
+//#include "src/glwidget.h"
+#include <QLabel>
+#include <QPushButton>
+
+
+#include <QtCore/QVariant>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QWidget>
+
+
+
+#include <QOpenGLWidget>
+#include <QPainter>
+#include <QPaintEvent>
+
+#include <QBrush>
+#include <QFont>
+#include <QPen>
+#include <QWidget>
+
+
+/*
+#include <rxqt.hpp>
+#include <rxcpp/operators/rx-subscribe_on.hpp>
+#include <rxcpp/operators/rx-observe_on.hpp>
+
+namespace Rx {
+    using namespace rxcpp;
+    using namespace rxcpp::sources;
+    using namespace rxcpp::operators;
+    using namespace rxcpp::util;
+}
+*/
+
+
+using GLWidget = QOpenGLWidget;
+//using GLWidget = QWidget;
+using Rate_Label = QLabel;
+
+
+#include "lmap.h"
+
+//#include "definitions.h"
+//#include "declarations.h"
+
+
+using namespace std::chrono;
+
+#include <QOpenGLWidget>
+using Rate_Label = QLabel;
+
+
+" > declarations.h
+
+awk '{print "std::unique_ptr<"$4"> _"$1";"}' new-2.txt >> declarations.h
+awk '{print $4 "*"$1" = nullptr;"}' new-2.txt >> declarations.h
+
+
+
+echo "
+
+#endif //	  declarations_H_741bc550b53c48ab80a4232466ea81af
+" >> declarations.h
+
+
+
+echo "
+// \"definitions.h\"
+
+#if !defined(definitions_H_741bc550b53c48ab80a4232466ea81af)
+#define	  definitions_H_741bc550b53c48ab80a4232466ea81af
+
+#include <memory>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <rxqt.hpp>
+#include <QApplication>
+#include <QThread>
+#include <QWidget>
+#include <QtWidgets>
+//#include "src/glwidget.h"
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QLineEdit>
+#include <rxcpp/operators/rx-subscribe_on.hpp>
+#include <rxcpp/operators/rx-observe_on.hpp>
+
+
+using GLWidget = QWidget;
+using Rate_Label = QLabel;
+
+
+#include "lmap.h"
+
+//#include "definitions.h"
+//#include "declarations.h"
+
+
+using namespace std::chrono;
+
+#include <QOpenGLWidget>
+using Rate_Label = QLabel;
+
+
+" > definitions.h
+
+awk '{print " _"$1" =  std::make_unique<"$4">("$5");\n"$1 " = _"$1".get();\n\n"}'  new-2.txt  >> definitions.h
+
+echo "
+
+#endif //	  definitions_H_741bc550b53c48ab80a4232466ea81af
+" >> definitions.h
+
+//awk '{print $1 " = _"$1".get();"}' new-2.txt  >> definitions.h
+
+
+
+//awk '{print " _"$1" =  std::make_unique<"$4">("$5");"}'  new-2.txt  >> definitions.h
+//awk '{print $1 " = _"$1".get();"}' new-2.txt  >> definitions.h
+
+
+#endif
+
+#if !defined(declarations_H_741bc550b53c48ab80a4232466ea81af)
+#define	  declarations_H_741bc550b53c48ab80a4232466ea81af
+
+#include <memory>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+
+std::unique_ptr<QAction> _action_Save;
+std::unique_ptr<QAction> _action_Load;
+std::unique_ptr<QAction> _action_Quit;
+std::unique_ptr<QOpenGLWidget> _centralWidget;
+std::unique_ptr<GLWidget> _openGLWidget;
+std::unique_ptr<QWidget> _Parameters;
+std::unique_ptr<QGroupBox> _points_per_rowBox;
+std::unique_ptr<QLabel> _nbaseLabel;
+std::unique_ptr<QLabel> _nbaseLabel_2;
+std::unique_ptr<QLabel> _nbaseLabel_3;
+std::unique_ptr<QLabel> _nbaseLabel_4;
+std::unique_ptr<QLabel> _n_total;
+std::unique_ptr<QLabel> _relativePointDensity;
+std::unique_ptr<QPushButton> _pb_n_base;
+std::unique_ptr<QPushButton> _pb_n_exponent;
+std::unique_ptr<QLabel> _nbaseLabel_5;
+std::unique_ptr<QLabel> _sampleIncrease;
+std::unique_ptr<QGroupBox> _numThreadsBox;
+std::unique_ptr<QPushButton> _pb_numThreads;
+std::unique_ptr<QCheckBox> _fixedAspectRatio;
+std::unique_ptr<QGroupBox> _colorTimeSeries;
+std::unique_ptr<QRadioButton> _blackWhiteRadio;
+std::unique_ptr<QRadioButton> _colorRadio;
+std::unique_ptr<QLabel> _points_per_row;
+std::unique_ptr<QCheckBox> _checkBox_auto_save;
+std::unique_ptr<QPushButton> _re_compute;
+std::unique_ptr<QFrame> _frame_Goto_R_2;
+std::unique_ptr<QPushButton> _pb_Rate_Goto;
+std::unique_ptr<QLabel> _label_R_goto;
+std::unique_ptr<QPushButton> _hairy_abort;
+std::unique_ptr<QGroupBox> _Music;
+std::unique_ptr<QLabel> _mousePOSITION;
+std::unique_ptr<QPushButton> _pb_playROWS;
+std::unique_ptr<QFrame> _fr_param_play;
+std::unique_ptr<QFrame> _fr_to;
+std::unique_ptr<QPushButton> _pb_to;
+std::unique_ptr<QLabel> _lbl_to;
+std::unique_ptr<QFrame> _fr_from;
+std::unique_ptr<QPushButton> _pb_from;
+std::unique_ptr<QLabel> _lbl_from;
+std::unique_ptr<QFrame> _fr_num_notes;
+std::unique_ptr<QPushButton> _pb_num_notes;
+std::unique_ptr<QLabel> _lbl_num_notes;
+std::unique_ptr<QPushButton> _pb_cancel;
+std::unique_ptr<QPlainTextEdit> _plainTextEdit_rate;
+std::unique_ptr<Rate_Label> _lbl_rate;
+std::unique_ptr<QFrame> _frame_Play_R;
+std::unique_ptr<QPushButton> _pb_Rate_Play;
+std::unique_ptr<QLabel> _label_R;
+std::unique_ptr<QFrame> _frame_Tone;
+std::unique_ptr<QLabel> _label_tone;
+std::unique_ptr<QSlider> _horizontalSlider_ms;
+std::unique_ptr<QLabel> _label_ms;
+std::unique_ptr<QLabel> _label_ms_lbl;
+std::unique_ptr<QToolBar> _mainToolBar;
+std::unique_ptr<QStatusBar> _statusBar;
+std::unique_ptr<QMenuBar> _menuBar;
+std::unique_ptr<QMenu> _menuLogisticMap;
+std::unique_ptr<QPushButton> _pb_abort;
+QAction*action_Save = nullptr;
+QAction*action_Load = nullptr;
+QAction*action_Quit = nullptr;
+QWidget*centralWidget = nullptr;
+GLWidget*openGLWidget = nullptr;
+QWidget*Parameters = nullptr;
+QGroupBox*points_per_rowBox = nullptr;
+QLabel*nbaseLabel = nullptr;
+QLabel*nbaseLabel_2 = nullptr;
+QLabel*nbaseLabel_3 = nullptr;
+QLabel*nbaseLabel_4 = nullptr;
+QLabel*n_total = nullptr;
+QLabel*relativePointDensity = nullptr;
+QPushButton*pb_n_base = nullptr;
+QPushButton*pb_n_exponent = nullptr;
+QLabel*nbaseLabel_5 = nullptr;
+QLabel*sampleIncrease = nullptr;
+QGroupBox*numThreadsBox = nullptr;
+QPushButton*pb_numThreads = nullptr;
+QCheckBox*fixedAspectRatio = nullptr;
+QGroupBox*colorTimeSeries = nullptr;
+QRadioButton*blackWhiteRadio = nullptr;
+QRadioButton*colorRadio = nullptr;
+QLabel*points_per_row = nullptr;
+QCheckBox*checkBox_auto_save = nullptr;
+QPushButton*re_compute = nullptr;
+QFrame*frame_Goto_R_2 = nullptr;
+QPushButton*pb_Rate_Goto = nullptr;
+QLabel*label_R_goto = nullptr;
+QPushButton*hairy_abort = nullptr;
+QGroupBox*Music = nullptr;
+QLabel*mousePOSITION = nullptr;
+QPushButton*pb_playROWS = nullptr;
+QFrame*fr_param_play = nullptr;
+QFrame*fr_to = nullptr;
+QPushButton*pb_to = nullptr;
+QLabel*lbl_to = nullptr;
+QFrame*fr_from = nullptr;
+QPushButton*pb_from = nullptr;
+QLabel*lbl_from = nullptr;
+QFrame*fr_num_notes = nullptr;
+QPushButton*pb_num_notes = nullptr;
+QLabel*lbl_num_notes = nullptr;
+QPushButton*pb_cancel = nullptr;
+QPlainTextEdit*plainTextEdit_rate = nullptr;
+Rate_Label*lbl_rate = nullptr;
+QFrame*frame_Play_R = nullptr;
+QPushButton*pb_Rate_Play = nullptr;
+QLabel*label_R = nullptr;
+QFrame*frame_Tone = nullptr;
+QLabel*label_tone = nullptr;
+QSlider*horizontalSlider_ms = nullptr;
+QLabel*label_ms = nullptr;
+QLabel*label_ms_lbl = nullptr;
+QToolBar*mainToolBar = nullptr;
+QStatusBar*statusBar = nullptr;
+QMenuBar*menuBar = nullptr;
+QMenu*menuLogisticMap = nullptr;
+QPushButton* pb_abort = nullptr;
+
+#endif //declarations_H_741bc550b53c48ab80a4232466ea81af

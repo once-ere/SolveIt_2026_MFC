@@ -1,0 +1,8 @@
+The directory contains three examples
+
+simple  -- a Fortran 90 example
+simplec -- a C example
+simple77-- a Fortran 77 example
+
+Most of the files are stored in directory ../SUN.  The Makefile will
+make the necessary links to the needed files when invoked.

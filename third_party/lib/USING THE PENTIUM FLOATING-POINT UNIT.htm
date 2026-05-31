@@ -1,0 +1,337 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0044)http://www.geisswerks.com/ryan/FAQS/fpu.html -->
+<HTML><HEAD><TITLE>Graphics of Ryan Geiss</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content="MSHTML 6.00.2800.1106" name=GENERATOR></HEAD>
+<BODY text=#cccccc vLink=#ffffff link=#ffffff bgColor=#4a4444><PRE>
+
+---------------------------------------------------------------------------------
+USING THE PENTIUM FLOATING-POINT UNIT
+---------------------------------------------------------------------------------
+
+** DISCLAIMER: Please excuse the disarray, this file is a bit of a mess.  I'll 
+try to clean it up soon, but it's hard to find the time.  In the meantime, all 
+the info. is here, you might just have to dig around.  Enjoy.
+
+Please be aware that this information is only for super-nerds; regular compilers 
+tend to optimize FPU usage very well!  But if you're really desperate to save
+a clock cycle, or just generally knowledge-thirsty, read on.
+
+What you will need: A basic understanding of how stacks/pushes/pops 
+work; know what a floating point is (vs. integer); know about pointers; 
+and you will need a compiler that supports Pentium commands/optimizations.  
+Assembly programming experience and basic understanding of system 
+architecture are a must.
+
+
+
+
+USING THE PENTIUM FLOATING-POINT UNIT
+---------------------------------------------------------------------------------
+
+The FPU is built right in to the Pentium.  It has a stack that holds eight
+floating-point values, referenced by st(0) through st(7).  st(0) is the 
+"bottom" of the stack and is where pushes and pops occur.  It is also the 
+default register to use for most arithmetic.  Here are the basic instructions:
+
+                                                                        clocks
+FLD   [pointer]        push a copy of an 8-byte f.p. value into st(0)     1
+FADD  st(0), st(y)     add st(y) to st(0)                                 3
+FSUB  st(0), st(y)     subtract st(y) from st(0)                          3
+FMUL  st(0), st(y)     multiply st(0) by st(y)                            3
+FDIV  st(0), st(y)     divide st(0) by st(y)                              ~39
+FXCH  st(x)            swaps st(0) and st(x) where x is in [1..7]         0*
+FST   [pointer]        copy st(0) to mem. location at pointer             2
+
+FADDP, FSUBP, FMULP    perform the operation then pop the stack.          3
+FSTP                   store, then pop the stack.                         2
+
+-For the four arithmetic operations, either the source or destination operand 
+	MUST be st(0).  
+-To make a copy of a value in a register you can use FLD st(x).  This will copy 
+	it into st(0).  
+-Many commands can be suffixed by a "P", which, after storing the result, pops 
+	the stack (deletes st(0)).  Note that this happens, usually, 3 cycles after 
+	the command is issued (or more if we’re waiting on a source)!
+-All pointers must point to an 8-byte chunk of memory.  To change precision, 
+	see page 3, Precision Control.
+
+
+For more info, look at the "developers" section of Intel’s website.  Go to 
+product documentation and get the Intel Architecture Software Developer’s 
+Manual®, Volume 1, in Acrobat format, 24319001.PDF.  Chapter 7 is the complete 
+FPU handbook.  Start here; instructions are introduced in a tutorial format.  
+For more detailed descriptions of the instructions, get volume 2, 24319101.PDF, 
+which is a complete index of *all* Pentium commands, and look under F.
+
+
+
+
+
+
+OPTIMIZING
+---------------------------------------------------------------------------------
+FAdd, FSub, and FMul all take 3 clock cycles.  Each takes two operands: the destination 
+and the source stack position, one of which must be st(0).  But you can start new 
+calculations while you're waiting on the others, so long as an operand to the second 
+calculation doesn't depend on the result of the first.  The key is in having operations 
+that don’t stall out waiting for previous results.  
+
+One complicated but worthwhile trick is taking two complex expressions and breaking 
+them down into two or three threads via assembly; then interleaving them with FXCH.  
+You can almost double the speed.  This is how my realtime Julia fractal generator works.
+
+Another good idea is to take advantage of necessary stalls.  If you can not get around
+a certain calculation stalling (a later calculation sits and waits for its result),
+go ahead and start a calculation you will need later while you're sitting there.
+
+All throughout your floating-point code, you can allegedly be doing regular integer 
+assembly, but this seldom fits well into a coding algorithm.  The Pentium has the two 
+pipes, U and V, for integer calculations, and so all throughout your FPU code you could
+ideally have integer math going through for free.
+
+
+
+CAUTIONS
+---------------------------------------------------------------------------------
+-You can’t start one FMUL right after the other; it will stall for 1 cycle.  FXCH 
+	doesn’t count as an in-between instruction.
+
+-FXCH will almost always cost about 1/2 cycle if preceded and followed by regular 
+	FPU commands (it actually just renames the stack registers).
+
+-FST can not be used on an FADD/FSUB/FMUL/FDIV result for 4 clock cycles rather than 3.
+
+
+
+
+
+
+
+MORE INSTRUCTIONS                                                                        
+---------------------------------------------------------------------------------
+F2XM1               replace st(0) 2^st(0) - 1
+FABS st(x)          replace st(x) with its absolute value
+FCHS                change sign of st(0)
+FCOS                replace st(0) with cos(st(0)), in radians.
+FSIN                replace st(0) with sin(st(0)), in radians.
+FSINCOS             replace st(0) with its sine; push cosine onto stack
+FSQRT               replace st(0) with its square root
+FPATAN              take arctan(st(1)/st(0)) and store in st(1); pop stack
+FPTAN               replace st(0) with its tangent; push 1.0 onto stack.
+FRNDINT             rounds st(0) (see below, under Rounding Control)
+
+FILD/FIST           load/store an integer in a FPU register.  Then you
+                      need to look up FIMUL, FIADD, etc.  FIST places
+                      the FPU in kinky mode.
+FINIT               initialize FPU (reset it)
+
+LOADING CONSTANTS
+---------------------------------------------------------------------------------
+FLDZ                push a zero onto the stack
+FLD1                push one onto the stack
+FLDPI               push pi onto the stack
+FLDL2T              push log2 10 onto the stack
+FLDL2E              push log2 e onto the stack
+FLDLG2              push log10 2 onto the stack
+FLDLN2              push ln 2 onto the stack
+
+
+
+
+
+
+PRECISION CONTROL
+---------------------------------------------------------------------------------
+There are three IEEE standard precisions for floating-point variables:
+
+  Single real   = 32 bits memory (4 byte "float")  = 24 bits precision = 00 in PC field
+  Double real   = 64 bits memory (8 byte "double") = 53 bits precision = 10 in PC field
+  Extended real = 80 bits memory (10 bytes)        = 64 bits precision = 11 in PC field
+
+You have to specify for the FPU what precision it should use in its calculations; the 
+default is 64-bit, which you can ensure with FINIT.  This is a speed issue; FDIV takes 
+19, 33, or 39 clock cycles based on the precision!  The difference is less noticeable 
+with quicker operations, though.
+
+You can change the precision by setting the PC (precision control) field of the FPU 
+control word, which is bits 8 and 9.  This can be done by using FSTCW [pointer] to 
+save the word to memory.  Then modify the appropriate bits and do an FLDCW [pointer] 
+to put it back.  
+
+Note that you can load/store values of any precision to and from memory, but the FPU 
+will convert them and operate on them with the precision set by the PC field.  
+Therefore, you must specify, with most compilers, not only an address but also how 
+many bytes to load/store there.  For example: 
+
+        FLD   dword ptr variablename       // for floats
+        FST   qword ptr variablename       // for doubles
+
+
+
+
+
+ROUNDING CONTROL
+---------------------------------------------------------------------------------
+
+FINIT will set rounding to the nearest whole number by default.  The RC field of 
+the FPU control word is made of bits 10 and 11.  Here is the breakdown:
+
+        00 = Round to nearest whole number. (default)
+        01 = Round down, toward -infinity.
+        10 = Round up, toward +infinity.
+        11 = Round toward zero (truncate).
+
+FRNDINT rounds st(0) based on the state of these 2 bits. 
+
+
+
+
+
+CONDITIONS &amp; BRANCHING INSIDE THE FPU
+---------------------------------------------------------------------------------
+
+The FPU can do condition testing and branching but you need the manual for that.  
+It's not hard, but you need to look some values up - because you have to do the 
+FCOM (float compare), then copy the FPU flags register into AX with a special 
+command, then do stuff to AX to find out if it's less than, greater than, etc.  
+Look up FCOM in volume 1 of the IASDM - it will give you straightforward 
+instructions on how to do this.  See also FUCOM &amp; FTST in volume 2.
+
+You can compare any register to st(0) and branch from the result.  This involves 
+doing a generic compare between the two, which modifies the FPU status word.  You 
+then copy the SW into AX and examine the bit combinations in different manners in 
+order to achieve JG, JL, and JE.  Here is sample code to compare st(0) to st(5).  
+Replace the bold terms according to the table below to achieve whatever type of 
+compare you want.
+
+   FCOM   st(5)            compare st(x) to st(5) - modifies FPU status word.
+   FSTSW  AX               store the status word in AX
+   TEST   AX, xxxxH        examine status word
+   Jxx    :label           jump based on compare.
+
+   Test desired:           xxxxH         Jxx
+   ST(0) &gt; st(x)           4500H         JZ
+   ST(0) &lt; st(x)           0100H         JNZ
+   ST(0) = st(x)           4000H         JNZ
+
+
+
+
+
+A TIDBIT ON MMX
+---------------------------------------------------------------------------------
+
+So what the hell does MMX really do?  It does parallel processing on integers,
+using the floating-point stack.
+
+You enter MMX mode with a special command; this takes about 40 clock cycles (ouch!).  
+In MMX mode, 57 new instructions are indeed available to the processor.  They use 
+the 8 registers of the FPU stack to pack in 8 bytes, 4 words, or 2 double-words each 
+(so note that you can NOT use the FPU while in MMX mode!  Big drawback!)  New custom 
+Add, Subtract, And/Or, etc operations can then operate on all 8 bytes (or whatever) 
+in the same time it would take to do just one.  
+
+But consider this: what about overflows?  Say you add 200 and 100 and get 300.  
+Problem: a byte can only hold 0 to 255.   So there are actually two add commands; one 
+clips this at 255 (saturation add), and the other loops it around to 45 (wraparound 
+add).  Also consider that you have signed and unsigned bytes, words, etc.  That gives 
+us even more modes to add.
+
+The bottom line: all in all, SEVEN of those 57 new commands bragged about are just for 
+adding!  Seven more are for subtracting.  It also offers integer multiplication (no 
+division at all), some ANDing, ORing, and a few other odds and ends.  
+
+The problem is that hardly any processing-intensive applications have such clean-cut 
+needs.  They could probably stand to multiply 8 floats in parallel, but not integers!  
+The only thing that really profits from such technology are Photoshop Plug-ins (which 
+do profit immensely), where you have mass similar operations on integers (pixels).  
+In addition, tying up the FPU can hurt, and integer operations were faster to begin 
+with!  
+
+However, MMX is a stepping stone.  It has paved the way to a floating-point version 
+of this, which, with proper code, could speed floating point calculations up eightfold! 
+Picture a PC with eight FPU’s, all running at once!  It would be something.  I’ve 
+heard that AMD is working on a new "3d" processor that will do just this, but this 
+waits to be verified.
+
+
+
+
+
+
+BONUS
+---------------------------------------------------------------------------------
+This code is from the MSDN Library for Visual Studio 6.0.  It reads the FPU 
+control word and, if necessary, sets it to single precision to maximize speed.
+It will only work in Windows.  
+
+If you have any large chunk of code in your app that does tons of FPU work,
+mission-critical precision isn't necessary, and you want it to be sped up,
+try this.  It disables exceptions (WHICH CAN BE A CRITICAL SPEED BOOST), 
+and sets precision to 32 bits (instead of the default 64 bits).
+
+
+
+#include &lt;windows.h&gt;
+#include &lt;math.h&gt;
+ 
+// This function evaluates whether the floating-point
+// control Word is set to single precision/round to nearest/
+// exceptions disabled. If not, the
+// function changes the control Word to set them and returns
+// TRUE, putting the old control Word value in the passback
+// location pointed to by pwOldCW.
+BOOL MungeFPCW( WORD *pwOldCW )
+{
+    BOOL ret = FALSE;
+    WORD wTemp, wSave;
+ 
+    __asm fstcw wSave
+    if (wSave &amp; 0x300 ||            // Not single mode
+        0x3f != (wSave &amp; 0x3f) ||   // Exceptions enabled
+        wSave &amp; 0xC00)              // Not round to nearest mode
+    {
+        __asm
+        {
+            mov ax, wSave
+            and ax, not 300h    ;; single mode
+            or  ax, 3fh         ;; disable all exceptions
+            and ax, not 0xC00   ;; round to nearest mode
+            mov wTemp, ax
+            fldcw   wTemp
+        }
+        ret = TRUE;
+    }
+    *pwOldCW = wSave;
+    return ret;
+}
+ 
+void RestoreFPCW(WORD wSave)
+{
+    __asm fldcw wSave
+}
+ 
+void __cdecl main()
+{
+    WORD wOldCW;
+    BOOL bChangedFPCW = MungeFPCW( &amp;wOldCW );
+    // Do something with control Word, as set by MungeFPCW.
+    if ( bChangedFPCW )
+        RestoreFPCW( wOldCW );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+This document copyright (c)1998+ Ryan M. Geiss.</PRE><A 
+href="http://www.geisswerks.com/ryan/FAQS/faqpage.html">Return to FAQ 
+page</A><BR><BR></BODY></HTML>

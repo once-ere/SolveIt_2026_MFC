@@ -1,0 +1,60 @@
+Thu Sep 23 16:25:57 PDT 1999
+Kesheng Wu <KWu@IEEE.org>
+
+This directory contains the program that will generate the eigenvalues
+and eigenvectors of the Laplacian when given a connectivity file.
+
+This was developed to work with the S-HARP graph partitioning program.
+See http://www.cs.njit.edu/sohn/sharp for more about S-HARP.
+
+To generate the executable, make sure the correct Fortran 90 compiler is
+specified in the Makefile.  In addition, LAPACK and BLAS libraries are
+needed, typically, they are specified as part of LDFLAGS.  The current
+version of the Makefile contains two sets of definitions for FC, FFLAGS
+and LDFLAGS, one for T3E and one for Linux using PGF90 and MPICH.
+On other systems, FC, FFLAGS and LDFLAGS need to be modified.
+After the correct compiling flags are specified, type
+
+make
+
+to generate an executable called 'eigconn'.
+
+The command line arguments to 'eigconn' are
+
+name_of_connectivity_file -- If this argument is given, it is expected
+to be the first argument.  if this file name is not given, 'eigconn'
+will attempt to read a connectivity file on standard input.
+
+number_of_eigenvalues_to_compute -- If specified, this is expected to be
+the second argument.  If leading portion of the second argument is not
+an integer, it is assumed to the output file name.  If there is only one
+argument or the second argument starts with an alphabet, 'eigconn' will
+compute 5 eigenvalues and eigenvectors.
+
+name_of_output_file -- The output file will store the computed
+eigenvalues and eigenvectors.  If the output file name is not specified
+on command but an input file is specified, the output file name will be
+leading portion of the input file name (uptil the first '.') followed by
+'.eig'.  Caution: it will overwrite an existing file with the same name
+without giving any warning.
+
+residual_tolerance -- The parameter (a floating-point value in the range
+of (0, 1)) specifies the tolerance on the residual norm of the
+eigenvalue and eigenvectors computed.  If not specified, 1.48e-8 will be
+used.  Larger tolerance means less accurate solutions, but the solutions
+may be computed in less time.
+
+The following is a sample command line for running 'eigconn'
+
+mpirun -np 2 eigconn spiral.conn 10 spiral.eig 1.0e-5
+
+In this case, 'eigconn' is run on two MPI processors using spiral.conn
+as the input file.  It will compute 10 eigenvalues and eigenvectors and
+output the resulting eigenvalues and eigenvectors to spiral.eig.  The
+tolerance on the solutions is 1.0e-5.
+
+Compiler note:
+Pacific Seria's vast/F90 does not compile the source code in TRLan
+directory correctly.  It appears to assign the poiter to the wrong
+values
+

@@ -1,0 +1,20 @@
+#!/bin/ksh
+# a shell script to run a number of test cases of ttrl
+#
+for ml in 20 50 100; do
+#    tr=12
+#    while test ${tr} -lt $(($ml - 2)) ; do
+    for tr in 1 2 3 4 5; do
+	echo 'Matrix:' si4 ' NE:' 12 ' Restart:' $tr ' ML:' $ml
+	./hbt si4 -12 $tr $ml
+        tr=$(( $tr + 1))
+    done
+done
+for ml in 20 50 100; do
+    for tr in 1 2 3 4 5; do
+	echo 'Matrix:' si6 ' NE:' 16 ' Restart:' $tr ' ML:' $ml
+	./hbt si6 -16 $tr $ml
+        tr=$(( $tr + 1))
+    done
+done
+exit

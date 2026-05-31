@@ -1,0 +1,12 @@
+The directory contains three examples
+
+simple  -- a Fortran 90 example
+simplec -- a C example
+simple77-- a Fortran 77 example
+
+To generate the execulates, type
+
+make simple simplec simple77
+
+You might have to modify the Makefile or ../../Make.inc in order to
+reference the correct compiler and library needed by these programs.

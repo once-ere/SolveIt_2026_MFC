@@ -1,0 +1,399 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: LIBF77 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP40E.tmp" with contents
+[
+/nologo /MTd /Za /W3 /GX /Z7 /Od /Gy /I ".." /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /FR".\WinDebug/" /Fp".\WinDebug/Libf77.pch" /YX /Fo".\WinDebug/" /Fd".\WinDebug/" /FD /c 
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\ABORT_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_ABS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_COS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_DIV.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_EXP.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_LOG.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_SIN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_SQRT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\CABS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_ABS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_ACOS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_ASIN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_ATAN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_ATN2.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_CNJG.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_COS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_COSH.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_DIM.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_EXP.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_IMAG.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_INT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_LG10.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_LOG.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_MOD.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_NINT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_PROD.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_SIGN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_SIN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_SINH.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_SQRT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_TAN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\D_TANH.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\DERF_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\DERFC_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\EF1ASC_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\EF1CMC_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\ERF_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\ERFC_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\GETARG_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\GETENV_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_ABS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_DIM.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_DNNT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_INDX.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_LEN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_MOD.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_NINT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_SIGN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\HL_GE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\HL_GT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\HL_LE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\HL_LT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_ABS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_DIM.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_DNNT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_INDX.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_LEN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_MOD.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_NINT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_SIGN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\IARGC_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\L_GE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\L_GT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\L_LE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\L_LT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\MAIN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_CI.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_DD.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_DI.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_HH.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_II.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_QQ.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_RI.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_ZI.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_ZZ.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_ABS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_ACOS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_ASIN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_ATAN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_ATN2.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_CNJG.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_COS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_COSH.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_DIM.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_EXP.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_IMAG.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_INT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_LG10.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_LOG.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_MOD.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_NINT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_SIGN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_SIN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_SINH.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_SQRT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_TAN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\R_TANH.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\S_CAT.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\S_CMP.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\S_COPY.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\S_PAUS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\S_RNGE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\S_STOP.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\SIG_DIE.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\SIGNAL_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\SYSTEM_.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\VERSION.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\Z_ABS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\Z_COS.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\Z_DIV.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\Z_EXP.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\Z_LOG.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\Z_SIN.C"
+"C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\Z_SQRT.C"
+]
+Creating command line "cl.exe @C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP40E.tmp" 
+Creating temporary file "C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP40F.tmp" with contents
+[
+/nologo /out:".\WinDebug\Libf77D.lib" 
+.\WinDebug\ABORT_.OBJ
+.\WinDebug\C_ABS.OBJ
+.\WinDebug\C_COS.OBJ
+.\WinDebug\C_DIV.OBJ
+.\WinDebug\C_EXP.OBJ
+.\WinDebug\C_LOG.OBJ
+.\WinDebug\C_SIN.OBJ
+.\WinDebug\C_SQRT.OBJ
+.\WinDebug\CABS.OBJ
+.\WinDebug\D_ABS.OBJ
+.\WinDebug\D_ACOS.OBJ
+.\WinDebug\D_ASIN.OBJ
+.\WinDebug\D_ATAN.OBJ
+.\WinDebug\D_ATN2.OBJ
+.\WinDebug\D_CNJG.OBJ
+.\WinDebug\D_COS.OBJ
+.\WinDebug\D_COSH.OBJ
+.\WinDebug\D_DIM.OBJ
+.\WinDebug\D_EXP.OBJ
+.\WinDebug\D_IMAG.OBJ
+.\WinDebug\D_INT.OBJ
+.\WinDebug\D_LG10.OBJ
+.\WinDebug\D_LOG.OBJ
+.\WinDebug\D_MOD.OBJ
+.\WinDebug\D_NINT.OBJ
+.\WinDebug\D_PROD.OBJ
+.\WinDebug\D_SIGN.OBJ
+.\WinDebug\D_SIN.OBJ
+.\WinDebug\D_SINH.OBJ
+.\WinDebug\D_SQRT.OBJ
+.\WinDebug\D_TAN.OBJ
+.\WinDebug\D_TANH.OBJ
+.\WinDebug\DERF_.OBJ
+.\WinDebug\DERFC_.OBJ
+.\WinDebug\EF1ASC_.OBJ
+.\WinDebug\EF1CMC_.OBJ
+.\WinDebug\ERF_.OBJ
+.\WinDebug\ERFC_.OBJ
+.\WinDebug\GETARG_.OBJ
+.\WinDebug\GETENV_.OBJ
+.\WinDebug\H_ABS.OBJ
+.\WinDebug\H_DIM.OBJ
+.\WinDebug\H_DNNT.OBJ
+.\WinDebug\H_INDX.OBJ
+.\WinDebug\H_LEN.OBJ
+.\WinDebug\H_MOD.OBJ
+.\WinDebug\H_NINT.OBJ
+.\WinDebug\H_SIGN.OBJ
+.\WinDebug\HL_GE.OBJ
+.\WinDebug\HL_GT.OBJ
+.\WinDebug\HL_LE.OBJ
+.\WinDebug\HL_LT.OBJ
+.\WinDebug\I_ABS.OBJ
+.\WinDebug\I_DIM.OBJ
+.\WinDebug\I_DNNT.OBJ
+.\WinDebug\I_INDX.OBJ
+.\WinDebug\I_LEN.OBJ
+.\WinDebug\I_MOD.OBJ
+.\WinDebug\I_NINT.OBJ
+.\WinDebug\I_SIGN.OBJ
+.\WinDebug\IARGC_.OBJ
+.\WinDebug\L_GE.OBJ
+.\WinDebug\L_GT.OBJ
+.\WinDebug\L_LE.OBJ
+.\WinDebug\L_LT.OBJ
+.\WinDebug\MAIN.OBJ
+.\WinDebug\POW_CI.OBJ
+.\WinDebug\POW_DD.OBJ
+.\WinDebug\POW_DI.OBJ
+.\WinDebug\POW_HH.OBJ
+.\WinDebug\POW_II.OBJ
+.\WinDebug\POW_QQ.OBJ
+.\WinDebug\POW_RI.OBJ
+.\WinDebug\POW_ZI.OBJ
+.\WinDebug\POW_ZZ.OBJ
+.\WinDebug\R_ABS.OBJ
+.\WinDebug\R_ACOS.OBJ
+.\WinDebug\R_ASIN.OBJ
+.\WinDebug\R_ATAN.OBJ
+.\WinDebug\R_ATN2.OBJ
+.\WinDebug\R_CNJG.OBJ
+.\WinDebug\R_COS.OBJ
+.\WinDebug\R_COSH.OBJ
+.\WinDebug\R_DIM.OBJ
+.\WinDebug\R_EXP.OBJ
+.\WinDebug\R_IMAG.OBJ
+.\WinDebug\R_INT.OBJ
+.\WinDebug\R_LG10.OBJ
+.\WinDebug\R_LOG.OBJ
+.\WinDebug\R_MOD.OBJ
+.\WinDebug\R_NINT.OBJ
+.\WinDebug\R_SIGN.OBJ
+.\WinDebug\R_SIN.OBJ
+.\WinDebug\R_SINH.OBJ
+.\WinDebug\R_SQRT.OBJ
+.\WinDebug\R_TAN.OBJ
+.\WinDebug\R_TANH.OBJ
+.\WinDebug\S_CAT.OBJ
+.\WinDebug\S_CMP.OBJ
+.\WinDebug\S_COPY.OBJ
+.\WinDebug\S_PAUS.OBJ
+.\WinDebug\S_RNGE.OBJ
+.\WinDebug\S_STOP.OBJ
+.\WinDebug\SIG_DIE.OBJ
+.\WinDebug\SIGNAL_.OBJ
+.\WinDebug\SYSTEM_.OBJ
+.\WinDebug\VERSION.OBJ
+.\WinDebug\Z_ABS.OBJ
+.\WinDebug\Z_COS.OBJ
+.\WinDebug\Z_DIV.OBJ
+.\WinDebug\Z_EXP.OBJ
+.\WinDebug\Z_LOG.OBJ
+.\WinDebug\Z_SIN.OBJ
+.\WinDebug\Z_SQRT.OBJ
+]
+Creating command line "link.exe -lib @C:\DOCUME~1\nsh\LOCALS~1\Temp\RSP40F.tmp"
+<h3>Output Window</h3>
+Compiling...
+ABORT_.C
+C_ABS.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\ABORT_.C(18) : warning C4716: 'abort_' : must return a value
+C_COS.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_COS.C(14) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_COS.C(15) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C_DIV.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_DIV.C(25) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_DIV.C(26) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_DIV.C(33) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_DIV.C(34) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C_EXP.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_EXP.C(17) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_EXP.C(18) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C_LOG.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_LOG.C(14) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_LOG.C(15) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C_SIN.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_SIN.C(14) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_SIN.C(15) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C_SQRT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_SQRT.C(21) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_SQRT.C(23) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_SQRT.C(30) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\C_SQRT.C(32) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+CABS.C
+D_ABS.C
+D_ACOS.C
+D_ASIN.C
+D_ATAN.C
+D_ATN2.C
+D_CNJG.C
+D_COS.C
+D_COSH.C
+D_DIM.C
+D_EXP.C
+D_IMAG.C
+D_INT.C
+D_LG10.C
+D_LOG.C
+D_MOD.C
+D_NINT.C
+D_PROD.C
+D_SIGN.C
+D_SIN.C
+D_SINH.C
+D_SQRT.C
+D_TAN.C
+D_TANH.C
+DERF_.C
+DERFC_.C
+EF1ASC_.C
+EF1CMC_.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\EF1ASC_.C(21) : warning C4716: 'ef1asc_' : must return a value
+ERF_.C
+ERFC_.C
+GETARG_.C
+GETENV_.C
+H_ABS.C
+H_DIM.C
+H_DNNT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_DNNT.C(13) : warning C4244: 'return' : conversion from 'double ' to 'short ', possible loss of data
+H_INDX.C
+H_LEN.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_LEN.C(9) : warning C4244: 'return' : conversion from 'long ' to 'short ', possible loss of data
+H_MOD.C
+H_NINT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\H_NINT.C(13) : warning C4244: 'return' : conversion from 'double ' to 'short ', possible loss of data
+H_SIGN.C
+HL_GE.C
+HL_GT.C
+HL_LE.C
+HL_LT.C
+I_ABS.C
+I_DIM.C
+I_DNNT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_DNNT.C(13) : warning C4244: 'return' : conversion from 'double ' to 'long ', possible loss of data
+I_INDX.C
+I_LEN.C
+I_MOD.C
+I_NINT.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\I_NINT.C(13) : warning C4244: 'return' : conversion from 'double ' to 'long ', possible loss of data
+I_SIGN.C
+IARGC_.C
+L_GE.C
+L_GT.C
+L_LE.C
+L_LT.C
+MAIN.C
+POW_CI.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_CI.C(18) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\POW_CI.C(19) : warning C4244: '=' : conversion from 'double ' to 'float ', possible loss of data
+POW_DD.C
+POW_DI.C
+POW_HH.C
+POW_II.C
+POW_QQ.C
+POW_RI.C
+POW_ZI.C
+POW_ZZ.C
+R_ABS.C
+R_ACOS.C
+R_ASIN.C
+R_ATAN.C
+R_ATN2.C
+R_CNJG.C
+R_COS.C
+R_COSH.C
+R_DIM.C
+R_EXP.C
+R_IMAG.C
+R_INT.C
+R_LG10.C
+R_LOG.C
+R_MOD.C
+R_NINT.C
+R_SIGN.C
+R_SIN.C
+R_SINH.C
+R_SQRT.C
+R_TAN.C
+R_TANH.C
+S_CAT.C
+S_CMP.C
+S_COPY.C
+S_PAUS.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\S_PAUS.C(40) : warning C4013: 'fileno' undefined; assuming extern returning int
+S_RNGE.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\S_PAUS.C(64) : warning C4716: 's_paus' : must return a value
+S_STOP.C
+C:\Projects\MFC\SolveIt\lib\libf2c\f2c\LIBF77\S_RNGE.C(26) : warning C4716: 's_rnge' : must return a value
+SIG_DIE.C
+SIGNAL_.C
+SYSTEM_.C
+VERSION.C
+Z_ABS.C
+Z_COS.C
+Z_DIV.C
+Z_EXP.C
+Z_LOG.C
+Z_SIN.C
+Z_SQRT.C
+Creating library...
+
+
+
+<h3>Results</h3>
+Libf77D.lib - 0 error(s), 28 warning(s)
+</pre>
+</body>
+</html>

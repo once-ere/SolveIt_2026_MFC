@@ -1,0 +1,19 @@
+#!/bin/ksh
+# a shell script to run a number of test cases of ttrl
+#
+for nr in 13 731; do
+    for op in 1 2 3 4 5; do
+	for lh in -1 0 1; do
+	    for ne in 1 7; do
+		for ml in 12 23; do
+		    for tr in 1 2 3 4; do
+echo $op $nr $lh $ne $ml $((${ml}*${ne}+${nr})) $tr > ttrl.param
+echo 'OP:' $op ' NR:' $nr ' LH:' $lh ' NE:' $ne ' ML:' $ml ', TR:' $tr
+mpprun -n 2 ttrl
+		    done
+		done
+	    done
+	done
+    done
+done
+exit

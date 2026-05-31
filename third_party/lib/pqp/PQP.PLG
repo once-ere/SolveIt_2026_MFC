@@ -1,0 +1,41 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: PQP - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\PROFPN~1.CRA\LOCALS~1\Temp\RSP18A3.tmp" with contents
+[
+/nologo /MTd /W3 /GR /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"Debug/PQP.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /c 
+"C:\Projects\ATL\Simulator\lib\pqp\Build.cpp"
+"C:\Projects\ATL\Simulator\lib\pqp\BV.cpp"
+"C:\Projects\ATL\Simulator\lib\pqp\PQP.cpp"
+"C:\Projects\ATL\Simulator\lib\pqp\TriDist.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\PROFPN~1.CRA\LOCALS~1\Temp\RSP18A3.tmp" 
+Creating command line "link.exe -lib /nologo /out:"Debug\PQPD.lib"  .\Debug\Build.obj .\Debug\BV.obj .\Debug\PQP.obj .\Debug\TriDist.obj "
+<h3>Output Window</h3>
+Compiling...
+Build.cpp
+BV.cpp
+PQP.cpp
+TriDist.cpp
+Creating library...
+Creating temporary file "C:\DOCUME~1\PROFPN~1.CRA\LOCALS~1\Temp\RSP18A4.bat" with contents
+[
+@echo off
+copy   Debug\PQPD.lib    ..
+]
+Creating command line "C:\DOCUME~1\PROFPN~1.CRA\LOCALS~1\Temp\RSP18A4.bat"
+
+        1 file(s) copied.
+
+
+
+<h3>Results</h3>
+PQPD.lib - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

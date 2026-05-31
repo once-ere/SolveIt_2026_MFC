@@ -1,0 +1,21 @@
+system.title = "1-Dim QM Eigenstate"
+system.boundingBox = [ -5, 5, -1, 1, -1, 1 ] 
+#func V(x$) {q=exp(-x*x)	return ( q*(-1+q*x*abs(x)*5) ) }
+system.potential.data = 't.dat'
+
+func V(x$) {return (Spline(x);)}
+
+
+plot(\"V\", \" [x,0, 1000], [y ,  -.012, .008] \");
+system.state.mass = 1;
+system.state.scale = 0.03;
+system.state.eigenNumber = 0;
+system.state.stationary = true;
+system.potential.time = false;
+system.potential = 'V';
+system.domain.end = infinity;
+#system.domain.begin = -infinity;
+system.domain.begin = 0;
+system.stationary.method = Cartesian;
+system.stationary.method = radial;
+system.state.energy;

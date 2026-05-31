@@ -1,0 +1,65 @@
+.SUFFIXES: .f90 .f .F .o
+
+FC=f90
+#FFLAGS=-O0 -g -Rabc -dp
+FFLAGS=-O3,aggress -dp -apad
+#FFLAGS=-O3,aggress -dp -apad -eA
+#FFLAGS=-O2 -dp -apad -eA
+#LDFLAGS=-L${HOME}/lib -lskit -Wl"../examples/C90/segldr.cld"
+LDFLAGS=-L${HOME}/lib -lskit -Wl"cray.cld"
+#LDFLAGS=-L${HOME}/lib -lskit -Wl"../examples/T3E/cray.cld" -lapp
+#LDFLAGS=-L${HOME}/lib -lskit -Wl"../examples/T3E/cray.cld" -lpat pat.cld
+
+TRLAN=../libtrlan.a lapack_aux.o
+
+ttrl: ttrl.o ${TRLAN} getarg.o
+	$(FC) ${FFLAGS} -o $@ ttrl.o getarg.o ${TRLAN} ${LDFLAGS}
+
+hbt: hbtrl.o ${TRLAN} getarg.o
+	$(FC) ${FFLAGS} -o $@ hbtrl.o getarg.o ${TRLAN} ${LDFLAGS}
+
+hbl: hblanso.o getarg.o
+	${FC} ${FFLAGS} -o $@ hblanso.o getarg.o $(HOME)/lib/liblanso.a ${LDFLAGS}
+
+hbn: hblan.o getarg.o
+	${FC} ${FFLAGS} -o $@ hblan.o getarg.o $(HOME)/lib/liblanso.a ${LDFLAGS}
+
+arp: arphb.o getarg.o
+	$(FC) ${FFLAGS} -o $@ arphb.o getarg.o -L${HOME}/lib -larpack ${LDFLAGS} \
+	-Wl"-Dequiv(DAXPY)=SAXPY;equiv(DNRM2)=SNRM2;equiv(DSAUPD)=SSAUPD;equiv(DSEUPD)=SSEUPD"
+
+cgs77: cgs.f
+	$(FC) ${FFLAGS} -o cgs77 cgs.f -Wl"-Dequiv(DSCAL)=SSCAL;equiv(DGEMV)=SGEMV;equiv(DNRM2)=SNRM2" -lapp
+
+cgs90: cgs.f90
+	${FC} ${FFLAGS} -o cgs90 cgs.f90 -lapp
+
+cgs91: cgs1.f90
+	${FC} ${FFLAGS} -o cgs91 cgs1.f90 -Wl"-Dequiv(DSCAL)=SSCAL;equiv(DGEMV)=SGEMV;equiv(DNRM2)=SNRM2" -lapp
+
+cgs92: cgs2.f90
+	${FC} ${FFLAGS} -o cgs92 cgs2.f90 -Wl"-Dequiv(DSCAL)=SSCAL;equiv(DGEMV)=SGEMV;equiv(DNRM2)=SNRM2" -lapp
+
+../libtrlan.a::
+	cd ../SRC; make FC="${FC}" FFLAGS="${FFLAGS}" libtrlan.a
+
+clean:
+	/bin/rm -f *.o *.T *.M *.lst core trl_info.f90 lapack_aux.f getarg.F TRL_*
+clean-all: clean
+	/bin/rm -f arp hbt
+	cd ..; make clean
+
+hbtrl.o ttrl.o: trl_info.o
+trl_info.f90:
+	ln -s ../SRC/trl_info.f90 .
+lapack_aux.f:
+	ln -s ../examples/C90/lapack_aux.f .
+getarg.F:
+	ln -s ../examples/psp/getarg.F .
+getarg.o: getarg.F
+	${FC} ${FFLAGS} -DCRAY -c $<
+
+.f.o:
+	${FC} ${FFLAGS} -c $<
+.f90.o:
+	${FC} ${FFLAGS} -c $<

@@ -1,0 +1,30 @@
+// DataQM_Scatt1D.h: interface for the CDataQM_Scatt1D class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#if !defined(AFX_DATAQM_SCATT2D_H__AED1C4EF_88CE_4206_8EE0_487A83632AC8__INCLUDED_)
+#define AFX_DATAQM_SCATT2D_H__AED1C4EF_88CE_4206_8EE0_487A83632AC8__INCLUDED_
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+#include "QM_2DScatt.h"
+/////////////////////////////////////////////////////////////////////////////////
+namespace SolveIt
+{
+///////////////////////////////////////////////////////////////////////////////
+
+class CDataQM_Scatt2D  
+{
+public:
+	CDataQM_Scatt2D();
+	virtual ~CDataQM_Scatt2D();
+
+};
+////////////////////////////////////////////////////////////////////////
+}//end namespace SolveIt
+
+///////////////////////////////////////////////////////////////////////////////
+
+#endif // !defined(AFX_DATAQM_SCATT2D_H__AED1C4EF_88CE_4206_8EE0_487A83632AC8__INCLUDED_)
