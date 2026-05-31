@@ -23,3 +23,7 @@ Build/
 
 
 task_gpt-git.txt
+
+# Git repository artifacts (mistakenly included)
+gat.git/
+gt.git/
