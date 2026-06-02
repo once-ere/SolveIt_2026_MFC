@@ -1,0 +1,51 @@
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Developer Studio">
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=iso-8859-1">
+<TITLE>Document Title</TITLE>
+</HEAD>
+
+
+<STYLE>A:hover { color:#FF00C0 }</STYLE>
+
+<SCRIPT LANGUAGE="JavaScript">
+	var okImages = new Array(2);
+	okImages[0]  = new Image();
+	okImages[1]  = new Image();
+	okImages[0].src = "okup.gif";
+	okImages[1].src = "okdn.gif";
+	function OnClickOK(bDown) {
+		okImage.src = okImages[bDown].src;	
+	}
+</SCRIPT>
+
+<BODY>
+
+
+<OBJECT
+ID="MediaPlayer"
+    CLASSID="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95"
+	CODEBASE="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701"
+	TYPE="application/x-oleobject"
+    WIDTH="320"
+    HEIGHT="320"
+    STYLE="position:absolute;
+           left:2px;
+           top:2px;"
+>
+
+    <PARAM NAME="FileName" VALUE="">
+    <PARAM NAME="ShowControls" VALUE="1">
+    <PARAM NAME="ShowStatusBar" VALUE="1">
+    <PARAM NAME="ShowDisplay" VALUE="1">
+</OBJECT>
+
+<BR>
+<a onMouseDown="OnClickOK(1);"
+	onMouseUp="OnClickOK(0);" 
+	onMouseOut="OnClickOK(0);" href="app:ok">
+<img name="okImage" src="okup.gif" align="right" border="0" width="80"
+height="20"></a>
+
+</BODY>
+</HTML>
