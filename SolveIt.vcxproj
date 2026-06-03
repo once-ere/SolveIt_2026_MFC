@@ -706,5 +706,9 @@ powershell -ExecutionPolicy Bypass -File "$(ProjectDir)third_party\SolveIt.Lib\l
     <ClInclude Include="src\\Examples\Superposition\WaveNumbers.h" />
     <ClInclude Include="src\\Examples\ScriptColors.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README_ClaudeOpus4_8.md" />
+    <None Include="tools\click_tree_test.ps1" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
