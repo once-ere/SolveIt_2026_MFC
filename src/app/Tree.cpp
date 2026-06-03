@@ -585,16 +585,27 @@ catch( SolveIt_Error& e){e.why();}catch(...)
 void CLeftView::OnClick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	*pResult = 0;
-	NMTVDISPINFO* nd = (NMTVDISPINFO*) pNMHDR;
-	TVITEM& item = nd->item;
-	if (item.pszText != 0)// editing was cancelled
-	{
-		string news(GetC(item.pszText));
-	}
 
-	CString m_Test;
+	// NOTE: The NM_CLICK reflected notification only provides a plain NMHDR.
+	// It is NOT an NMTVDISPINFO, so the item/label data is unavailable here.
+	// Casting pNMHDR to NMTVDISPINFO* and reading item.pszText dereferences
+	// memory past the end of the real NMHDR and crashes on every click.
+	// Determine the clicked item safely via a hit-test on the cursor instead.
+	UNREFERENCED_PARAMETER(pNMHDR);
+
 	CTreeCtrl& t = GetTreeCtrl();
-//	t.GetEditControl()->GetWindowText(m_Test);
+
+	CPoint pt;
+	::GetCursorPos(&pt);
+	t.ScreenToClient(&pt);
+
+	UINT flags = 0;
+	HTREEITEM hItem = t.HitTest(pt, &flags);
+	if (hItem != 0 && (flags & TVHT_ONITEM))
+	{
+		CString text = t.GetItemText(hItem);
+		string news(GetC((LPCWSTR) text));
+	}
 }
 ///////////////////////////////////////////////////////////////////////////////
 void CLeftView::OnEndlabeledit(NMHDR* pNMHDR, LRESULT* pResult) 

@@ -1,29 +1,63 @@
-# Visual Studio cache and settings
+# =========================
+# Visual Studio / MFC repo
+# Keep source code
+# Ignore generated files
+# =========================
+
+# Visual Studio user-specific files
 .vs/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
+*.VC.db
+*.VC.opendb
 
-# Build outputs
-Debug/
-Release/
+# Build output folders
+[Dd]ebug/
+[Rr]elease/
 x64/
+x86/
 ARM/
 Build/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
 
-# Specific compiler files
+# Common build folders
+[Bb]in/
+[Oo]bj/
+
+# Logs and temporary files
+*.log
+*.tlog
+*.tmp
+*.temp
+
+# Build artifacts
+*.exe
+*.dll
 *.obj
 *.pdb
 *.ilk
 *.idb
-*.gch
+*.ipch
 *.pch
+*.lib
+*.exp
+*.gch
 
+# Test/build result folders
+[Tt]est[Rr]esult*/
+[Ll]og/
+[Ll]ogs/
+
+# If you later want to keep a specific release ZIP in the repo,
+# you can "un-ignore" it with a rule like this:
+# !releases/*.zip
+
+task_gpt-git.txt
+.gitignore
 
 
 task_gpt-git.txt
-
-# Git repository artifacts (mistakenly included)
-gat.git/
-gt.git/
+mfc-wrong-folder.txt
